@@ -1,54 +1,123 @@
-# Astro Starter Kit: Basics
+# Windows 98 Style Portfolio
 
-```sh
-npm create astro@latest -- --template basics
+A nostalgic personal portfolio website that recreates the iconic Windows 98 interface using modern web technologies. Experience the classic desktop environment with draggable windows, a functional taskbar, and the beloved start menu.
+
+## ✨ Features
+
+- **Authentic Windows 98 Design**
+  - Classic window management
+  - Interactive taskbar
+  - Start menu functionality
+  - Desktop icons
+
+- **Modern Implementation**
+  - Built with Astro
+  - TypeScript support
+  - Responsive design
+  - Smooth animations
+
+- **Key Components**
+  - Draggable modal windows
+  - Multi-language support (EN/ES)
+  - Skills showcase
+  - Project gallery
+  - Contact form
+
+## 🛠️ Tech Stack
+
+- [Astro](https://astro.build/)
+- TypeScript
+- CSS
+- Font Awesome Icons
+
+## 📦 Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/andres-sanchezz/portfolio-win98.git
+```
+2. Install dependencies
+```bash
+npm install
+```
+3. Run the development server
+```bash
+npm run dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🗂️ Project Structure
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
+```
 /
 ├── public/
-│   └── favicon.svg
+│ └── images/
 ├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
+│ ├── components/
+│ │ ├── AboutMe.astro
+│ │ ├── Skills.astro
+│ │ ├── WindowModal.astro
+│ │ └── ...
+│ ├── layouts/
+│ │ └── Layout.astro
+│ ├── pages/
+│ │ └── index.astro
+│ ├── styles/
+│ │ ├── global.css
+│ │ └── ...
+│ └── i18n/
+│ └── translations.ts
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## 🌍 Internationalization
 
-Any static assets, like images, can be placed in the `public/` directory.
+The portfolio supports both English and Spanish languages with dynamic switching capabilities. Language preferences are persisted across sessions.
 
-## 🧞 Commands
+## 🎨 Available Windows
 
-All commands are run from the root of the project, from a terminal:
+- About Me
+- Skills & Technologies
+- Projects [Doing]
+- Contact [To do]
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## 💻 Skills Showcase
 
-## 👀 Want to learn more?
+- **Frontend**: Angular, JavaScript, TypeScript, Astro
+- **Backend**: PHP, Node.js, Java, Python, Laravel
+- **Mobile**: Flutter, Dart
+- **Database**: PostgreSQL, MySQL, Firebase, DynamoDB
+- **Cloud**: AWS, Google Cloud
+- **Tools**: Git, Docker, CI/CD, Puppeteer
+- **Architecture**: Microservices, MVC, OOP
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 🚀 Deployment
+
+This site is deployed using GitHub Pages. The deployment process is automated through GitHub Actions.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 👤 Author
+
+Andrés Sánchez
+- GitHub: [@asanchezRay](https://github.com/asanchezRay)
+- GitLab: [@asanchez35](https://gitlab.com/asanchez35)
+- LinkedIn: [Andrés Sánchez](https://linkedin.com/in/andressanchezc)
+
+## 🙏 Acknowledgments
+
+- Inspired by the classic Windows 98 interface
+- Built with modern web technologies
