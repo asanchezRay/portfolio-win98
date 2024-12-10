@@ -80,7 +80,7 @@ The portfolio supports both English and Spanish languages with dynamic switching
 - About Me
 - Skills & Technologies
 - Projects [Doing]
-- Contact [To do]
+- Contact
 
 ## 💻 Skills Showcase
 
