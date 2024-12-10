@@ -1,0 +1,134 @@
+.skills-container {
+  display: flex;
+  height: 500px;
+  background: #c0c0c0;
+}
+
+.skills-tabs {
+  width: 150px;
+  background: #dfdfdf;
+  border-right: 2px solid #808080;
+  padding: 10px 0;
+  overflow-y: auto;
+}
+
+.tab-button {
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #000;
+  transition: background-color 0.2s;
+}
+
+.tab-button:hover {
+  background: #c0c0c0;
+}
+
+.tab-button.active {
+  background: #000080;
+  color: white;
+}
+
+.tab-button i {
+  width: 20px;
+  text-align: center;
+}
+
+.skills-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.skill-panel {
+  display: none;
+}
+
+.skill-panel.active {
+  display: block;
+}
+
+.skills-list {
+  display: grid;
+  gap: 15px;
+}
+
+.skill-card {
+  background: #fff;
+  border: 2px solid #dfdfdf;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.2s;
+}
+
+.skill-card:hover {
+  transform: translateX(5px);
+}
+
+.skill-icon {
+  width: 40px;
+  height: 40px;
+  background: #000080;
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.skill-info {
+  flex: 1;
+}
+
+.skill-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #000080;
+}
+
+.skill-bar {
+  height: 8px;
+  background: #dfdfdf;
+  border: 1px solid #808080;
+  border-right-color: #dfdfdf;
+  border-bottom-color: #dfdfdf;
+}
+
+.skill-progress {
+  width: 75%;
+  height: 100%;
+  background: #000080;
+  transition: width 0.3s;
+}
+
+/* Scrollbar estilo Windows 98 */
+.skills-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.skills-content::-webkit-scrollbar-track {
+  background: #c0c0c0;
+}
+
+.skills-content::-webkit-scrollbar-thumb {
+  background: #dfdfdf;
+  border: 1px solid #808080;
+  border-right-color: #dfdfdf;
+  border-bottom-color: #dfdfdf;
+}
+
+.skills-content::-webkit-scrollbar-button {
+  display: none;
+} 

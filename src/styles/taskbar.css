@@ -1,0 +1,79 @@
+.taskbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: #c0c0c0;
+  border-top: 2px solid #dfdfdf;
+  padding: 2px;
+  height: 30px;
+}
+
+.start-button {
+  display: flex;
+  align-items: stretch;
+}
+
+.start-button button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: #c0c0c0;
+  border: 1px solid #dfdfdf;
+  border-bottom-color: #808080;
+  border-right-color: #808080;
+  cursor: pointer;
+  height: 100%;
+  margin: 0;
+}
+
+.start-button button:active {
+  border: 1px solid #808080;
+  border-bottom-color: #dfdfdf;
+  border-right-color: #dfdfdf;
+}
+
+.taskbar-items {
+  display: flex;
+  gap: 2px;
+  margin-left: 5px;
+  flex: 1;
+  align-items: center;
+}
+
+.taskbar-item {
+  background: #c0c0c0;
+  border: 1px solid #808080;
+  border-bottom-color: #dfdfdf;
+  border-right-color: #dfdfdf;
+  padding: 2px 8px;
+  min-width: 150px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.taskbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 5px;
+}
+
+.windows-logo {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.taskbar-item.active {
+  background: #dfdfdf;
+  border: 1px solid #808080;
+  border-top-color: #000;
+  border-left-color: #000;
+}
+
+.taskbar-item i {
+  font-size: 16px;
+} 

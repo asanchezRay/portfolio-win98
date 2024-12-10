@@ -1,0 +1,47 @@
+---
+import WindowModal from './WindowModal.astro';
+import { t } from '../i18n/translations';
+import '../styles/aboutMe.css';
+---
+
+<WindowModal 
+  title={t('about')} 
+  data-window="about"
+  icon="fa-solid fa-user-tie"
+  translationKey="about"
+>
+  <div class="about-content">
+    <div class="profile-section">
+      <div class="profile-image">
+        <img src="/img/profile.jpeg" alt="Andrés Sánchez" />
+      </div>
+      <h2>Andrés Sánchez</h2>
+      <p class="location">🇨🇱 Concepción, Chile</p>
+    </div>
+
+    <div class="description">
+      <span data-i18n="about-description">{t('about-description')}</span>
+    </div>
+
+    <div class="contact-info">
+      <div class="contact-item">
+        <i class="fa-solid fa-envelope"></i>
+        <a href="mailto:and.sanchezc@outlook.com">and.sanchezc@outlook.com</a>
+      </div>
+      <div class="contact-item">
+        <i class="fa-solid fa-phone"></i>
+        <a href="tel:+56985774337">+56 9 8577 4337</a>
+      </div>
+    </div>
+  </div>
+</WindowModal>
+
+<style>
+  .window-modal {
+    display: none;
+  }
+
+  .window-modal[data-open="true"] {
+    display: block;
+  }
+</style> 

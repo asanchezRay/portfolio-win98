@@ -1,0 +1,50 @@
+.language-selector {
+  margin: 0 10px;
+}
+
+select {
+  background: #c0c0c0;
+  border: 2px solid #808080;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  padding: 2px 4px;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  cursor: pointer;
+  height: 28px;
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 20px;
+  background-image: linear-gradient(45deg, transparent 50%, #808080 50%),
+                    linear-gradient(135deg, #808080 50%, transparent 50%);
+  background-position: calc(100% - 13px) 12px,
+                      calc(100% - 8px) 12px;
+  background-size: 5px 5px,
+                  5px 5px;
+  background-repeat: no-repeat;
+}
+
+select:focus {
+  outline: none;
+}
+
+select:hover {
+  background: #d0d0d0;
+}
+
+/* Estilo para las opciones del select */
+select option {
+  background: #c0c0c0;
+  color: black;
+  padding: 4px;
+}
+
+/* Efecto de "presionado" */
+select:active {
+  border: 2px solid #808080;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  padding-top: 3px;
+  padding-left: 5px;
+} 

@@ -1,0 +1,69 @@
+.desktop-icon {
+  width: 80px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.desktop-icon a,
+.desktop-icon .clickable {
+  text-decoration: none;
+  color: #c0c0c0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 5px;
+}
+
+.icon i {
+  font-size: 32px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.label {
+  text-align: center;
+  font-size: 0.9rem;
+  word-wrap: break-word;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+}
+
+.desktop-icon a:focus {
+  background: rgba(255, 255, 255, 0.2);
+  outline: 1px dotted white;
+}
+
+.desktop-icon:active {
+  transform: scale(0.95);
+}
+
+.fa-github {
+  color: #f0f6fc;
+}
+
+.fa-gitlab {
+  color: #fc6d26;
+}
+
+.fa-linkedin {
+  color: #0a66c2;
+}
+
+.desktop-icon:hover .icon i {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+} 

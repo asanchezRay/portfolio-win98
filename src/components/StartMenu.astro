@@ -1,0 +1,38 @@
+---
+import '../styles/startMenu.css';
+import { menuItems } from '../data/menuItems';
+import { t } from '../i18n/translations';
+---
+
+<div class="start-menu" id="startMenu">
+  <div class="menu-items">
+    {menuItems.map((item) => (
+      <>
+        {item.link ? (
+          <a href={item.link} target="_blank" rel="noopener noreferrer" class="menu-item">
+            <span class="icon"><i class={item.icon}></i></span>
+            <span class="text" data-i18n={item.translationKey}>{t(item.translationKey)}</span>
+          </a>
+        ) : (
+          <div class="menu-item" data-action={item.translationKey}>
+            <span class="icon"><i class={item.icon}></i></span>
+            <span class="text" data-i18n={item.translationKey}>{t(item.translationKey)}</span>
+          </div>
+        )}
+        {item.translationKey === 'contact' && <div class="menu-separator" />}
+      </>
+    ))}
+  </div>
+</div>
+
+<script>
+  const menuItems = document.querySelectorAll('.menu-item:not(a)');
+  
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const text = item.querySelector('.text')?.textContent;
+      console.log(`Clicked: ${text}`);
+      document.getElementById('startMenu')?.classList.remove('active');
+    });
+  });
+</script> 

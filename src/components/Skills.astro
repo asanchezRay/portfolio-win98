@@ -1,0 +1,157 @@
+---
+import WindowModal from './WindowModal.astro';
+import { t } from '../i18n/translations';
+import '../styles/skills.css';
+
+interface Skill {
+  name: string;
+  icon: string;
+  translationKey?: string;
+}
+
+const skills = [
+  {
+    category: 'frontend',
+    items: [
+      { name: 'Angular', icon: 'fa-brands fa-angular' },
+      { name: 'JavaScript', icon: 'fa-brands fa-js' },
+      { name: 'TypeScript', icon: 'fa-brands fa-js' },
+      { name: 'Astro', icon: 'fa-solid fa-rocket' },
+      { name: 'Microfrontend', icon: 'fa-solid fa-puzzle-piece', translationKey: 'microfrontend' }
+    ]
+  },
+  {
+    category: 'backend',
+    items: [
+      { name: 'PHP', icon: 'fa-brands fa-php' },
+      { name: 'Node.js', icon: 'fa-brands fa-node-js' },
+      { name: 'Java', icon: 'fa-brands fa-java' },
+      { name: 'Python', icon: 'fa-brands fa-python' },
+      { name: 'Laravel', icon: 'fa-brands fa-laravel' },
+      { name: 'Yii2', icon: 'fa-solid fa-y' },
+      { name: 'Microservicios', icon: 'fa-solid fa-cubes', translationKey: 'microservices' }
+    ]
+  },
+  {
+    category: 'mobile',
+    items: [
+      { name: 'Flutter', icon: 'fa-solid fa-mobile-screen' },
+      { name: 'Dart', icon: 'fa-solid fa-bullseye' }
+    ]
+  },
+  {
+    category: 'database',
+    items: [
+      { name: 'PostgreSQL', icon: 'fa-solid fa-database', translationKey: 'postgresql' },
+      { name: 'MySQL', icon: 'fa-solid fa-database' },
+      { name: 'Firebase', icon: 'fa-solid fa-fire' },
+      { name: 'DynamoDB', icon: 'fa-brands fa-aws' },
+      { name: 'BigQuery', icon: 'fa-brands fa-google' }
+    ]
+  },
+  {
+    category: 'tools',
+    items: [
+      { name: 'Git', icon: 'fa-brands fa-git-alt' },
+      { name: 'Docker', icon: 'fa-brands fa-docker' },
+      { name: 'CI/CD', icon: 'fa-solid fa-infinity' },
+      { name: 'Puppeteer', icon: 'fa-solid fa-robot' },
+      { name: 'Unit Testing', icon: 'fa-solid fa-vial' }
+    ]
+  },
+  {
+    category: 'cloud',
+    items: [
+      { name: 'AWS', icon: 'fa-brands fa-aws' },
+      { name: 'Google Cloud', icon: 'fa-brands fa-google' }
+    ]
+  },
+  {
+    category: 'ai',
+    items: [
+      { name: 'TensorFlow', icon: 'fa-solid fa-brain' },
+      { name: 'Keras', icon: 'fa-solid fa-brain' }
+    ]
+  },
+  {
+    category: 'architecture',
+    items: [
+      { name: 'MVC', icon: 'fa-solid fa-layer-group' },
+      { name: 'OOP', icon: 'fa-solid fa-cube' },
+      { name: 'Microservicios', icon: 'fa-solid fa-cubes' }
+    ]
+  }
+];
+---
+
+<WindowModal 
+  title={t('skills')} 
+  data-window="skills"
+  icon="fa-solid fa-code"
+  translationKey="skills"
+>
+  <div class="skills-container">
+    <div class="skills-tabs">
+      {skills.map((category) => (
+        <button 
+          class="tab-button" 
+          data-category={category.category}
+        >
+          <i class={category.items[0].icon}></i>
+          <span data-i18n={category.category}>{t(category.category)}</span>
+        </button>
+      ))}
+    </div>
+    <div class="skills-content">
+      {skills.map((category) => (
+        <div class="skill-panel" data-category={category.category}>
+          <div class="skills-list">
+            {category.items.map((skill) => (
+              <div class="skill-card">
+                <div class="skill-icon">
+                  <i class={skill.icon}></i>
+                </div>
+                <div class="skill-info">
+                  <h3 data-i18n={skill.translationKey}>
+                    {skill.translationKey ? t(skill.translationKey) : skill.name}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</WindowModal>
+
+<script>
+  function initializeTabs() {
+    const tabs = document.querySelectorAll('.tab-button');
+    const panels = document.querySelectorAll('.skill-panel');
+
+    // Mostrar el primer panel por defecto
+    if (panels.length > 0) {
+      panels[0].classList.add('active');
+      tabs[0]?.classList.add('active');
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const category = tab.getAttribute('data-category');
+        
+        // Desactivar todos los tabs y panels
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        
+        // Activar el tab y panel seleccionado
+        tab.classList.add('active');
+        document.querySelector(`.skill-panel[data-category="${category}"]`)
+          ?.classList.add('active');
+      });
+    });
+  }
+
+  // Inicializar cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', initializeTabs);
+</script> 

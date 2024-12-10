@@ -1,0 +1,58 @@
+---
+import '../styles/languageSelector.css';
+import { getCurrentLanguage, translations, t } from '../i18n/translations';
+
+const currentLocale = getCurrentLanguage();
+
+const languages = [
+  { code: 'es', label: '🇪🇸 ES' },
+  { code: 'en', label: '🇬🇧 EN' }
+];
+---
+
+<div class="language-selector">
+  <select id="languageSelect">
+    {languages.map((lang) => (
+      <option value={lang.code} selected={lang.code === currentLocale}>
+        {lang.label}
+      </option>
+    ))}
+  </select>
+</div>
+
+<script>
+  import { translations, t } from '../i18n/translations';
+
+  function updateTexts(locale: string) {
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (key) {
+        element.textContent = t(key, locale);
+      }
+    });
+
+    // Emitir evento de cambio de idioma
+    const event = new CustomEvent('languageChanged', {
+      detail: { locale }
+    });
+    document.dispatchEvent(event);
+
+    // Actualizar el título de la página
+    document.title = t('portfolio', locale);
+  }
+
+  const languageSelect = document.getElementById('languageSelect');
+  
+  languageSelect?.addEventListener('change', (e) => {
+    const target = e.target as HTMLSelectElement;
+    const newLocale = target.value;
+    localStorage.setItem('preferredLanguage', newLocale);
+    updateTexts(newLocale);
+  });
+
+  // Actualizar textos al cargar la página
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedLocale = localStorage.getItem('preferredLanguage') || 'es';
+    updateTexts(savedLocale);
+  });
+</script> 

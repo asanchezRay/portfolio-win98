@@ -1,0 +1,85 @@
+.code-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 40px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.code-block {
+  font-family: 'Fira Code', 'Consolas', monospace;
+  color: #c3cee3;
+  background: transparent;
+  line-height: 1.5;
+  width: fit-content;
+  max-width: 600px;
+  font-size: clamp(1.5rem, 1.5vw, 2.2rem);
+  margin: 0 auto;
+  padding: 2rem;
+  transform: translateX(-1rem);
+}
+
+/* Ajusta el espaciado del código dentro del pre */
+.code-block code {
+  display: block;
+  white-space: pre;
+  text-align: left;
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .code-block {
+    font-size: clamp(0.6rem, 2.5vw, 0.8rem);
+    max-width: 95%;
+  }
+}
+
+/* Ajustes para pantallas muy grandes */
+@media (min-width: 1920px) {
+  .code-block {
+    max-width: 800px;
+    font-size: 1.4rem;
+  }
+}
+
+/* Asegurar que el código no se desborde */
+.code-block code {
+  display: block;
+  white-space: pre-wrap; /* Permite que el código se envuelva */
+  word-break: break-word; /* Evita desbordamiento horizontal */
+}
+
+/* Resto de los estilos de colores... */
+.keyword {
+  color: #ff79c6;
+}
+
+.string {
+  color: #f1fa8c;
+}
+
+.function {
+  color: #50fa7b;
+}
+
+.class {
+  color: #8be9fd;
+}
+
+.property {
+  color: #bd93f9;
+}
+
+.number {
+  color: #bd93f9;
+}
+
+/* Efecto de brillo suave */
+.code-block {
+  text-shadow: 0 0 10px rgba(195, 206, 227, 0.3);
+} 

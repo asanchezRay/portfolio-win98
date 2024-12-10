@@ -1,0 +1,30 @@
+---
+import '../styles/desktopIcon.css';
+import { t } from '../i18n/translations';
+
+interface Props {
+  icon: string;
+  translationKey: string;
+  link?: string;
+}
+
+const { icon, translationKey, link } = Astro.props;
+---
+
+<div class="desktop-icon">
+  {link ? (
+    <a href={link} target="_blank" rel="noopener noreferrer">
+      <div class="icon">
+        <i class={icon}></i>
+      </div>
+      <div class="label" data-i18n={translationKey}>{t(translationKey)}</div>
+    </a>
+  ) : (
+    <div class="clickable">
+      <div class="icon">
+        <i class={icon}></i>
+      </div>
+      <div class="label" data-i18n={translationKey}>{t(translationKey)}</div>
+    </div>
+  )}
+</div> 

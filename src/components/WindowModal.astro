@@ -1,0 +1,214 @@
+---
+import '../styles/windowModal.css';
+
+interface Props {
+  title: string;
+  'data-window': string;
+  icon?: string;
+  translationKey: string;
+}
+
+const { title, 'data-window': dataWindow, icon = 'fa-solid fa-window-maximize', translationKey } = Astro.props;
+---
+
+<div class="window-modal" data-window={dataWindow} data-open="false" data-translation-key={translationKey} data-icon={icon}>
+  <div class="window-header">
+    <div class="title" data-i18n={translationKey}>{title}</div>
+    <div class="window-controls">
+      <button class="minimize" title="Minimize">_</button>
+      <button class="maximize" title="Maximize">□</button>
+      <button class="close" title="Close">×</button>
+    </div>
+  </div>
+  <div class="window-content">
+    <slot />
+  </div>
+</div>
+
+<script>
+  import { t } from '../i18n/translations';
+
+  class WindowManager {
+    private window: HTMLElement;
+    private header: HTMLElement;
+    private isDragging = false;
+    private currentX: number;
+    private currentY: number;
+    private initialX: number;
+    private initialY: number;
+    private xOffset = 0;
+    private yOffset = 0;
+    private icon: string;
+    private taskbarItem: HTMLElement | null = null;
+    private translationKey: string;
+
+    constructor(window: HTMLElement) {
+      this.window = window;
+      this.header = window.querySelector('.window-header') as HTMLElement;
+      this.currentX = 0;
+      this.currentY = 0;
+      this.initialX = 0;
+      this.initialY = 0;
+      this.icon = window.getAttribute('data-icon') || 'fa-solid fa-window-maximize';
+      this.translationKey = window.getAttribute('data-translation-key') || '';
+      
+      this.centerWindow();
+      this.initializeControls();
+      this.initializeTaskbarItem();
+      this.initializeLanguageObserver();
+    }
+
+    private centerWindow() {
+      const viewportWidth = document.documentElement.clientWidth;
+      const viewportHeight = document.documentElement.clientHeight;
+      const windowWidth = this.window.offsetWidth;
+      const windowHeight = this.window.offsetHeight;
+
+      this.currentX = (viewportWidth - windowWidth) / 2;
+      this.currentY = (viewportHeight - windowHeight) / 2;
+      this.updatePosition();
+    }
+
+    private initializeControls() {
+      this.header.addEventListener('mousedown', (e) => this.startDragging(e));
+      document.addEventListener('mousemove', (e) => this.drag(e));
+      document.addEventListener('mouseup', () => this.stopDragging());
+
+      const closeBtn = this.window.querySelector('.close');
+      closeBtn?.addEventListener('click', () => this.closeWindow());
+    }
+
+    private initializeTaskbarItem() {
+      const taskbarItems = document.getElementById('taskbarItems');
+      if (!taskbarItems) return;
+
+      this.taskbarItem = document.createElement('div');
+      this.taskbarItem.className = 'taskbar-item';
+      this.updateTaskbarItemContent();
+
+      this.taskbarItem.addEventListener('click', () => {
+        if (this.window.getAttribute('data-open') === 'true') {
+          this.window.style.display = 'none';
+          this.taskbarItem?.classList.remove('active');
+        } else {
+          this.window.style.display = 'block';
+          this.taskbarItem?.classList.add('active');
+        }
+      });
+    }
+
+    private updateTaskbarItemContent() {
+      if (this.taskbarItem) {
+        this.taskbarItem.innerHTML = `
+          <i class="${this.icon}"></i>
+          <span data-i18n="${this.translationKey}">${t(this.translationKey)}</span>
+        `;
+      }
+    }
+
+    private initializeLanguageObserver() {
+      document.addEventListener('languageChanged', (e: CustomEvent) => {
+        const newLocale = e.detail.locale;
+        this.updateWindowTitle(newLocale);
+        this.updateTaskbarItemContent();
+      });
+    }
+
+    private updateWindowTitle(locale: string) {
+      const titleElement = this.window.querySelector('.title');
+      if (titleElement) {
+        titleElement.textContent = t(this.translationKey, locale);
+      }
+    }
+
+    private updatePosition() {
+      this.window.style.left = `${this.currentX}px`;
+      this.window.style.top = `${this.currentY}px`;
+    }
+
+    private startDragging(e: MouseEvent) {
+      if (e.target instanceof HTMLButtonElement) return;
+      
+      this.isDragging = true;
+      this.initialX = e.clientX - this.currentX;
+      this.initialY = e.clientY - this.currentY;
+      
+      if (e.target === this.header) {
+        this.header.style.cursor = 'grabbing';
+      }
+    }
+
+    private drag(e: MouseEvent) {
+      if (this.isDragging) {
+        e.preventDefault();
+        
+        this.currentX = e.clientX - this.initialX;
+        this.currentY = e.clientY - this.initialY;
+        
+        const viewportWidth = document.documentElement.clientWidth;
+        const viewportHeight = document.documentElement.clientHeight;
+        const windowWidth = this.window.offsetWidth;
+        const windowHeight = this.window.offsetHeight;
+
+        this.currentX = Math.max(0, Math.min(this.currentX, viewportWidth - windowWidth));
+        this.currentY = Math.max(0, Math.min(this.currentY, viewportHeight - windowHeight));
+
+        this.updatePosition();
+      }
+    }
+
+    private stopDragging() {
+      this.isDragging = false;
+      this.header.style.cursor = 'grab';
+    }
+
+    private closeWindow() {
+      this.window.setAttribute('data-open', 'false');
+      this.taskbarItem?.remove();
+    }
+
+    public openWindow() {
+      this.window.setAttribute('data-open', 'true');
+      const taskbarItems = document.getElementById('taskbarItems');
+      if (taskbarItems && this.taskbarItem) {
+        taskbarItems.appendChild(this.taskbarItem);
+        this.taskbarItem.classList.add('active');
+      }
+      this.centerWindow();
+    }
+  }
+
+  // Initialize all windows and store references
+  const windowManagers = new Map<string, WindowManager>();
+  
+  document.querySelectorAll('.window-modal').forEach(window => {
+    const windowEl = window as HTMLElement;
+    const windowId = windowEl.getAttribute('data-window');
+    if (windowId) {
+      windowManagers.set(windowId, new WindowManager(windowEl));
+    }
+  });
+
+  // Handle window opening
+  function handleWindowOpen(action: string) {
+    const windowManager = windowManagers.get(action);
+    if (windowManager) {
+      windowManager.openWindow();
+    }
+  }
+
+  // Add click handlers
+  document.querySelectorAll('[data-action]').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const action = (e.currentTarget as HTMLElement).getAttribute('data-action');
+      if (action) handleWindowOpen(action);
+    });
+  });
+
+  document.querySelectorAll('.desktop-icon .clickable').forEach(icon => {
+    icon.addEventListener('click', (e) => {
+      const action = icon.querySelector('[data-i18n]')?.getAttribute('data-i18n');
+      if (action) handleWindowOpen(action);
+    });
+  });
+</script>

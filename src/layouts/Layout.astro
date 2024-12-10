@@ -1,4 +1,11 @@
 ---
+import '../styles/global.css';
+import '../styles/layout.css';
+import '../styles/taskbar.css';
+import LanguageSelector from '../components/LanguageSelector.astro';
+import CodeBackground from '../components/CodeBackground.astro';
+import { t } from '../i18n/translations';
+
 interface Props {
 	title: string;
 }
@@ -7,44 +14,66 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={Astro.preferredLocale}>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{title}</title>
+		<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@v5/font/simple-icons.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	</head>
 	<body>
-		<slot />
+		<CodeBackground />
+		<div class="container">
+			<div class="desktop">
+				<slot />
+			</div>
+			<footer class="taskbar">
+				<div class="start-button">
+					<button id="startBtn">
+						<span class="windows-logo">🪟</span>
+						<span data-i18n="start">{t('start')}</span>
+					</button>
+				</div>
+				<div class="taskbar-items" id="taskbarItems">
+					<!-- Las ventanas abiertas aparecerán aquí -->
+				</div>
+				<div class="taskbar-right">
+					<LanguageSelector />
+					<div class="clock-container">
+						<div id="time" class="time"></div>
+						<div id="date" class="date"></div>
+					</div>
+				</div>
+			</footer>
+		</div>
 	</body>
 </html>
-<style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-		background: #13151a;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
-</style>
+
+<script>
+	function updateClock() {
+    const timeElement = document.getElementById('time');
+    const dateElement = document.getElementById('date');
+    const now = new Date();
+
+    // Formatear hora
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    timeElement.textContent = `${hours}:${minutes}`;
+
+    // Formatear fecha
+    const options: Intl.DateTimeFormatOptions = { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric' 
+    };
+    const dateStr = now.toLocaleDateString('es-ES', options);
+    dateElement.textContent = dateStr;
+  }
+
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>

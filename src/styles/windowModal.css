@@ -1,0 +1,52 @@
+.window-modal {
+  position: fixed;
+  background: #c0c0c0;
+  border: 2px solid #dfdfdf;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  width: 500px;
+  min-height: 300px;
+  
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: none;
+}
+
+.window-modal[data-open="true"] {
+  display: block;
+}
+
+.window-header {
+  background: #000080;
+  color: white;
+  padding: 3px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+}
+
+.window-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.window-controls button {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background: #c0c0c0;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.window-content {
+  padding: 10px;
+  background: #fff;
+  height: calc(100% - 30px);
+  overflow: auto;
+} 
