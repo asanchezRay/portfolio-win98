@@ -66,7 +66,7 @@ npm run dev
 │ │ ├── global.css
 │ │ └── ...
 │ └── i18n/
-│ └── translations.ts
+│   └── translations.ts
 └── package.json
 ```
 
