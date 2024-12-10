@@ -20,6 +20,7 @@ export const menuItems: MenuItem[] = [
   {
     icon: 'fa-solid fa-paper-plane',
     translationKey: 'contact',
+    link: 'mailto:and.sanchezc@outlook.com'
   },
   {
     icon: 'fa-brands fa-github',
