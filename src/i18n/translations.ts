@@ -36,7 +36,7 @@ export const translations = {
     oop: 'Programación Orientada a Objetos',
 
     // Sección Sobre mí
-    aboutMe: 'Soy un desarrollador de software apasionado por la tecnología y la innovación. Me especializo en el desarrollo web y móvil, con experiencia en múltiples tecnologías y frameworks.',
+    aboutMe: 'Soy un ingeniero de software. Me gusta aprender sobre nuevas tecnologias, compartir mis conocimientos y resolver problemas complejos. Estoy interesado tanto en el desarrollo como la arquitectura de software.',
     location: 'Ubicación',
     email: 'Correo',
     phone: 'Teléfono',
@@ -95,7 +95,7 @@ export const translations = {
     oop: 'Object-Oriented Programming',
 
     // About section
-    aboutMe: 'I am a software developer passionate about technology and innovation. I specialize in web and mobile development, with experience in multiple technologies and frameworks.',
+    aboutMe: 'I am a software engineer. I like to learn about new technologies, share my knowledge and solve complex problems. I am interested in both software development and software architecture.',
     location: 'Location',
     email: 'Email',
     phone: 'Phone',
