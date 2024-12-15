@@ -92,10 +92,6 @@ The portfolio supports both English and Spanish languages with dynamic switching
 - **Tools**: Git, Docker, CI/CD, Puppeteer
 - **Architecture**: Microservices, MVC, OOP
 
-## 🚀 Deployment
-
-This site is deployed using GitHub Pages. The deployment process is automated through GitHub Actions.
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
