@@ -1,0 +1,214 @@
+---
+import WindowModal from './WindowModal.astro';
+import { t } from '../i18n/translations';
+import '../styles/projects.css';
+import ImageViewer from './ImageViewer.astro';
+
+console.log('Test translation:', t('projects'));
+
+console.log('Project description:', t('projectsList.igx.description'));
+
+const categories = [
+  { id: 'all', icon: 'fa-solid fa-briefcase', label: 'projectsList.categories.all' },
+  { id: 'professional', icon: 'fa-solid fa-building', label: 'projectsList.categories.professional' },
+  { id: 'personal', icon: 'fa-solid fa-user', label: 'projectsList.categories.personal' }
+];
+
+const projects = [
+  {
+    category: 'professional',
+    titleKey: 'projectsList.igx.title',
+    periodKey: 'projectsList.igx.period',
+    descriptionKey: 'projectsList.igx.description',
+    responsibilitiesKey: 'projectsList.igx.responsibilities',
+    technologies: [
+      'PHP', 'Yii2', 'Python', 'Docker', 'AWS', 'Google Cloud',
+      'MySQL', 'JavaScript', 'Linux', 'Git', 'CI/CD', 'Puppeteer',
+    ],
+    achievementsKey: 'projectsList.igx.achievements',
+    images: []
+  },
+  {
+    category: 'professional',
+    titleKey: 'projectsList.vestua.title',
+    periodKey: 'projectsList.vestua.period',
+    descriptionKey: 'projectsList.vestua.description',
+    responsibilitiesKey: 'projectsList.vestua.responsibilities',
+    technologies: ['NodeJS', 'TypeScript', 'Angular', 'AWS', 'Git', 'PostgreSQL'],
+    achievementsKey: 'projectsList.vestua.achievements',
+    images: []
+  },
+  {
+    category: 'professional',
+    titleKey: 'projectsList.everis.title',
+    periodKey: 'projectsList.everis.period',
+    descriptionKey: 'projectsList.everis.description',
+    responsibilitiesKey: 'projectsList.everis.responsibilities',
+    technologies: ['NodeJS', 'Angular', 'Jest', 'TypeScript', 'Oracle', 'MongoDB', 'Git'],
+    images: []
+  },
+  {
+    category: 'professional',
+    titleKey: 'projectsList.drup.title',
+    periodKey: 'projectsList.drup.period',
+    descriptionKey: 'projectsList.drup.description',
+    responsibilitiesKey: 'projectsList.drup.responsibilities',
+    technologies: ['Laravel', 'JavaScript', 'Postgres', 'Git'],
+    images: []
+  },
+  {
+    category: 'personal',
+    titleKey: 'projectsList.afasiaApp.title',
+    periodKey: 'projectsList.afasiaApp.period',
+    descriptionKey: 'projectsList.afasiaApp.description',
+    responsibilitiesKey: 'projectsList.afasiaApp.responsibilities',
+    technologies: ['Flutter', 'Dart', 'SQLite', 'Material Design', 'Git'],
+    achievementsKey: 'projectsList.afasiaApp.achievements',
+    images: [
+      {
+        src: '/img/afasiaApp/profile.png',
+        alt: t('projectsList.afasiaApp.images.profile'),
+        thumbnail: '/img/afasiaApp/profile.png'
+      },
+      {
+        src: '/img/afasiaApp/lecturaComprensiva.png',
+        alt: t('projectsList.afasiaApp.images.lecturaComprensiva'),
+        thumbnail: '/img/afasiaApp/lecturaComprensiva.png'
+      },
+      {
+        src: '/img/afasiaApp/listaActividades.png',
+        alt: t('projectsList.afasiaApp.images.listaActividades'),
+        thumbnail: '/img/afasiaApp/listaActividades.png'
+      },
+      {
+        src: '/img/afasiaApp/login.png',
+        alt: t('projectsList.afasiaApp.images.login'),
+        thumbnail: '/img/afasiaApp/login.png'
+      }
+    ]
+  }
+];
+const project2 = projects[0];
+
+---
+<WindowModal 
+  title={t('projects')} 
+  data-window="projects"
+  icon="fa-solid fa-folder-tree"
+  translationKey="projects"
+>
+  <div class="projects-container">
+    <nav class="projects-nav">
+      {categories.map((category) => (
+        <button class="nav-button" data-category={category.id}>
+          <i class={category.icon}></i>
+          <span data-i18n={category.label}>{t(category.label)}</span>
+        </button>
+      ))}
+    </nav>
+    
+    <div class="projects-grid">
+      {projects.map((project) => (
+        <article class="project-card" data-category={project.category}>
+          <header class="project-header">
+            <h3 data-i18n={project.titleKey}>{t(project.titleKey)}</h3>
+            <span class="project-period" data-i18n={project.periodKey}>{t(project.periodKey)}</span>
+          </header>
+          
+          <div class="project-content">
+            <div class="project-description" data-i18n={project.descriptionKey}>
+              {t(project.descriptionKey)}
+            </div>
+            
+            {project.responsibilitiesKey && (
+              <div class="project-responsibilities">
+                <h4 data-i18n="projectsList.sections.responsibilities">
+                  {t('projectsList.sections.responsibilities')}:
+                </h4>
+                <ul>
+                  {t(project.responsibilitiesKey).map((responsibility: string, index: number) => (
+                    <li data-i18n={`${project.responsibilitiesKey}.${index}`}>
+                      {responsibility}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div class="project-tech">
+              <h4 data-i18n="projectsList.sections.technologies">
+                {t('projectsList.sections.technologies')}:
+              </h4>
+              <div class="tech-badges">
+                {project.technologies.map((tech) => (
+                  <span class="tech-badge">{tech}</span>
+                ))}
+              </div>
+            </div>
+
+            {project.achievementsKey && (
+              <div class="project-achievements">
+                <h4 data-i18n="projectsList.sections.achievements">
+                  {t('projectsList.sections.achievements')}:
+                </h4>
+                <ul>
+                  {t(project.achievementsKey).map((achievement: string, index: number) => (
+                    <li data-i18n={`${project.achievementsKey}.${index}`}>
+                      {achievement}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {project.images && project.images.length > 0 && (
+              <div class="project-images">
+                <h4>{t('projectsList.sections.images')}:</h4>
+                <ImageViewer images={project.images} />
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</WindowModal>
+
+<script>
+  function initializeProjectTabs() {
+    const buttons = document.querySelectorAll('.nav-button') as NodeListOf<HTMLElement>;
+    const projects = document.querySelectorAll('.project-card') as NodeListOf<HTMLElement>;
+
+    buttons[0]?.classList.add('active');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const category = button.getAttribute('data-category');
+        
+        buttons.forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+
+        projects.forEach(project => {
+          project.classList.add('fade');
+          
+          setTimeout(() => {
+            if (category === 'all' || project.getAttribute('data-category') === category) {
+              project.classList.remove('hidden');
+            } else {
+              project.classList.add('hidden');
+            }
+            project.classList.remove('fade');
+          }, 300);
+        });
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initializeProjectTabs);
+</script>
+
+<style>
+  .hidden {
+    display: none !important;
+  }
+</style> 

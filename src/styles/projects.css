@@ -1,0 +1,208 @@
+.projects-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: #c0c0c0;
+  overflow: hidden;
+}
+
+.projects-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #808080;
+  max-width: 100%;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: #c0c0c0;
+  border: 2px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.nav-button:active {
+  border: 2px solid #808080;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+  padding-top: 6px;
+  padding-left: 11px;
+}
+
+.nav-button.active {
+  background: #000080;
+  color: #fff;
+  border-color: #000080;
+}
+
+.nav-button i {
+  font-size: 0.9rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.project-card {
+  background: #fff;
+  border: 2px solid #dfdfdf;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #000080;
+  color: #fff;
+}
+
+.project-header i {
+  font-size: 1.5rem;
+}
+
+.project-year {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.project-content {
+  padding: 1rem;
+}
+
+.project-content h3 {
+  margin: 0 0 0.5rem 0;
+  color: #000080;
+}
+
+.project-content p {
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #444;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tech-badge {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  background: #000080;
+  color: #fff;
+  border-radius: 3px;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #c0c0c0;
+  border: 2px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.9rem;
+}
+
+.project-link:active {
+  border: 2px solid #808080;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+  padding-top: 6px;
+  padding-left: 11px;
+}
+
+/* Animaciones */
+.fade {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Scrollbar estilo Windows 98 */
+.projects-grid::-webkit-scrollbar {
+  width: 16px;
+}
+
+.projects-grid::-webkit-scrollbar-track {
+  background: #c0c0c0;
+  border: 2px solid #dfdfdf;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+}
+
+.projects-grid::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border: 2px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+}
+
+.project-content ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.project-content li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.project-content h4 {
+  color: #000080;
+  margin: 1rem 0 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.project-description {
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: #000080;
+}
+
+.project-responsibilities,
+.project-achievements {
+  margin-bottom: 1rem;
+}
+
+.tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+} 

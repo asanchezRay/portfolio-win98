@@ -1,0 +1,192 @@
+---
+interface Props {
+  images: {
+    src: string;
+    alt: string;
+    thumbnail: string;
+  }[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="image-viewer">
+  <div class="main-image">
+    <img src={images[0].src} alt={images[0].alt} id="mainImage" />
+    <div class="navigation-buttons">
+      <button class="nav-btn prev" disabled>
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <span class="image-counter">1 / {images.length}</span>
+      <button class="nav-btn next">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+  <div class="thumbnails">
+    {images.map((image, index) => (
+      <button 
+        class={`thumb-btn ${index === 0 ? 'active' : ''}`}
+        data-index={index}
+      >
+        <img src={image.thumbnail} alt={`Miniatura ${index + 1}`} />
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  class ImageViewer {
+    private currentIndex = 0;
+    private images: HTMLImageElement[];
+    private mainImage: HTMLImageElement;
+    private counter: HTMLElement;
+    private prevBtn: HTMLButtonElement;
+    private nextBtn: HTMLButtonElement;
+    private thumbBtns: HTMLButtonElement[];
+
+    constructor(container: HTMLElement) {
+      this.mainImage = container.querySelector('#mainImage')!;
+      this.counter = container.querySelector('.image-counter')!;
+      this.prevBtn = container.querySelector('.prev')!;
+      this.nextBtn = container.querySelector('.next')!;
+      this.thumbBtns = Array.from(container.querySelectorAll('.thumb-btn'));
+      this.images = this.thumbBtns.map(btn => {
+        const img = btn.querySelector('img')!;
+        return {
+          src: img.src.replace('-thumb', ''),
+          alt: img.alt
+        };
+      });
+
+      this.setupListeners();
+    }
+
+    private setupListeners() {
+      this.prevBtn.addEventListener('click', () => this.navigate(-1));
+      this.nextBtn.addEventListener('click', () => this.navigate(1));
+      
+      this.thumbBtns.forEach((btn, index) => {
+        btn.addEventListener('click', () => this.showImage(index));
+      });
+    }
+
+    private navigate(direction: number) {
+      this.showImage(this.currentIndex + direction);
+    }
+
+    private showImage(index: number) {
+      // Actualizar botones y miniaturas
+      this.thumbBtns[this.currentIndex].classList.remove('active');
+      this.currentIndex = index;
+      this.thumbBtns[this.currentIndex].classList.add('active');
+
+      // Actualizar imagen principal
+      this.mainImage.src = this.images[index].src;
+      this.mainImage.alt = this.images[index].alt;
+
+      // Actualizar contador
+      this.counter.textContent = `${index + 1} / ${this.images.length}`;
+
+      // Actualizar estado de botones
+      this.prevBtn.disabled = index === 0;
+      this.nextBtn.disabled = index === this.images.length - 1;
+    }
+  }
+
+  // Inicializar todos los visores de imágenes
+  document.querySelectorAll('.image-viewer').forEach(viewer => {
+    new ImageViewer(viewer as HTMLElement);
+  });
+</script>
+
+<style>
+  .image-viewer {
+    background: #c0c0c0;
+    border: 2px solid #dfdfdf;
+    border-right-color: #808080;
+    border-bottom-color: #808080;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .main-image {
+    position: relative;
+    background: #fff;
+    border: 2px solid #808080;
+    border-right-color: #dfdfdf;
+    border-bottom-color: #dfdfdf;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .navigation-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .nav-btn {
+    padding: 0.25rem 0.5rem;
+    background: #c0c0c0;
+    border: 2px solid #fff;
+    border-right-color: #808080;
+    border-bottom-color: #808080;
+    cursor: pointer;
+  }
+
+  .nav-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .nav-btn:active:not(:disabled) {
+    border: 2px solid #808080;
+    border-right-color: #fff;
+    border-bottom-color: #fff;
+  }
+
+  .thumbnails {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.5rem;
+    background: #fff;
+    border: 2px solid #808080;
+    border-right-color: #dfdfdf;
+    border-bottom-color: #dfdfdf;
+  }
+
+  .thumb-btn {
+    padding: 2px;
+    background: #c0c0c0;
+    border: 2px solid #fff;
+    border-right-color: #808080;
+    border-bottom-color: #808080;
+    cursor: pointer;
+  }
+
+  .thumb-btn.active {
+    background: #000080;
+    border-color: #000080;
+  }
+
+  .thumb-btn img {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+  }
+
+  .image-counter {
+    font-size: 0.9rem;
+    color: #444;
+  }
+</style> 
