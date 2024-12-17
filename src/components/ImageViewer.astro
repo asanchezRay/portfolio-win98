@@ -36,9 +36,14 @@ const { images } = Astro.props;
 </div>
 
 <script>
+  interface ImageInfo {
+    src: string;
+    alt: string;
+  }
+
   class ImageViewer {
     private currentIndex = 0;
-    private images: HTMLImageElement[];
+    private images: ImageInfo[];
     private mainImage: HTMLImageElement;
     private counter: HTMLElement;
     private prevBtn: HTMLButtonElement;

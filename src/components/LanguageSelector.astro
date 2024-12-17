@@ -27,7 +27,7 @@ const languages = [
     document.querySelectorAll('[data-i18n]').forEach(element => {
       const key = element.getAttribute('data-i18n');
       if (key) {
-        element.textContent = t(key, locale);
+        element.textContent = t(key, locale) as string;
       }
     });
 
@@ -38,7 +38,7 @@ const languages = [
     document.dispatchEvent(event);
 
     // Actualizar el título de la página
-    document.title = t('portfolio', locale);
+    document.title = t('portfolio', locale) as string;
   }
 
   const languageSelect = document.getElementById('languageSelect');

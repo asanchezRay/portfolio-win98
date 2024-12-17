@@ -67,22 +67,22 @@ const projects = [
     images: [
       {
         src: '/img/afasiaApp/profile.png',
-        alt: t('projectsList.afasiaApp.images.profile'),
+        alt: t('projectsList.afasiaApp.images.profile') as string,
         thumbnail: '/img/afasiaApp/profile.png'
       },
       {
         src: '/img/afasiaApp/lecturaComprensiva.png',
-        alt: t('projectsList.afasiaApp.images.lecturaComprensiva'),
+        alt: t('projectsList.afasiaApp.images.lecturaComprensiva') as string,
         thumbnail: '/img/afasiaApp/lecturaComprensiva.png'
       },
       {
         src: '/img/afasiaApp/listaActividades.png',
-        alt: t('projectsList.afasiaApp.images.listaActividades'),
+        alt: t('projectsList.afasiaApp.images.listaActividades') as string,
         thumbnail: '/img/afasiaApp/listaActividades.png'
       },
       {
         src: '/img/afasiaApp/login.png',
-        alt: t('projectsList.afasiaApp.images.login'),
+        alt: t('projectsList.afasiaApp.images.login') as string,
         thumbnail: '/img/afasiaApp/login.png'
       }
     ]
@@ -92,7 +92,7 @@ const project2 = projects[0];
 
 ---
 <WindowModal 
-  title={t('projects')} 
+  title={t('projects') as string} 
   data-window="projects"
   icon="fa-solid fa-folder-tree"
   translationKey="projects"
@@ -126,7 +126,7 @@ const project2 = projects[0];
                   {t('projectsList.sections.responsibilities')}:
                 </h4>
                 <ul>
-                  {t(project.responsibilitiesKey).map((responsibility: string, index: number) => (
+                  {([].concat(t(project.responsibilitiesKey))).map((responsibility: string, index: number) => (
                     <li data-i18n={`${project.responsibilitiesKey}.${index}`}>
                       {responsibility}
                     </li>
@@ -152,7 +152,7 @@ const project2 = projects[0];
                   {t('projectsList.sections.achievements')}:
                 </h4>
                 <ul>
-                  {t(project.achievementsKey).map((achievement: string, index: number) => (
+                  {([].concat(t(project.achievementsKey))).map((achievement: string, index: number) => (
                     <li data-i18n={`${project.achievementsKey}.${index}`}>
                       {achievement}
                     </li>
