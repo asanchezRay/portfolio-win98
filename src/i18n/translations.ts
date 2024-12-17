@@ -18,6 +18,7 @@ export const translations = {
     skills: 'Habilidades Técnicas',
     experience: 'Experiencia',
     education: 'Educación',
+    cv: 'Descargar CV',
 
     // Categorías de habilidades
     frontend: 'Frontend',
@@ -184,7 +185,7 @@ export const translations = {
     skills: 'Technical Skills',
     experience: 'Experience',
     education: 'Education',
-
+    cv: 'Download CV',
     // Skill categories
     frontend: 'Frontend',
     backend: 'Backend',

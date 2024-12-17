@@ -36,5 +36,10 @@ export const menuItems: MenuItem[] = [
     icon: 'fa-brands fa-linkedin',
     translationKey: 'Linkedin',
     link: 'https://cl.linkedin.com/in/andressanchezc'
+  },
+  {
+    icon: 'fa-solid fa-file-pdf',
+    translationKey: 'cv',
+    link: '/CV_Andres_Sanchez_Cabrera.pdf',
   }
 ]; 
