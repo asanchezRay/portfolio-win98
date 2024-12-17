@@ -166,6 +166,9 @@ export const translations = {
           listaActividades: 'Lista de actividades en AfasiaApp',
           login: 'Inicio de sesión en AfasiaApp'
         }
+      },
+      hints: {
+        desktopInteraction: '¡Haz clic en los iconos del escritorio para conocerme mejor!'
       }
     }
   },
@@ -325,6 +328,9 @@ export const translations = {
           listaActividades: 'Activities list in AfasiaApp',
           login: 'Login in AfasiaApp'
         }
+      },
+      hints: {
+        desktopInteraction: 'Click on desktop icons to interact!'
       }
     }
   }
