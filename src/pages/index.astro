@@ -10,7 +10,7 @@ import { t } from '../i18n/translations';
 import '../styles/index.css';
 ---
 
-<Layout title={t('portfolio')}>
+<Layout title={t('portfolio') as string}>
   <div class="desktop-icons">
     {menuItems.map((item) => (
       <DesktopIcon 
