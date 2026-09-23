@@ -1,62 +1,59 @@
 /*
  * Tokens del sistema visual.
  *
- * La direccion es "expediente tecnico": tipografia de documento, cifras
- * tratadas como instrumento de medicion y figuras con pie numerado. El color
- * es deliberadamente sobrio — el peso visual lo cargan las imagenes, los
- * diagramas y los numeros, no el cromado de la interfaz.
+ * La direccion es consola de instrumentos: oscuro, monoespaciado, esquinas
+ * vivas, cuadricula a la vista y ambar de fosforo. Sale del mundo donde
+ * trabaja Andres — paneles de despacho, lecturas de medidor — y lo que la
+ * hace no generica es la estructura en paneles, no la paleta.
  *
- * El tema claro se define completo en :root. El oscuro solo redefine tokens,
- * nunca introduce un color que no exista ya en claro.
+ * Es un tema unico y deliberado: no hay claro/oscuro. Un panel de
+ * instrumentos en fondo blanco no es un panel de instrumentos.
  */
 
 :root {
-  /* --- Color: papel e tinta --- */
-  --papel: #faf9f7;
-  --papel-hundido: #f2f0ec;
-  --papel-elevado: #ffffff;
-  --tinta: #1a1816;
-  --tinta-media: #55504a;
-  --tinta-suave: #7d766d;
-  --linea: #e2ddd5;
-  --linea-fuerte: #cdc6bb;
+  /* --- Superficies e tinta --- */
+  --papel: #0a0d0c;
+  --papel-hundido: #0f1413;
+  --papel-elevado: #131918;
+  --tinta: #d6e2d6;
+  --tinta-media: #8fa08f;
+  --tinta-suave: #64756a;
+  --linea: #1e2826;
+  --linea-fuerte: #35443f;
 
-  /* --- Color: acentos ---
-     Un solo acento para lo interactivo. La senal ambar queda reservada
-     para datos y diagramas, para que nunca compita con un enlace. */
-  --acento: #1f4ba8;
-  --acento-tenue: #e8eefb;
-  --senal: #b1560f;
-  --senal-tenue: #fbeee2;
+  /* --- Acentos ---
+     Ambar para lo interactivo, naranja para datos y estados activos. */
+  --acento: #ffb000;
+  --acento-tenue: #2a1f06;
+  --senal: #ff7b3d;
+  --senal-tenue: #2b1509;
 
   /* --- Color de datos ---
-     Par de enfasis para graficos: gris de contexto + ambar de enfasis.
-     Separado de --senal a proposito: --senal es para texto y marcas de
-     interfaz, donde manda el contraste de texto; estos dos son para
-     rellenos, y estan elegidos para pasar banda de luminosidad,
-     separacion bajo daltonismo, piso de vision normal y 3:1 contra el
-     fondo. Verificados con el validador de paleta; no cambiar a ojo. */
-  --dato-contexto: #6f6860;
-  --dato-enfasis: #c4670f;
+     Par de enfasis para graficos: gris de contexto + ambar. Verificado con el
+     validador de paleta en banda de luminosidad, separacion bajo daltonismo,
+     piso de vision normal y contraste contra el fondo. No cambiar a ojo. */
+  --dato-contexto: #5d6f68;
+  --dato-enfasis: #ffb000;
 
-  color-scheme: light dark;
+  color-scheme: dark;
 
-  /* --- Tipografia --- */
-  --fuente-texto: 'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
-  --fuente-ui: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-    'Helvetica Neue', Arial, sans-serif;
+  /* --- Tipografia ---
+     Todo monoespaciado, del sistema. Cero fuentes web: el sitio no descarga
+     ni un byte de tipografia. */
   --fuente-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
     'Liberation Mono', monospace;
+  --fuente-texto: var(--fuente-mono);
+  --fuente-ui: var(--fuente-mono);
 
   /* Escala modular ~1.2, con los extremos fluidos */
   --t-micro: 0.75rem;
   --t-mini: 0.8125rem;
-  --t-chico: 0.9375rem;
-  --t-base: 1.0625rem;
-  --t-medio: 1.1875rem;
-  --t-grande: clamp(1.25rem, 0.9rem + 1.1vw, 1.5rem);
-  --t-titulo: clamp(1.5rem, 1.1rem + 1.7vw, 2rem);
-  --t-display: clamp(2rem, 1.3rem + 3.2vw, 3.25rem);
+  --t-chico: 0.875rem;
+  --t-base: 0.9375rem;
+  --t-medio: 1rem;
+  --t-grande: clamp(1.125rem, 0.9rem + 0.9vw, 1.3125rem);
+  --t-titulo: clamp(1.25rem, 1rem + 1.1vw, 1.5rem);
+  --t-display: clamp(1.75rem, 1.1rem + 2.6vw, 2.5rem);
 
   /* --- Ritmo vertical --- */
   --e-1: 0.25rem;
@@ -70,32 +67,10 @@
   --e-9: 6rem;
 
   /* --- Medidas de la reticula de documento --- */
-  --ancho-texto: 38rem;
-  --ancho-medio: 52rem;
-  --ancho-amplio: 68rem;
+  --ancho-texto: 42rem;
+  --ancho-medio: 56rem;
+  --ancho-amplio: 72rem;
 
-  --radio: 3px;
-  --borde: 1px solid var(--linea);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --papel: #14120f;
-    --papel-hundido: #1c1916;
-    --papel-elevado: #201d19;
-    --tinta: #eae5dc;
-    --tinta-media: #a9a298;
-    --tinta-suave: #857e74;
-    --linea: #2e2a25;
-    --linea-fuerte: #453f38;
-
-    --acento: #9cb8f5;
-    --acento-tenue: #1b2438;
-    --senal: #e09a5c;
-    --senal-tenue: #2c2118;
-
-    /* Escalones propios para el fondo oscuro, no un volteo automatico. */
-    --dato-contexto: #736d65;
-    --dato-enfasis: #d07a2b;
-  }
+  --radio: 0;
+  --borde: 1px solid var(--linea-fuerte);
 }

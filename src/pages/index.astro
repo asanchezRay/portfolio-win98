@@ -61,15 +61,11 @@ const { contacto } = perfil;
     <!-- ═══ El taller ═══ -->
     <Panel
       rotulo="El taller"
-      nota={`${taller.length} cosas · ${enMarcha} andando`}
+      nota={`${taller.length} cosas · ${enMarcha} andando · 4 destacadas`}
       desnudo
       id="taller"
     >
-      <p class="glosa">
-        Trabajo pagado, proyectos propios, clases y cambios de proceso, todo
-        junto. Los separo poco porque en la práctica no los separo.
-      </p>
-      <Taller soloRejilla />
+      <Taller />
     </Panel>
 
     <!-- ═══ Trayectoria ═══ -->
@@ -197,16 +193,6 @@ const { contacto } = perfil;
     flex-wrap: wrap;
     gap: var(--e-2) var(--e-4);
     font-family: var(--fuente-ui);
-    font-size: var(--t-chico);
-  }
-
-  /* ═══ Taller ═══ */
-  .glosa {
-    margin: 0;
-    padding: var(--e-4) var(--e-5);
-    max-width: 46rem;
-    border-bottom: 1px solid var(--linea);
-    color: var(--tinta-media);
     font-size: var(--t-chico);
   }
 

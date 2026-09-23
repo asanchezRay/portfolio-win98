@@ -22,24 +22,42 @@ import '../styles/prosa.css';
     </p>
     <p>
       No hay framework de interfaz ni librería de componentes, y las páginas no
-      envían JavaScript al navegador, salvo el selector de temas de abajo a la
-      derecha, que es provisorio y se va cuando esté elegida la dirección
-      visual. El CSS está escrito a mano sobre una retícula de tres
+      envían un solo byte de JavaScript al navegador. Los tres archivos que
+      quedan en el build son del escritorio del 98. El CSS está escrito a mano sobre una retícula de tres
       anchos: texto, medio y amplio. Eso permite que las figuras se salgan de la
       columna de lectura sin salirse del flujo.
     </p>
 
     <h2>Tipografía</h2>
     <p>
-      Source Serif 4 para el cuerpo, autohospedada, solo el subconjunto latino
-      (el rango <code>U+0000-00FF</code> ya cubre los acentos, la eñe y los
-      signos de apertura). Son dos archivos, 172 KB. La versión anterior del
-      sitio cargaba dos familias de Google Fonts y tres CDN de iconos: cinco
-      peticiones bloqueantes a terceros antes de pintar una letra.
+      Monoespaciada del sistema, en todo: titulares, cuerpo, rótulos y datos.
+      Cero fuentes web. El sitio no descarga ni un byte de tipografía, y eso
+      también define el aire: una consola no usa dos familias.
     </p>
     <p>
-      Los rótulos, los datos y las cifras van en la sans del sistema. A tamaño
-      grande, un número en serif parece decoración.
+      La versión anterior cargaba dos familias de Google Fonts y tres CDN de
+      iconos, cinco peticiones bloqueantes a terceros antes de pintar una letra.
+      La intermedia autohospedaba una serif de 172 KB. Esta no carga nada.
+    </p>
+
+    <h2>Layout</h2>
+    <p>
+      La portada es una retícula de doce columnas a sangre completa, con
+      paneles de borde duro y barra de título pegados entre sí. No hay columna
+      centrada flotando en el medio.
+    </p>
+    <p>
+      Esa decisión es la que más se nota. Las dos versiones anteriores tenían
+      buena tipografía y colores razonables, y se veían como cualquier otro
+      portafolio, porque la estructura era la de cualquier otro portafolio. El
+      color se cambia en diez minutos; el layout es lo que hace que un sitio se
+      reconozca.
+    </p>
+    <p>
+      Las líneas de la cuadrícula se dibujan con <code>box-shadow</code> y no
+      con borde: la sombra sale de la caja y el contenedor la recorta, así que
+      los paneles contiguos no dibujan líneas dobles y una fila incompleta no
+      deja huecos.
     </p>
 
     <h2>Diagramas</h2>

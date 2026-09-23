@@ -1,243 +1,322 @@
 ---
-import { taller, type Estado } from '../data/taller';
+import { taller, type Estado, type Pieza } from '../data/taller';
 
 /**
- * Rejilla densa con todo lo construido.
+ * El taller en dos pesos.
  *
- * Fichas chicas y uniformes a proposito: lo que comunica aqui es la cantidad y
- * la variedad, no cada pieza por separado. Las que tienen caso enlazan; las
- * demas se leen completas en su ficha, que es justamente por que cada `que`
- * tiene que caber en una linea.
+ * Arriba, las pocas piezas que aguantan presencia propia: captura o cifra
+ * grande, nombre y una linea corta. Abajo, el indice denso con TODO, una fila
+ * por cosa y sin una sola descripcion.
+ *
+ * La version anterior era una rejilla de quince fichas iguales, cada una con
+ * su frase. Eso son quince parrafos y cero jerarquia: "LeetCode" pesaba lo
+ * mismo que "Organizatumatri", y lo chico le restaba a lo grande.
  */
 
-/** Activo lleva punto relleno; terminado, punto hueco. */
 const activo = (estado: Estado) =>
   estado === 'en curso' || estado === 'en producción' || estado === 'continuo';
 
-const total = taller.length;
-const enMarcha = taller.filter((p) => activo(p.estado)).length;
+const destacadas = taller.filter((p) => p.destacado);
+const indice = taller;
 
-interface Props {
-  /** Dentro de un Panel el encabezado sobra: el panel ya trae barra de titulo. */
-  soloRejilla?: boolean;
-}
-const { soloRejilla = false } = Astro.props;
+const enlaceDe = (p: Pieza) =>
+  p.caso ? `/casos/${p.caso}` : p.enlace ? p.enlace.href : null;
 ---
 
-<section class:list={['taller', { 'solo-rejilla': soloRejilla }]}>
-  {
-    !soloRejilla && (
-      <>
-        <header>
-          <h2>El taller</h2>
-          <p class="cuenta rotulo">
-            {total} cosas · {enMarcha} andando
-          </p>
-        </header>
-        <p class="glosa">
-          Trabajo pagado, proyectos propios, clases y cambios de proceso, todo
-          junto. Los separo poco porque en la práctica no los separo.
-        </p>
-      </>
-    )
-  }
-
-  <ul class="rejilla">
+<div class="taller">
+  <!-- ══ Destacadas ══ -->
+  <ul class="destacadas">
     {
-      taller.map((pieza) => {
-        const Etiqueta = pieza.caso ? 'a' : 'div';
-        const props = pieza.caso ? { href: `/casos/${pieza.caso}` } : {};
+      destacadas.map((pieza) => {
+        const href = enlaceDe(pieza);
+        const Cuerpo = href ? 'a' : 'div';
         return (
-          <li class="ficha">
-            <Etiqueta {...props} class="cuerpo">
-              <p class:list={['estado', { activo: activo(pieza.estado) }]}>
-                <span class="punto" aria-hidden="true" />
-                {pieza.estado}
-              </p>
-              <h3>{pieza.nombre}</h3>
-              <p class="que">{pieza.que}</p>
-            </Etiqueta>
-
-            <p class="meta">
-              <span>{pieza.anios}</span>
-              {pieza.contexto && <span>{pieza.contexto}</span>}
-            </p>
-
-            <ul class="tags">
-              {pieza.tags.map((t) => (
-                <li>{t}</li>
-              ))}
-            </ul>
-
-            {(pieza.caso || pieza.enlace) && (
-              <p class="acciones">
-                {pieza.caso && <a href={`/casos/${pieza.caso}`}>Ver el caso</a>}
-                {pieza.enlace && <a href={pieza.enlace.href}>{pieza.enlace.texto}</a>}
-              </p>
-            )}
+          <li>
+            <Cuerpo {...(href ? { href } : {})} class="tarjeta">
+              <div class="visual">
+                {pieza.imagen ? (
+                  <img src={pieza.imagen.src} alt={pieza.imagen.alt} loading="lazy" decoding="async" />
+                ) : pieza.cifra ? (
+                  <p class="cifra">
+                    <span class="v">{pieza.cifra.valor}</span>
+                    {pieza.cifra.unidad && <span class="u">{pieza.cifra.unidad}</span>}
+                    <span class="e">{pieza.cifra.etiqueta}</span>
+                  </p>
+                ) : null}
+              </div>
+              <div class="pie">
+                <h3>{pieza.nombre}</h3>
+                <p class="que">{pieza.que}</p>
+              </div>
+            </Cuerpo>
           </li>
         );
       })
     }
   </ul>
-</section>
+
+  <!-- ══ Índice ══ -->
+  <table class="indice">
+    <caption class="solo-lectores">
+      Todo lo construido: año, estado, nombre, contexto y stack.
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col" class="c-anio">Año</th>
+        <th scope="col" class="c-estado">Estado</th>
+        <th scope="col" class="c-que">Qué</th>
+        <th scope="col" class="c-donde">Dónde</th>
+        <th scope="col" class="c-stack">Stack</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        indice.map((pieza) => {
+          const href = enlaceDe(pieza);
+          return (
+            <tr class:list={{ marcada: pieza.destacado }}>
+              <td class="c-anio">{pieza.anios}</td>
+              <td class="c-estado">
+                <span class:list={['estado', { activo: activo(pieza.estado) }]}>
+                  <span class="punto" aria-hidden="true" />
+                  {pieza.estado}
+                </span>
+              </td>
+              <th scope="row" class="c-que">
+                {href ? <a href={href}>{pieza.nombre}</a> : pieza.nombre}
+              </th>
+              <td class="c-donde">{pieza.contexto}</td>
+              <td class="c-stack">{pieza.tags.join(' · ')}</td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</div>
 
 <style>
-  .taller header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--e-2) var(--e-4);
-  }
-
-  h2 {
-    font-size: var(--t-titulo);
-  }
-
-  .cuenta {
+  /* ══ Destacadas ══ */
+  .destacadas {
     margin: 0;
-  }
-
-  .glosa {
-    margin-top: var(--e-3);
-    max-width: 34rem;
-    color: var(--tinta-media);
-    font-size: var(--t-chico);
-  }
-
-  .rejilla {
-    margin: var(--e-6) 0 0;
     padding: 0;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
     gap: 0;
-    background: var(--papel-elevado);
-    border: var(--borde);
-    border-radius: var(--radio);
-    overflow: hidden;
+    border-bottom: 1px solid var(--linea-fuerte);
   }
 
-  /* Dentro de un panel la rejilla llena el panel y no dibuja su propio marco:
-     esa linea ya la pone la barra de titulo. */
-  .solo-rejilla .rejilla {
-    margin: 0;
-    border: 0;
-    border-radius: 0;
+  .destacadas > li {
+    min-inline-size: 0;
+    box-shadow: 1px 0 0 var(--linea-fuerte);
   }
 
-  .ficha {
+  .tarjeta {
     display: flex;
     flex-direction: column;
-    gap: var(--e-3);
-    padding: var(--e-4);
-    background: var(--papel-elevado);
-    /* Las lineas de la cuadricula se dibujan como sombra y no como borde: la
-       sombra sale fuera de la caja, asi que el overflow del contenedor recorta
-       las del ultimo borde y no quedan lineas dobles. Ademas, cuando la ultima
-       fila queda incompleta, la celda sobrante es papel y no un hueco gris. */
-    box-shadow:
-      1px 0 0 var(--linea),
-      0 1px 0 var(--linea);
+    block-size: 100%;
+    color: inherit;
+    text-decoration: none;
   }
 
-  .ficha:hover {
+  a.tarjeta:hover {
     background: var(--papel-hundido);
   }
 
-  .cuerpo {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    flex: 1;
+  .visual {
+    aspect-ratio: 16 / 10;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--papel);
+    border-bottom: 1px solid var(--linea);
   }
 
-  a.cuerpo:hover h3 {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
+  .visual img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: top center;
   }
 
-  /* --- Estado --- */
-  .estado {
-    margin: 0 0 var(--e-2);
+  .cifra {
+    margin: 0;
+    padding: var(--e-4);
     display: flex;
-    align-items: center;
-    gap: 0.45em;
-    font-family: var(--fuente-ui);
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.08em;
+    text-align: center;
+  }
+
+  .cifra .v {
+    font-size: clamp(2.5rem, 1.6rem + 3.4vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--dato-enfasis);
+  }
+
+  .cifra .u {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--dato-enfasis);
+  }
+
+  .cifra .e {
+    flex-basis: 100%;
+    margin-top: var(--e-2);
     font-size: var(--t-micro);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    line-height: 1.4;
     color: var(--tinta-suave);
   }
 
+  .pie {
+    padding: var(--e-4);
+    display: grid;
+    gap: var(--e-2);
+    align-content: start;
+  }
+
+  .pie h3 {
+    font-size: var(--t-chico);
+  }
+
+  a.tarjeta:hover h3 {
+    color: var(--acento);
+  }
+
+  .que {
+    margin: 0;
+    font-size: var(--t-mini);
+    line-height: 1.45;
+    color: var(--tinta-media);
+    text-wrap: pretty;
+  }
+
+  /* ══ Índice ══ */
+  .indice {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: var(--t-mini);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .indice thead th {
+    padding: var(--e-2) var(--e-4);
+    text-align: left;
+    font-size: var(--t-micro);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    border-bottom: 1px solid var(--linea-fuerte);
+    background: var(--papel-hundido);
+    white-space: nowrap;
+  }
+
+  .indice td,
+  .indice tbody th {
+    padding: var(--e-2) var(--e-4);
+    text-align: left;
+    font-weight: 400;
+    border-bottom: 1px solid var(--linea);
+    vertical-align: baseline;
+  }
+
+  .indice tbody tr:hover {
+    background: var(--papel-hundido);
+  }
+
+  /* Las que estan arriba como destacadas quedan marcadas en el indice, para
+     que la lista y las tarjetas se lean como una sola cosa. */
+  .indice tr.marcada .c-que {
+    color: var(--tinta);
+  }
+  .indice tr.marcada .c-que::after {
+    content: ' ●';
+    color: var(--senal);
+    font-size: 0.7em;
+    vertical-align: 0.15em;
+  }
+
+  .c-anio { color: var(--tinta-suave); white-space: nowrap; }
+  .c-que { color: var(--tinta); }
+  .c-donde { color: var(--tinta-media); white-space: nowrap; }
+  .c-stack { color: var(--tinta-suave); }
+
+  .estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    font-size: var(--t-micro);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--tinta-suave);
+    white-space: nowrap;
+  }
+
   .punto {
-    inline-size: 6px;
-    block-size: 6px;
+    inline-size: 5px;
+    block-size: 5px;
     border-radius: 50%;
-    border: 1.5px solid var(--tinta-suave);
+    border: 1.5px solid currentColor;
   }
 
   .estado.activo {
     color: var(--senal);
   }
-
   .estado.activo .punto {
-    background: var(--senal);
-    border-color: var(--senal);
+    background: currentColor;
   }
 
-  h3 {
-    font-size: var(--t-base);
-    letter-spacing: -0.01em;
-  }
-
-  .que {
-    margin-top: var(--e-2);
-    font-size: var(--t-chico);
-    line-height: 1.5;
-    color: var(--tinta-media);
-    text-wrap: pretty;
-  }
-
-  /* --- Pie de ficha --- */
-  .meta {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4em 0.7em;
-    font-family: var(--fuente-ui);
-    font-size: var(--t-micro);
-    color: var(--tinta-suave);
-  }
-
-  .meta span + span::before {
-    content: '· ';
-  }
-
-  .tags {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--e-1) var(--e-2);
-  }
-
-  .tags li {
-    padding: 0.15em 0.45em;
-    border: var(--borde);
-    border-radius: 2px;
-    font-family: var(--fuente-mono);
-    font-size: 0.6875rem;
-    color: var(--tinta-suave);
-  }
-
-  .acciones {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--e-4);
-    font-family: var(--fuente-ui);
-    font-size: var(--t-mini);
+  /* En pantallas angostas la tabla se reordena: el nombre manda y el resto
+     baja como metadatos. Cinco columnas a 390 px no existen. */
+  @media (max-width: 52rem) {
+    .indice thead {
+      display: none;
+    }
+    .indice,
+    .indice tbody,
+    .indice tr,
+    .indice td,
+    .indice tbody th {
+      display: block;
+      border: 0;
+    }
+    .indice tr {
+      padding: var(--e-3) var(--e-4);
+      border-bottom: 1px solid var(--linea);
+    }
+    .indice tbody th {
+      padding: 0;
+      font-size: var(--t-chico);
+    }
+    .indice td {
+      padding: 0;
+      display: inline;
+    }
+    /* Sin separadores: el siguiente dato va en su propia linea y el punto
+       quedaba colgando al final. */
+    .indice .c-anio,
+    .indice .c-estado {
+      display: inline;
+    }
+    .indice .c-anio::after {
+      content: '  ';
+      white-space: pre;
+    }
+    .indice tbody th {
+      margin-top: var(--e-1);
+    }
+    .indice .c-donde,
+    .indice .c-stack {
+      display: block;
+    }
+    .indice .c-stack {
+      margin-top: var(--e-1);
+    }
   }
 </style>

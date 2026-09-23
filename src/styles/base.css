@@ -29,18 +29,30 @@ body {
   color: var(--tinta);
   font-family: var(--fuente-texto);
   font-size: var(--t-base);
-  line-height: 1.65;
-  font-synthesis-weight: none;
-  text-rendering: optimizeLegibility;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  /* Cuadricula tenue de fondo, como papel milimetrado de instrumento. */
+  background-image:
+    linear-gradient(var(--linea) 1px, transparent 1px),
+    linear-gradient(90deg, var(--linea) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+  background-position: -1px -1px;
 }
 
 h1, h2, h3, h4 {
   margin: 0;
   font-weight: 600;
   line-height: 1.2;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
   text-wrap: balance;
+}
+
+/* El prompt del titular principal. Un solo h1 por pagina, asi que aparece
+   una vez y hace de firma. */
+h1::before {
+  content: '> ';
+  color: var(--acento);
 }
 
 p, ul, ol { margin: 0; }
@@ -48,6 +60,7 @@ p { text-wrap: pretty; }
 
 a {
   color: var(--acento);
+  text-decoration-color: var(--acento);
   text-underline-offset: 0.18em;
   text-decoration-thickness: from-font;
 }
@@ -77,7 +90,7 @@ img, svg, video {
   font-family: var(--fuente-ui);
   font-size: var(--t-micro);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--tinta-suave);
 }

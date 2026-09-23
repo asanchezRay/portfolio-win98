@@ -19,8 +19,16 @@ export type Estado =
 
 export interface Pieza {
   nombre: string;
-  /** Una linea. Si no cabe en una linea, va en un caso. */
+  /**
+   * Solo se muestra en las piezas destacadas, y corta. En el indice no va
+   * ninguna descripcion: quince frases sueltas son quince parrafos, y hacian
+   * que lo chico pesara lo mismo que lo grande.
+   */
   que: string;
+  /** Las pocas que se muestran con presencia real arriba del indice. */
+  destacado?: boolean;
+  /** Para las destacadas que no tienen captura: el numero hace de imagen. */
+  cifra?: { valor: string; unidad?: string; etiqueta: string };
   anios: string;
   estado: Estado;
   /** Tres o cuatro, no el stack completo. */
@@ -36,7 +44,9 @@ export interface Pieza {
 export const taller: Pieza[] = [
   {
     nombre: 'Organizatumatri',
-    que: 'Marketplace de dos lados para el mercado de matrimonios, construido solo de punta a punta.',
+    destacado: true,
+    cifra: { valor: '3', etiqueta: 'aplicaciones, levantadas solo' },
+    que: 'Marketplace de dos lados, de punta a punta.',
     anios: '2025 — 2026',
     estado: 'cerrado',
     tags: ['Next.js', 'Prisma', 'MercadoPago', 'Playwright'],
@@ -45,7 +55,9 @@ export const taller: Pieza[] = [
   },
   {
     nombre: '900 GB a BigQuery',
-    que: 'Saqué la historia de medidores del motor operacional y rediseñé el esquema. 53% menos costo.',
+    destacado: true,
+    cifra: { valor: '53', unidad: '%', etiqueta: 'menos costo recurrente' },
+    que: 'Saqué la historia de medidores del motor operacional.',
     anios: '2026',
     estado: 'en producción',
     tags: ['BigQuery', 'MySQL', 'AWS RDS'],
@@ -122,7 +134,8 @@ export const taller: Pieza[] = [
   },
   {
     nombre: 'AfasiaApp',
-    que: 'App para tablets que asiste a fonoaudiólogos tratando la afasia. Publicada en IEEE.',
+    destacado: true,
+    que: 'Tratamiento temprano de la afasia, en tablet.',
     anios: '2021',
     estado: 'archivado',
     tags: ['Flutter', 'Dart', 'SQLite'],
@@ -135,7 +148,8 @@ export const taller: Pieza[] = [
   },
   {
     nombre: 'Escritorio Windows 98',
-    que: 'Mi portafolio anterior: ventanas arrastrables, barra de tareas y menú inicio, en CSS a mano.',
+    destacado: true,
+    que: 'Mi portafolio anterior, en CSS a mano.',
     anios: '2024 — 2026',
     estado: 'archivado',
     tags: ['Astro', 'TypeScript', 'CSS'],
