@@ -44,7 +44,12 @@ const PANTALLAS = {
     ['/proveedores', 'proveedores', 'Directorio de proveedores'],
     ['/para-proveedores', 'para-proveedores', 'Landing para proveedores'],
     ['/calculadora-presupuesto', 'calculadora', 'Calculadora de presupuesto'],
+    ['/proveedor/casona-los-aromos', 'ficha-proveedor', 'Ficha de un proveedor'],
     ['/nosotros', 'nosotros', 'Nosotros'],
+    ['/blog', 'blog', 'Blog'],
+    ['/contacto', 'contacto', 'Contacto'],
+    ['/terminos', 'terminos', 'Términos'],
+    ['/privacidad', 'privacidad', 'Privacidad'],
   ],
   proveedor: [
     ['/vendor/dashboard', 'proveedor-resumen', 'Panel del proveedor'],
@@ -65,6 +70,23 @@ const PANTALLAS = {
     ['/couple/dashboard?tab=favorites', 'novios-favoritos', 'Favoritos'],
   ],
 };
+
+/**
+ * Rutas que no tienen pantalla propia pero que igual deben llevar a alguna
+ * parte. Sin esto los botones quedan muertos y el recorrido se corta: "Soy
+ * novi@" apunta a /register y "Soy Empresa" a /dashboard, que son pantallas
+ * de registro sin nada que mostrar. Llevan al panel correspondiente, que es
+ * lo que el visitante quiere ver.
+ *
+ * Cada entrada es [patron sobre la ruta, carpeta destino].
+ */
+const ALIAS = [
+  ['^/proveedor/', 'ficha-proveedor'],
+  ['^/proveedores/', 'proveedores'],
+  ['^/(register|login|auth|onboarding|couple)', 'novios-resumen'],
+  ['^/(dashboard|registro-proveedor|vendor|checkout|adminPanel)', 'proveedor-resumen'],
+  ['^/(bodas|calculadora)', 'calculadora'],
+];
 
 const modulo = process.env.PLAYWRIGHT ?? 'playwright-core';
 let chromium;
@@ -112,16 +134,18 @@ async function sesion(cuenta, destino) {
     deviceScaleFactor: 1,
   });
 
-  // La app muestra un modal de "muy pronto el lanzamiento oficial" que tapa
-  // todo y se recuerda en sessionStorage. Como la copia va sin JavaScript, el
-  // boton de cerrar no funcionaria y el modal quedaria encima para siempre.
-  // Se marca como visto antes de cargar nada, que es lo mismo que pasa cuando
-  // un usuario lo cierra.
+  // La app tiene avisos que se cierran a mano y recuerda en sessionStorage que
+  // ya se vieron. Como la copia va sin JavaScript, sus botones de cerrar no
+  // funcionarian y quedarian encima para siempre. Se marcan como vistos antes
+  // de cargar nada, que es lo mismo que pasa cuando un usuario los cierra.
+  //
+  // Si se agrega otro aviso a la app, su clave va aqui.
   await ctx.addInitScript(() => {
     try {
-      sessionStorage.setItem('launch_popup_seen', '1');
+      sessionStorage.setItem('launch_popup_seen', '1'); // LaunchPopup
+      sessionStorage.setItem('guestCTADismissed_v1', '1'); // GuestCTABanner
     } catch {
-      /* sin sessionStorage el modal tampoco se muestra */
+      /* sin sessionStorage tampoco se muestran */
     }
   });
 
@@ -195,7 +219,7 @@ async function capturar(ctx, ruta, archivo) {
   await page.waitForTimeout(1500);
 
   const { html, css } = await page.evaluate(
-    async ({ BASE, rutas }) => {
+    async ({ BASE, rutas, alias }) => {
       // El dev server de Next sirve el CSS con un ?v= que cambia en cada
       // recompilacion, asi que bajarlo despues da 404. Se trae aqui, desde
       // la propia pagina y mientras la URL sigue siendo valida.
@@ -232,17 +256,21 @@ async function capturar(ctx, ruta, archivo) {
       for (const s of document.querySelectorAll('script')) s.remove();
       for (const n of document.querySelectorAll('noscript')) n.remove();
 
-      // Red de seguridad: cualquier capa fija que cubra la pantalla completa
-      // quedaria encima para siempre, porque no hay JS que la cierre.
+      // Red de seguridad para lo que no se cubrio por sessionStorage: sin JS,
+      // una capa flotante no se puede cerrar y queda encima para siempre.
+      // Se eliminan las que tapan la pantalla entera y las que traen un boton
+      // de cerrar, que por definicion estan pensadas para descartarse.
       for (const el of document.querySelectorAll('body *')) {
         const e = getComputedStyle(el);
         if (e.position !== 'fixed' || e.display === 'none') continue;
+        if (Number(e.zIndex || 0) < 10) continue;
+
         const c = el.getBoundingClientRect();
-        const tapaTodo =
-          c.width >= innerWidth * 0.9 &&
-          c.height >= innerHeight * 0.9 &&
-          Number(e.zIndex || 0) >= 10;
-        if (tapaTodo) el.remove();
+        const tapaTodo = c.width >= innerWidth * 0.9 && c.height >= innerHeight * 0.9;
+        const sePuedeCerrar = el.querySelector(
+          '[aria-label="Cerrar"], [aria-label="Close"], [data-dismiss]'
+        );
+        if (tapaTodo || sePuedeCerrar) el.remove();
       }
 
       const aRuta = (href) => {
@@ -255,7 +283,13 @@ async function capturar(ctx, ruta, archivo) {
         }
         if (u.origin !== location.origin) return null;
         const clave = u.pathname + u.search;
-        return rutas[clave] ?? rutas[u.pathname] ?? null;
+        const exacta = rutas[clave] ?? rutas[u.pathname];
+        if (exacta) return exacta;
+        // Sin pantalla propia: se busca la mas parecida antes de rendirse.
+        for (const [patron, destino] of alias) {
+          if (new RegExp(patron).test(u.pathname)) return destino;
+        }
+        return null;
       };
 
       // Los enlaces internos apuntan a la pantalla capturada equivalente; los
@@ -278,7 +312,7 @@ async function capturar(ctx, ruta, archivo) {
 
       return { html: document.documentElement.outerHTML, css };
     },
-    { BASE, rutas: RUTAS_A_ARCHIVO }
+    { BASE, rutas: RUTAS_A_ARCHIVO, alias: ALIAS }
   );
 
   await page.close();
