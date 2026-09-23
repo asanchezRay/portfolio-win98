@@ -1,0 +1,36 @@
+---
+import { organizaciones, partirOrganizacion } from '../data/organizaciones';
+
+/**
+ * Nombre de una organización, enlazado a su sitio cuando se conoce.
+ *
+ * Acepta nombres compuestos ("IGX · Energía Simple") y enlaza cada parte por
+ * separado, porque son dos empresas distintas.
+ */
+interface Props {
+  nombre: string;
+}
+
+const partes = partirOrganizacion(Astro.props.nombre);
+---
+
+{
+  partes.map((parte, i) => (
+    <>
+      {i > 0 && <span class="sep"> · </span>}
+      {organizaciones[parte] ? (
+        <a href={organizaciones[parte]} rel="noopener" target="_blank">
+          {parte}
+        </a>
+      ) : (
+        parte
+      )}
+    </>
+  ))
+}
+
+<style>
+  .sep {
+    color: var(--tinta-suave);
+  }
+</style>

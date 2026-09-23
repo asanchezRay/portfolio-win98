@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Panel from '../components/Panel.astro';
 import Cifras from '../components/Cifras.astro';
 import Taller from '../components/Taller.astro';
+import Organizacion from '../components/Organizacion.astro';
 import Abribles from '../components/Abribles.astro';
 import { perfil } from '../data/perfil';
 import { taller } from '../data/taller';
@@ -23,7 +24,7 @@ const { contacto } = perfil;
 <Base
   titulo={`${perfil.nombre} — ${perfil.rol} en ${perfil.organizacion}`}
   tituloCrudo
-  descripcion="Líder técnico. Software en dominios que no se parecen entre sí: mercado eléctrico, nómina multipaís, salud y marketplaces."
+  descripcion="Líder técnico y senior software engineer. Software en dominios que no se parecen entre sí: mercado eléctrico, nómina multipaís, salud y marketplaces."
 >
   <div class="consola">
     <!-- ═══ Quién ═══ -->
@@ -41,7 +42,10 @@ const { contacto } = perfil;
     <Panel rotulo="Estado" ancho="tercio">
       <dl class="estado">
         <div><dt>Rol</dt><dd>{perfil.rol}</dd></div>
-        <div><dt>Dónde</dt><dd>{perfil.organizacion} · {perfil.modalidad}</dd></div>
+        <div>
+          <dt>Dónde</dt>
+          <dd><Organizacion nombre={perfil.organizacion} /> · {perfil.modalidad}</dd>
+        </div>
         <div><dt>Base</dt><dd>{perfil.ubicacion}</dd></div>
         <div><dt>Taller</dt><dd>{taller.length} cosas, {enMarcha} andando</dd></div>
       </dl>
@@ -62,7 +66,7 @@ const { contacto } = perfil;
     <!-- ═══ Se pueden abrir ═══ -->
     <Panel
       rotulo="Se pueden abrir"
-      nota="lo único que un documento no puede tener"
+      nota="no son capturas: se abren y se usan"
       desnudo
       id="abrir"
     >
@@ -88,7 +92,7 @@ const { contacto } = perfil;
               <p class="periodo">{rango(etapa.desde, etapa.hasta)}</p>
               <p class="cargo">
                 <strong>{etapa.rol}</strong>
-                <span>{etapa.organizacion}</span>
+                <span><Organizacion nombre={etapa.organizacion} /></span>
               </p>
             </li>
           ))

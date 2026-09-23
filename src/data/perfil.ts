@@ -1,7 +1,7 @@
 /** Datos de identidad y contacto, en un solo lugar para no duplicarlos. */
 export const perfil = {
   nombre: 'Andrés Sánchez',
-  rol: 'Líder Técnico',
+  rol: 'Líder Técnico / Senior Software Engineer',
   organizacion: 'IGX',
   ubicacion: 'Concepción, Chile',
   modalidad: 'Remoto',
@@ -12,9 +12,9 @@ export const perfil = {
   presentacion:
     'Mercado eléctrico y nómina multipaís, que son los regulados. Antes ' +
     'e-commerce, el núcleo digital de una clínica, y un marketplace propio que ' +
-    'levanté solo. Hoy soy líder técnico en IGX: escribo menos código que antes ' +
-    'y paso más tiempo entre ingeniería y las áreas de negocio, evaluando qué ' +
-    'vale la pena construir.',
+    'levanté solo. Hoy lidero técnicamente en IGX y sigo escribiendo código ' +
+    'todos los días; además trabajo entre ingeniería y las áreas de negocio, ' +
+    'evaluando qué vale la pena construir.',
 
   /** Las tres cifras de la portada. Verificables, no adjetivos. */
   cifras: [

@@ -1,5 +1,6 @@
 ---
 import { taller, type Estado, type Pieza } from '../data/taller';
+import Organizacion from './Organizacion.astro';
 
 /**
  * El taller en dos pesos.
@@ -85,7 +86,9 @@ const enlaceDe = (p: Pieza) =>
               <th scope="row" class="c-que">
                 {href ? <a href={href}>{pieza.nombre}</a> : pieza.nombre}
               </th>
-              <td class="c-donde">{pieza.contexto}</td>
+              <td class="c-donde">
+                {pieza.contexto ? <Organizacion nombre={pieza.contexto} /> : null}
+              </td>
               <td class="c-stack">{pieza.tags.join(' · ')}</td>
             </tr>
           );

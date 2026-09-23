@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import Cifras from '../../components/Cifras.astro';
+import Organizacion from '../../components/Organizacion.astro';
 import '../../styles/prosa.css';
 import '../../styles/diagramas.css';
 
@@ -86,7 +87,7 @@ const etiquetaTipo = {
       }
 
       <dl class="ficha">
-        <div><dt>Dónde</dt><dd>{data.organizacion}</dd></div>
+        <div><dt>Dónde</dt><dd><Organizacion nombre={data.organizacion} /></dd></div>
         <div><dt>Cuándo</dt><dd>{data.periodo}</dd></div>
         <div><dt>Rol</dt><dd>{data.rol}</dd></div>
       </dl>

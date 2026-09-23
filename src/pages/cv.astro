@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { perfil } from '../data/perfil';
 import { trayectoria, rango, duracion } from '../data/trayectoria';
+import Organizacion from '../components/Organizacion.astro';
 
 /**
  * Version de lectura corrida y de impresion.
@@ -48,7 +49,10 @@ const hoy = new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'lo
             <div class="entrada">
               <div class="linea">
                 <h3>
-                  {etapa.rol} <span class="org">· {etapa.organizacion}</span>
+                  {etapa.rol}{' '}
+                  <span class="org">
+                    · <Organizacion nombre={etapa.organizacion} />
+                  </span>
                 </h3>
                 <p class="fechas">
                   {rango(etapa.desde, etapa.hasta)}
@@ -78,7 +82,10 @@ const hoy = new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'lo
             <div class="entrada">
               <div class="linea">
                 <h3>
-                  {etapa.rol} <span class="org">· {etapa.organizacion}</span>
+                  {etapa.rol}{' '}
+                  <span class="org">
+                    · <Organizacion nombre={etapa.organizacion} />
+                  </span>
                 </h3>
                 <p class="fechas">
                   {rango(etapa.desde, etapa.hasta)}

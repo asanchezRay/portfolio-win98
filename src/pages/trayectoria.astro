@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { trayectoria, rango, duracion } from '../data/trayectoria';
+import Organizacion from '../components/Organizacion.astro';
 
 const casos = await getCollection('casos');
 const tituloDe = (slug: string) => casos.find((c) => c.id === slug)?.data.titulo;
@@ -36,7 +37,7 @@ const docencia = trayectoria.filter((e) => e.via === 'docencia');
             <div class="detalle">
               <h3>{etapa.rol}</h3>
               <p class="donde">
-                {etapa.organizacion} · {etapa.ubicacion}
+                <Organizacion nombre={etapa.organizacion} /> · {etapa.ubicacion}
               </p>
 
               {etapa.nota && <p class="nota">{etapa.nota}</p>}
@@ -86,7 +87,7 @@ const docencia = trayectoria.filter((e) => e.via === 'docencia');
             <div class="detalle">
               <h3>{etapa.rol}</h3>
               <p class="donde">
-                {etapa.organizacion} · {etapa.ubicacion}
+                <Organizacion nombre={etapa.organizacion} /> · {etapa.ubicacion}
               </p>
               <p class="resumen">{etapa.resumen}</p>
               {etapa.hitos && (
