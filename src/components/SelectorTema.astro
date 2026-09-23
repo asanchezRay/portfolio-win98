@@ -1,0 +1,143 @@
+---
+/**
+ * Selector de tema. TEMPORAL.
+ *
+ * Existe solo para elegir dirección visual mirando el sitio real en vez de
+ * discutirla por escrito. Cuando haya un tema elegido, se hornea en tokens.css
+ * y se borran este componente, temas.css y el script del <head> de Base.astro.
+ *
+ * Es el unico JavaScript del sitio, y por eso se quita despues.
+ */
+const temas = [
+  { id: 'documento', nombre: 'Documento', nota: 'el actual' },
+  { id: 'terminal', nombre: 'Terminal', nota: 'panel de instrumentos' },
+  { id: 'editorial', nombre: 'Editorial', nota: 'revista técnica' },
+  { id: 'sistema', nombre: 'Sistema', nota: 'el ADN del 98' },
+];
+---
+
+<aside class="selector" aria-label="Probar temas">
+  <p class="titulo">Probando temas</p>
+  <div class="botones">
+    {
+      temas.map((t) => (
+        <button type="button" data-tema-btn={t.id}>
+          <span class="nombre">{t.nombre}</span>
+          <span class="nota">{t.nota}</span>
+        </button>
+      ))
+    }
+  </div>
+  <p class="aviso">Provisorio, para elegir. Se va cuando decidas.</p>
+</aside>
+
+<script is:inline>
+  (() => {
+    const raiz = document.documentElement;
+    const marcar = (tema) => {
+      for (const b of document.querySelectorAll('[data-tema-btn]')) {
+        b.setAttribute(
+          'aria-pressed',
+          String(b.dataset.temaBtn === (tema || 'documento'))
+        );
+      }
+    };
+
+    for (const b of document.querySelectorAll('[data-tema-btn]')) {
+      b.addEventListener('click', () => {
+        const tema = b.dataset.temaBtn;
+        if (tema === 'documento') {
+          raiz.removeAttribute('data-tema');
+          try { localStorage.removeItem('tema'); } catch {}
+        } else {
+          raiz.setAttribute('data-tema', tema);
+          try { localStorage.setItem('tema', tema); } catch {}
+        }
+        marcar(tema);
+      });
+    }
+
+    marcar(raiz.getAttribute('data-tema'));
+  })();
+</script>
+
+<style>
+  .selector {
+    position: fixed;
+    inset-block-end: calc(var(--e-4) + env(safe-area-inset-bottom, 0px));
+    inset-inline-end: var(--e-4);
+    z-index: 50;
+    padding: var(--e-3);
+    background: var(--papel-elevado);
+    border: 1px solid var(--linea-fuerte);
+    border-radius: var(--radio);
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.14);
+    font-family: var(--fuente-ui);
+    max-inline-size: calc(100vw - var(--e-4) * 2);
+  }
+
+  .titulo {
+    margin: 0 0 var(--e-2);
+    font-size: var(--t-micro);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  .botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-1);
+  }
+
+  button {
+    flex: 1 1 auto;
+    display: grid;
+    gap: 1px;
+    padding: 0.4em 0.7em;
+    text-align: left;
+    cursor: pointer;
+    background: var(--papel);
+    color: var(--tinta-media);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    font: inherit;
+  }
+
+  button:hover {
+    border-color: var(--linea-fuerte);
+    color: var(--tinta);
+  }
+
+  button[aria-pressed='true'] {
+    background: var(--senal-tenue);
+    border-color: var(--senal);
+    color: var(--tinta);
+  }
+
+  .nombre {
+    font-size: var(--t-mini);
+    font-weight: 600;
+  }
+
+  .nota {
+    font-size: 0.6875rem;
+    color: var(--tinta-suave);
+  }
+
+  .aviso {
+    margin: var(--e-2) 0 0;
+    font-size: 0.6875rem;
+    color: var(--tinta-suave);
+  }
+
+  @media (max-width: 30rem) {
+    .selector {
+      inset-inline: var(--e-3);
+    }
+    .nota {
+      display: none;
+    }
+  }
+</style>

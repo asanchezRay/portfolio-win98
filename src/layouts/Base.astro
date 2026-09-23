@@ -9,8 +9,11 @@
 import '../styles/fuentes.css';
 import '../styles/tokens.css';
 import '../styles/base.css';
+// TEMPORAL: se borra junto con el selector cuando haya un tema elegido.
+import '../styles/temas.css';
 import EncabezadoSitio from '../components/EncabezadoSitio.astro';
 import PieSitio from '../components/PieSitio.astro';
+import SelectorTema from '../components/SelectorTema.astro';
 import { perfil } from '../data/perfil';
 
 interface Props {
@@ -80,6 +83,14 @@ const imagenOg = new URL('/og.png', Astro.site);
         sameAs: [perfil.contacto.linkedin, perfil.contacto.github, perfil.contacto.gitlab],
       })}
     />
+    <!-- TEMPORAL: aplica el tema guardado antes de pintar, para que no
+         parpadee. Se borra cuando se elija uno. -->
+    <script is:inline>
+      try {
+        const t = localStorage.getItem('tema');
+        if (t) document.documentElement.setAttribute('data-tema', t);
+      } catch {}
+    </script>
   </head>
 
   <body>
@@ -89,5 +100,6 @@ const imagenOg = new URL('/og.png', Astro.site);
       <slot />
     </main>
     <PieSitio />
+    <SelectorTema />
   </body>
 </html>

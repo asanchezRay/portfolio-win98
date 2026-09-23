@@ -1,0 +1,263 @@
+/*
+ * Temas alternativos, para elegir mirando en vez de discutiendo.
+ *
+ * Cada tema redefine el juego completo de tokens sobre [data-tema=...].
+ * El HTML y los componentes no cambian: si un tema necesita algo estructural
+ * (bordes biselados, esquinas vivas, mayusculas), va al final de su bloque.
+ *
+ * Esto es temporal. Cuando Andres elija uno, se hornea en tokens.css y este
+ * archivo se borra junto con el selector.
+ */
+
+/* ══════════════════════════════════════════════════════════════════
+   TERMINAL — panel de instrumentos
+   Oscuro siempre, monoespaciado en todo, esquinas vivas, cuadricula a
+   la vista. Sale del mundo donde trabaja: consolas de despacho,
+   lecturas de medidor, fosforo ambar.
+   ══════════════════════════════════════════════════════════════════ */
+
+[data-tema='terminal'] {
+  --papel: #0a0d0c;
+  --papel-hundido: #0f1413;
+  --papel-elevado: #131918;
+  --tinta: #d6e2d6;
+  --tinta-media: #8fa08f;
+  --tinta-suave: #64756a;
+  --linea: #1e2826;
+  --linea-fuerte: #35443f;
+
+  --acento: #ffb000;
+  --acento-tenue: #2a1f06;
+  --senal: #ff7b3d;
+  --senal-tenue: #2b1509;
+
+  --dato-contexto: #5d6f68;
+  --dato-enfasis: #ffb000;
+
+  --fuente-texto: var(--fuente-mono);
+  --fuente-ui: var(--fuente-mono);
+
+  --t-base: 0.9375rem;
+  --t-medio: 1rem;
+  --t-display: clamp(1.75rem, 1.1rem + 2.6vw, 2.5rem);
+  --t-titulo: clamp(1.25rem, 1rem + 1.1vw, 1.5rem);
+
+  --radio: 0;
+
+  color-scheme: dark;
+}
+
+[data-tema='terminal'] body {
+  line-height: 1.55;
+  /* Cuadricula tenue de fondo, como papel milimetrado de instrumento. */
+  background-image:
+    linear-gradient(var(--linea) 1px, transparent 1px),
+    linear-gradient(90deg, var(--linea) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+  background-position: -1px -1px;
+}
+
+[data-tema='terminal'] h1,
+[data-tema='terminal'] h2,
+[data-tema='terminal'] h3 {
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+[data-tema='terminal'] h1::before {
+  content: '> ';
+  color: var(--acento);
+}
+
+[data-tema='terminal'] .rotulo {
+  letter-spacing: 0.16em;
+}
+
+[data-tema='terminal'] .caja,
+[data-tema='terminal'] .ficha,
+[data-tema='terminal'] .diagrama,
+[data-tema='terminal'] .lienzo {
+  border-radius: 0;
+}
+
+[data-tema='terminal'] a {
+  text-decoration-color: var(--acento);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   EDITORIAL — revista tecnica con volumen
+   Blanco duro, negro duro, un color que grita. Titulares enormes con
+   tracking negativo, filetes gruesos, etiquetas en versalitas mono.
+   ══════════════════════════════════════════════════════════════════ */
+
+[data-tema='editorial'] {
+  --papel: #fbfaf8;
+  --papel-hundido: #efece5;
+  --papel-elevado: #ffffff;
+  --tinta: #08070a;
+  --tinta-media: #45424c;
+  --tinta-suave: #6f6b78;
+  --linea: #ddd8ce;
+  --linea-fuerte: #08070a;
+
+  --acento: #1f1bd4;
+  --acento-tenue: #e6e5ff;
+  --senal: #d92b00;
+  --senal-tenue: #ffe9e3;
+
+  --dato-contexto: #b3aea4;
+  --dato-enfasis: #d92b00;
+
+  --fuente-ui: var(--fuente-mono);
+
+  --t-display: clamp(2.5rem, 1.2rem + 6vw, 5rem);
+  --t-titulo: clamp(1.75rem, 1.1rem + 2.6vw, 2.5rem);
+
+  --radio: 0;
+}
+
+[data-tema='editorial'] h1 {
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+[data-tema='editorial'] h2 {
+  letter-spacing: -0.03em;
+}
+
+[data-tema='editorial'] .rotulo {
+  letter-spacing: 0.14em;
+  color: var(--senal);
+}
+
+[data-tema='editorial'] .prosa > h2::before {
+  inline-size: 100%;
+  block-size: 3px;
+  background: var(--tinta);
+}
+
+[data-tema='editorial'] .caja,
+[data-tema='editorial'] .ficha,
+[data-tema='editorial'] .diagrama,
+[data-tema='editorial'] .lienzo {
+  border-radius: 0;
+}
+
+[data-tema='editorial'] .caja {
+  border: 2px solid var(--tinta);
+  border-left-width: 8px;
+  border-left-color: var(--senal);
+}
+
+[data-tema='editorial'] .rejilla {
+  border: 2px solid var(--tinta);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-tema='editorial']:not([data-forzar-claro]) {
+    --papel: #0b0a0d;
+    --papel-hundido: #141318;
+    --papel-elevado: #17161c;
+    --tinta: #f7f5f2;
+    --tinta-media: #b3aeb8;
+    --tinta-suave: #8b8694;
+    --linea: #2a2830;
+    --linea-fuerte: #f7f5f2;
+    --acento: #a8a5ff;
+    --acento-tenue: #1b1a35;
+    --senal: #ff6a45;
+    --senal-tenue: #2e1611;
+    --dato-contexto: #6a6572;
+    --dato-enfasis: #ff6a45;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SISTEMA — el ADN del 98, sin el disfraz
+   Gris de chrome, paneles biselados, navy de barra de titulo, sans de
+   sistema. Mantiene lo que le gustaba del escritorio pero sobre una
+   pagina que se lee con scroll y dice cosas.
+   ══════════════════════════════════════════════════════════════════ */
+
+[data-tema='sistema'] {
+  --papel: #cdc9c0;
+  --papel-hundido: #bfbab0;
+  --papel-elevado: #f4f2ee;
+  --tinta: #14130f;
+  --tinta-media: #45423b;
+  --tinta-suave: #6a665d;
+  --linea: #9a958a;
+  --linea-fuerte: #6a665d;
+
+  --acento: #1d3a8a;
+  --acento-tenue: #dbe2f5;
+  --senal: #9a3412;
+  --senal-tenue: #f6e5d9;
+
+  --dato-contexto: #7d7970;
+  --dato-enfasis: #1d3a8a;
+
+  --fuente-texto: var(--fuente-ui);
+
+  --t-base: 1rem;
+  --t-display: clamp(1.75rem, 1.2rem + 2.4vw, 2.5rem);
+
+  --radio: 0;
+
+  color-scheme: light;
+}
+
+[data-tema='sistema'] body {
+  line-height: 1.55;
+}
+
+/* Bisel: claro arriba e izquierda, oscuro abajo y derecha. Es la misma
+   regla del chrome de Windows 98, aplicada a paneles de una pagina normal. */
+[data-tema='sistema'] .caja,
+[data-tema='sistema'] .ficha,
+[data-tema='sistema'] .lienzo,
+[data-tema='sistema'] .diagrama,
+[data-tema='sistema'] .tarjeta {
+  border: 2px solid;
+  border-color: #ffffff var(--tinta-media) var(--tinta-media) #ffffff;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-tema='sistema'] .rejilla {
+  border: 2px solid;
+  border-color: var(--tinta-media) #ffffff #ffffff var(--tinta-media);
+  border-radius: 0;
+}
+
+[data-tema='sistema'] .ficha {
+  box-shadow: none;
+  border-width: 1px;
+  border-color: #ffffff var(--linea) var(--linea) #ffffff;
+}
+
+[data-tema='sistema'] h1,
+[data-tema='sistema'] h2 {
+  letter-spacing: -0.01em;
+}
+
+/* Titulares con barra de titulo, el guiño mas directo al escritorio. */
+[data-tema='sistema'] .rotulo {
+  display: inline-block;
+  padding: 0.25em 0.7em;
+  background: var(--acento);
+  color: #ffffff;
+  letter-spacing: 0.08em;
+}
+
+[data-tema='sistema'] .boton {
+  border: 2px solid;
+  border-color: #ffffff var(--tinta) var(--tinta) #ffffff;
+  background: var(--papel);
+  color: var(--tinta);
+  border-radius: 0;
+}
+
+[data-tema='sistema'] .boton:active {
+  border-color: var(--tinta) #ffffff #ffffff var(--tinta);
+}
