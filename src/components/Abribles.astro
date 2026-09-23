@@ -1,0 +1,155 @@
+---
+/**
+ * Las dos cosas del sitio que se pueden abrir y usar.
+ *
+ * Estaban como enlaces de texto dentro de sus fichas del taller, al mismo
+ * peso que "ver el caso", y no se encontraban. Son lo unico que un documento
+ * no puede tener, asi que van arriba y con boton propio.
+ */
+const abribles = [
+  {
+    nombre: 'Organizatumatri',
+    que: 'La plataforma completa, congelada y navegable. 33 pantallas, incluidas las privadas del proveedor y de los novios.',
+    detalle: 'Sin credenciales: no hay backend que proteger.',
+    accion: { href: '/demo/organizatumatri/', texto: 'Recorrer la plataforma' },
+    caso: '/casos/organizatumatri',
+    imagen: {
+      src: '/img/organizatumatri/directorio.png',
+      alt: 'Directorio de proveedores de Organizatumatri',
+    },
+  },
+  {
+    nombre: 'Escritorio Windows 98',
+    que: 'Mi portafolio anterior, hecho a mano en CSS. Ventanas arrastrables, barra de tareas y menú inicio.',
+    detalle: 'Sigue funcionando igual que el primer día.',
+    accion: { href: '/98', texto: 'Abrir el escritorio' },
+    caso: '/casos/portafolio-98',
+    imagen: {
+      src: '/img/98/escritorio.png',
+      alt: 'El escritorio Windows 98 con una ventana abierta',
+    },
+  },
+];
+---
+
+<ul class="abribles">
+  {
+    abribles.map((a) => (
+      <li>
+        {/* La miniatura tambien abre, porque mucha gente hace clic en la
+            imagen antes que en el boton. Lleva alt real y no aria-hidden: un
+            enlace escondido de los lectores de pantalla pero alcanzable con
+            el mouse es justo lo que no hay que hacer. */}
+        <a class="visual" href={a.accion.href}>
+          <img src={a.imagen.src} alt={a.imagen.alt} loading="lazy" decoding="async" />
+        </a>
+        <div class="cuerpo">
+          <h3>{a.nombre}</h3>
+          <p class="que">{a.que}</p>
+          <p class="detalle">{a.detalle}</p>
+          <p class="acciones">
+            <a class="boton" href={a.accion.href}>{a.accion.texto}</a>
+            <a class="secundario" href={a.caso}>Leer el caso</a>
+          </p>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .abribles {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 0;
+  }
+
+  .abribles > li {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    box-shadow: 1px 0 0 var(--linea-fuerte);
+  }
+
+  .visual {
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--papel);
+    border-bottom: 1px solid var(--linea-fuerte);
+  }
+
+  .visual img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: transform 200ms ease;
+  }
+
+  .visual:hover img {
+    transform: scale(1.02);
+  }
+
+  .cuerpo {
+    flex: 1;
+    display: grid;
+    align-content: start;
+    gap: var(--e-2);
+    padding: var(--e-5);
+  }
+
+  h3 {
+    font-size: var(--t-grande);
+  }
+
+  .que {
+    margin: 0;
+    color: var(--tinta-media);
+    font-size: var(--t-chico);
+    text-wrap: pretty;
+  }
+
+  .detalle {
+    margin: 0;
+    color: var(--tinta-suave);
+    font-size: var(--t-mini);
+  }
+
+  .acciones {
+    margin: var(--e-4) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--e-3) var(--e-5);
+    font-size: var(--t-chico);
+  }
+
+  /* Boton solido y con flecha: tiene que leerse como "esto se abre", no como
+     un enlace mas de los muchos que hay en la pagina. */
+  .boton {
+    padding: 0.65em 1.2em;
+    background: var(--acento);
+    color: var(--papel);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radio);
+  }
+
+  .boton::after {
+    content: ' →';
+  }
+
+  .boton:hover {
+    background: var(--tinta);
+    color: var(--acento);
+    outline: 1px solid var(--acento);
+  }
+
+  .secundario {
+    color: var(--tinta-media);
+  }
+</style>

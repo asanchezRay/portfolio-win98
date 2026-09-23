@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Panel from '../components/Panel.astro';
 import Cifras from '../components/Cifras.astro';
 import Taller from '../components/Taller.astro';
+import Abribles from '../components/Abribles.astro';
 import { perfil } from '../data/perfil';
 import { taller } from '../data/taller';
 import { trayectoria, rango } from '../data/trayectoria';
@@ -56,6 +57,16 @@ const { contacto } = perfil;
     <!-- ═══ Mediciones ═══ -->
     <Panel rotulo="Mediciones" nota="verificables, no adjetivos">
       <Cifras cifras={perfil.cifras} escala="grande" />
+    </Panel>
+
+    <!-- ═══ Se pueden abrir ═══ -->
+    <Panel
+      rotulo="Se pueden abrir"
+      nota="lo único que un documento no puede tener"
+      desnudo
+      id="abrir"
+    >
+      <Abribles />
     </Panel>
 
     <!-- ═══ El taller ═══ -->

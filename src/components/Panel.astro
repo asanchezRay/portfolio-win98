@@ -72,6 +72,23 @@ const { rotulo, nota, ancho = 'completo', desnudo = false, id } = Astro.props;
     white-space: nowrap;
   }
 
+  /* En pantallas angostas la barra se parte en dos lineas en vez de recortar
+     la nota contra el borde, y el rotulo deja de quebrarse palabra por
+     palabra. */
+  @media (max-width: 40rem) {
+    .barra {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--e-1);
+    }
+    .barra h2 {
+      white-space: nowrap;
+    }
+    .nota {
+      white-space: normal;
+    }
+  }
+
   .contenido {
     flex: 1;
     padding: var(--e-5);

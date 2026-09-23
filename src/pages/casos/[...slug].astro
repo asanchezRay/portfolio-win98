@@ -79,8 +79,15 @@ const etiquetaTipo = {
       {
         data.enlaces.length > 0 && (
           <p class="enlaces">
-            {data.enlaces.map((e) => (
-              <a href={e.href} rel={e.externo ? 'noopener' : undefined}>
+            {/* El primer enlace es el que abre algo — el demo, el escritorio —
+                y por eso va como boton solido: mezclado con los demas no se
+                encontraba. */}
+            {data.enlaces.map((e, i) => (
+              <a
+                class:list={{ boton: i === 0 }}
+                href={e.href}
+                rel={e.externo ? 'noopener' : undefined}
+              >
                 {e.texto}
               </a>
             ))}
@@ -195,9 +202,29 @@ const etiquetaTipo = {
     margin-top: var(--e-6);
     display: flex;
     flex-wrap: wrap;
-    gap: var(--e-2) var(--e-5);
+    align-items: center;
+    gap: var(--e-3) var(--e-5);
     font-family: var(--fuente-ui);
     font-size: var(--t-chico);
+  }
+
+  .enlaces .boton {
+    padding: 0.65em 1.2em;
+    background: var(--acento);
+    color: var(--papel);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radio);
+  }
+
+  .enlaces .boton::after {
+    content: ' →';
+  }
+
+  .enlaces .boton:hover {
+    background: var(--tinta);
+    color: var(--acento);
+    outline: 1px solid var(--acento);
   }
 
 
