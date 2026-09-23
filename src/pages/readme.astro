@@ -1,7 +1,19 @@
 ---
-const readmeUrl = "https://github.com/asanchezRay/afasiaApp/blob/master/README.md";
+/**
+ * /readme  —  RUTA PUBLICADA. NO RENOMBRAR NI ELIMINAR.
+ *
+ * Referenciada desde la publicacion de AfasiaApp en IEEE Latin America
+ * Transactions. Es un enlace impreso: la ruta tiene que seguir existiendo
+ * indefinidamente, sin importar como se reestructure el resto del sitio.
+ *
+ * El redirect real lo sirve Netlify desde public/_redirects (302).
+ * Esta pagina es el respaldo por si esa configuracion se pierde.
+ */
+import Redirect from '../components/Redirect.astro';
 ---
 
-<script define:vars={{ readmeUrl }}>
-  window.location.href = readmeUrl;
-</script> 
+<Redirect
+  target="https://github.com/asanchezRay/afasiaApp/blob/master/README.md"
+  label="la documentacion de AfasiaApp en GitHub"
+  title="AfasiaApp — Documentacion"
+/>

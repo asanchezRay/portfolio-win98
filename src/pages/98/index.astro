@@ -1,0 +1,94 @@
+---
+import Layout from '../../win98/layouts/Layout.astro';
+import StartMenu from '../../win98/components/StartMenu.astro';
+import DesktopIcon from '../../win98/components/DesktopIcon.astro';
+import AboutMe from '../../win98/components/AboutMe.astro';
+import Skills from '../../win98/components/Skills.astro';
+import Projects from '../../win98/components/Projects.astro';
+import { menuItems } from '../../win98/data/menuItems';
+import { t } from '../../win98/i18n/translations';
+import '../../win98/styles/index.css';
+---
+
+<Layout title={t('portfolio') as string}>
+  <div class="desktop-icons">
+    {menuItems.map((item) => (
+      <DesktopIcon 
+        icon={item.icon}
+        translationKey={item.translationKey}
+        link={item.link}
+      />
+    ))}
+  </div>
+  <AboutMe />
+  <Skills />
+  <Projects />
+  <StartMenu />
+</Layout>
+
+<script>
+  // Inicializar el menú de inicio
+  function initializeStartMenu() {
+    const startBtn = document.getElementById('startBtn');
+    const startMenu = document.getElementById('startMenu');
+
+    startBtn?.addEventListener('click', () => {
+      startMenu?.classList.toggle('active');
+    });
+
+    // Cerrar el menú al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!startBtn?.contains(e.target as Node) && 
+          !startMenu?.contains(e.target as Node)) {
+        startMenu?.classList.remove('active');
+      }
+    });
+  }
+
+  // Inicializar las ventanas modales
+  function initializeWindows() {
+    function handleItemClick(action: string) {
+      console.log('Click en:', action);
+      const modal = document.querySelector(`.window-modal[data-window="${action}"]`);
+      if (modal) {
+        modal.setAttribute('data-open', 'true');
+        document.getElementById('startMenu')?.classList.remove('active');
+      }
+    }
+
+    // Event listeners para el menú
+    document.querySelectorAll('.menu-item').forEach(item => {
+      if (!item.hasAttribute('href')) {
+        item.addEventListener('click', (e) => {
+          const action = item.querySelector('[data-i18n]')?.getAttribute('data-i18n');
+          if (action) handleItemClick(action);
+        });
+      }
+    });
+
+    // Event listeners para iconos del escritorio
+    document.querySelectorAll('.desktop-icon .clickable').forEach(icon => {
+      icon.addEventListener('click', (e) => {
+        const action = icon.querySelector('[data-i18n]')?.getAttribute('data-i18n');
+        if (action) handleItemClick(action);
+      });
+    });
+  }
+
+  // Ejecutar ambas inicializaciones cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeStartMenu();
+    initializeWindows();
+  });
+</script>
+
+<style>
+  .desktop-icons {
+    display: grid;
+    grid-template-columns: 90px;
+    gap: 10px;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+</style>

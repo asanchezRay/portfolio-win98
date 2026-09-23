@@ -1,0 +1,91 @@
+---
+/**
+ * Layout del sitio nuevo.
+ *
+ * Deliberadamente NO importa nada de src/win98/: ese CSS aplica
+ * `overflow: hidden` a html/body y fija fuente y fondo del escritorio,
+ * lo que romperia cualquier pagina con scroll.
+ */
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_CL" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Andrés Sánchez',
+      jobTitle: 'Líder Técnico',
+      worksFor: { '@type': 'Organization', name: 'IGX' },
+      url: Astro.site?.href,
+      address: { '@type': 'PostalAddress', addressLocality: 'Concepción', addressCountry: 'CL' },
+      sameAs: [
+        'https://cl.linkedin.com/in/andressanchezc',
+        'https://github.com/asanchezRay',
+        'https://gitlab.com/asanchez35',
+      ],
+    })} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root {
+    --ink: #1c1917;
+    --ink-soft: #57534e;
+    --rule: #e7e5e4;
+    --paper: #fafaf9;
+    --accent: #1d4ed8;
+    color-scheme: light dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7e5e4;
+      --ink-soft: #a8a29e;
+      --rule: #292524;
+      --paper: #12100f;
+      --accent: #93b4fd;
+    }
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: var(--accent); }
+  img { max-width: 100%; height: auto; }
+</style>

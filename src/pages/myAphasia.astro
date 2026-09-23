@@ -1,7 +1,21 @@
 ---
-const driveUrl = "https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view";
+/**
+ * /myAphasia  —  RUTA PUBLICADA. NO RENOMBRAR NI ELIMINAR.
+ *
+ * Descarga del APK de AfasiaApp, referenciada junto con /readme desde la
+ * publicacion en IEEE Latin America Transactions.
+ *
+ * Atencion al camelCase: las URLs estaticas de Netlify son sensibles a
+ * mayusculas. El alias /myaphasia se cubre desde public/_redirects.
+ *
+ * El redirect real lo sirve Netlify desde public/_redirects (302).
+ * Esta pagina es el respaldo por si esa configuracion se pierde.
+ */
+import Redirect from '../components/Redirect.astro';
 ---
 
-<script define:vars={{ driveUrl }}>
-  window.location.href = driveUrl;
-</script> 
+<Redirect
+  target="https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view"
+  label="la descarga de AfasiaApp"
+  title="AfasiaApp — Descarga"
+/>

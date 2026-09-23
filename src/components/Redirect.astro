@@ -1,0 +1,59 @@
+---
+/**
+ * Redireccion resistente para rutas publicadas.
+ *
+ * Funciona en tres capas, de mas a menos robusta:
+ *   1. Netlify sirve un 302 desde public/_redirects y esta pagina ni se carga.
+ *   2. Si esa config se pierde, el <meta http-equiv="refresh"> redirige
+ *      sin necesidad de JavaScript.
+ *   3. Si todo falla, queda un enlace visible en pantalla.
+ *
+ * La version anterior era solo `window.location.href` dentro de un <script>:
+ * sin JS quedaba una pagina en blanco.
+ */
+interface Props {
+  target: string;
+  label: string;
+  title: string;
+}
+
+const { target, label, title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={target} />
+    <title>{title}</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-content: center;
+        gap: 0.75rem;
+        padding: 2rem;
+        text-align: center;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        color: #1a1a1a;
+        background: #fafaf9;
+      }
+      p { margin: 0; }
+      .muted { color: #57534e; font-size: 0.9rem; }
+      a { color: #1d4ed8; }
+    </style>
+  </head>
+  <body>
+    <p class="muted">Redirigiendo a {label}…</p>
+    <p><a href={target} rel="noopener">Continuar manualmente</a></p>
+    <script is:inline define:vars={{ target }}>
+      // replace() y no href: evita dejar esta pagina en el historial,
+      // para que el boton Atras vuelva al origen y no reactive el redirect.
+      window.location.replace(target);
+    </script>
+  </body>
+</html>

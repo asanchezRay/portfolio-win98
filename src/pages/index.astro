@@ -1,94 +1,103 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import StartMenu from '../components/StartMenu.astro';
-import DesktopIcon from '../components/DesktopIcon.astro';
-import AboutMe from '../components/AboutMe.astro';
-import Skills from '../components/Skills.astro';
-import Projects from '../components/Projects.astro';
-import { menuItems } from '../data/menuItems';
-import { t } from '../i18n/translations';
-import '../styles/index.css';
+/**
+ * Home — base minima mientras se construye el portafolio nuevo.
+ *
+ * Es intencionalmente corta: no es el diseno final, pero si un estado
+ * presentable y desplegable. El portafolio Windows 98 anterior vive
+ * completo en /98.
+ */
+import Base from '../layouts/Base.astro';
+
+const links = [
+  { href: '/CV_Andres_Sanchez_Cabrera.pdf', label: 'CV (PDF)' },
+  { href: 'https://cl.linkedin.com/in/andressanchezc', label: 'LinkedIn' },
+  { href: 'https://github.com/asanchezRay', label: 'GitHub' },
+  { href: 'mailto:and.sanchezc@outlook.com', label: 'Correo' },
+];
 ---
 
-<Layout title={t('portfolio') as string}>
-  <div class="desktop-icons">
-    {menuItems.map((item) => (
-      <DesktopIcon 
-        icon={item.icon}
-        translationKey={item.translationKey}
-        link={item.link}
-      />
-    ))}
-  </div>
-  <AboutMe />
-  <Skills />
-  <Projects />
-  <StartMenu />
-</Layout>
+<Base
+  title="Andrés Sánchez — Líder Técnico"
+  description="Líder Técnico en IGX. Seis años construyendo software para el mercado eléctrico chileno y la nómina multipaís, entre ingeniería y negocio."
+>
+  <main>
+    <header>
+      <h1>Andrés Sánchez</h1>
+      <p class="role">Líder Técnico en IGX · Concepción, Chile</p>
+    </header>
 
-<script>
-  // Inicializar el menú de inicio
-  function initializeStartMenu() {
-    const startBtn = document.getElementById('startBtn');
-    const startMenu = document.getElementById('startMenu');
+    <p class="lead">
+      Traduzco entre dos mundos que rara vez hablan el mismo idioma: el negocio y el
+      sistema. Seis años construyendo software para el mercado eléctrico chileno y para
+      la nómina de miles de personas — dominios donde una regla mal leída se convierte
+      en plata mal cobrada.
+    </p>
 
-    startBtn?.addEventListener('click', () => {
-      startMenu?.classList.toggle('active');
-    });
+    <nav aria-label="Enlaces">
+      <ul>
+        {links.map(({ href, label }) => (
+          <li><a href={href}>{label}</a></li>
+        ))}
+      </ul>
+    </nav>
 
-    // Cerrar el menú al hacer clic fuera
-    document.addEventListener('click', (e) => {
-      if (!startBtn?.contains(e.target as Node) && 
-          !startMenu?.contains(e.target as Node)) {
-        startMenu?.classList.remove('active');
-      }
-    });
-  }
-
-  // Inicializar las ventanas modales
-  function initializeWindows() {
-    function handleItemClick(action: string) {
-      console.log('Click en:', action);
-      const modal = document.querySelector(`.window-modal[data-window="${action}"]`);
-      if (modal) {
-        modal.setAttribute('data-open', 'true');
-        document.getElementById('startMenu')?.classList.remove('active');
-      }
-    }
-
-    // Event listeners para el menú
-    document.querySelectorAll('.menu-item').forEach(item => {
-      if (!item.hasAttribute('href')) {
-        item.addEventListener('click', (e) => {
-          const action = item.querySelector('[data-i18n]')?.getAttribute('data-i18n');
-          if (action) handleItemClick(action);
-        });
-      }
-    });
-
-    // Event listeners para iconos del escritorio
-    document.querySelectorAll('.desktop-icon .clickable').forEach(icon => {
-      icon.addEventListener('click', (e) => {
-        const action = icon.querySelector('[data-i18n]')?.getAttribute('data-i18n');
-        if (action) handleItemClick(action);
-      });
-    });
-  }
-
-  // Ejecutar ambas inicializaciones cuando el DOM esté listo
-  document.addEventListener('DOMContentLoaded', () => {
-    initializeStartMenu();
-    initializeWindows();
-  });
-</script>
+    <footer>
+      <p>
+        Mi portafolio anterior, un escritorio Windows 98 hecho a mano en CSS,
+        sigue en pie en <a href="/98">/98</a>.
+      </p>
+    </footer>
+  </main>
+</Base>
 
 <style>
-  .desktop-icons {
-    display: grid;
-    grid-template-columns: 90px;
-    gap: 10px;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
+  main {
+    max-width: 38rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    padding-block: clamp(3rem, 12vh, 7rem) 4rem;
   }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 7vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .role {
+    margin: 0.4rem 0 0;
+    color: var(--ink-soft);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+  }
+
+  .lead {
+    margin: 2.25rem 0 0;
+    font-size: 1.1875rem;
+    text-wrap: pretty;
+  }
+
+  nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 2.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.9375rem;
+  }
+
+  footer {
+    margin-top: 3.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.875rem;
+  }
+
+  footer p { margin: 0; }
 </style>
