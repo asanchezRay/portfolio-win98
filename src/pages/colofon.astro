@@ -5,12 +5,27 @@ import '../styles/prosa.css';
 
 <Base
   titulo="Colofón"
-  descripcion="Cómo está construido este sitio: Astro, content collections, tipografía autohospedada, diagramas en SVG escritos a mano y una verificación que protege dos URL publicadas en un paper."
+  descripcion="Cómo está construido este sitio: Astro, content collections, cero JavaScript, diagramas en SVG y una verificación que protege dos URL publicadas en un paper."
 >
   <article class="documento prosa colofon">
     <h1>Colofón</h1>
     <p class="entradilla">
       Cómo está construido este sitio.
+    </p>
+
+    <h2>Quién lo escribió</h2>
+    <p>
+      Este sitio lo construí con asistencia de IA, de principio a fin. Lo digo
+      acá porque un portafolio que habla de criterio técnico no debería ser
+      ambiguo sobre cómo está hecho.
+    </p>
+    <p>
+      Lo que aporté fue el criterio: qué mostrar y qué sacar, cuándo algo no
+      comunicaba, cuándo una versión se veía genérica y había que rehacerla. El
+      escritorio Windows 98 que vive en <a href="/98">/98</a>,
+      <a href="/casos/organizatumatri">Organizatumatri</a> y
+      <a href="/casos/afasiaapp">AfasiaApp</a> son otra cosa: esos los escribí
+      yo, y por eso ahí sí digo que el CSS está hecho a mano.
     </p>
 
     <h2>Stack</h2>
@@ -23,9 +38,9 @@ import '../styles/prosa.css';
     <p>
       No hay framework de interfaz ni librería de componentes, y las páginas no
       envían un solo byte de JavaScript al navegador. Los tres archivos que
-      quedan en el build son del escritorio del 98. El CSS está escrito a mano sobre una retícula de tres
-      anchos: texto, medio y amplio. Eso permite que las figuras se salgan de la
-      columna de lectura sin salirse del flujo.
+      quedan en el build son del escritorio del 98. El CSS se apoya en una
+      retícula de tres anchos —texto, medio y amplio—, que permite que las
+      figuras se salgan de la columna de lectura sin salirse del flujo.
     </p>
 
     <h2>Tipografía</h2>
@@ -62,9 +77,10 @@ import '../styles/prosa.css';
 
     <h2>Diagramas</h2>
     <p>
-      Son SVG escritos a mano contra una hoja de estilos común, así que
-      comparten grosores, cajas, puntas de flecha y jerarquía tipográfica. Eso
-      le da consistencia gráfica al sitio sin librería de dibujo.
+      Son SVG sobre una hoja de estilos común, así que comparten grosores,
+      cajas, puntas de flecha y jerarquía tipográfica. Esa consistencia es lo
+      que le da identidad gráfica al sitio, y no hay librería de dibujo
+      involucrada.
     </p>
     <p>
       En pantallas angostas no se encogen: se desplazan horizontalmente.

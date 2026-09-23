@@ -184,7 +184,7 @@ export const taller: Pieza[] = [
   },
   {
     nombre: 'Este sitio',
-    que: 'Astro, CSS escrito a mano, diagramas en SVG y cero JavaScript enviado al navegador.',
+    que: 'Astro, diagramas en SVG y cero JavaScript enviado al navegador. Construido con IA.',
     anios: '2026',
     estado: 'en curso',
     tags: ['Astro', 'MDX', 'SVG'],

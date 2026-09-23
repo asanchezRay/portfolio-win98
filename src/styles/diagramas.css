@@ -2,8 +2,8 @@
  * Lenguaje visual compartido de los diagramas.
  *
  * Todos los diagramas del sitio usan estas clases, asi que se leen como un
- * mismo sistema aunque cada uno se dibuje a mano. Esa consistencia es lo que
- * le da identidad grafica al portafolio sin depender de una libreria.
+ * mismo sistema aunque cada uno se dibuje por separado. Esa consistencia es lo
+ * que le da identidad grafica al portafolio sin depender de una libreria.
  *
  * Los SVG se autoran con un viewBox fijo y se envuelven en .diagrama, que da
  * scroll horizontal propio en pantallas angostas: reducir el dibujo entero
