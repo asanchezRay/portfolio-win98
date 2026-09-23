@@ -60,6 +60,13 @@ const PANTALLAS = {
     ['/vendor/dashboard?tab=calendario', 'proveedor-agenda', 'Agenda'],
     ['/vendor/dashboard?tab=estadisticas', 'proveedor-estadisticas', 'Estadísticas'],
     ['/vendor/dashboard?tab=perfil', 'proveedor-perfil', 'Edición de perfil'],
+    ['/vendor/dashboard?tab=cotizaciones', 'proveedor-cotizaciones', 'Cotizaciones enviadas'],
+    ['/vendor/dashboard?tab=servicios', 'proveedor-servicios', 'Servicios'],
+    ['/vendor/dashboard?tab=galeria', 'proveedor-galeria', 'Galería'],
+    ['/vendor/dashboard?tab=equipo', 'proveedor-equipo', 'Equipo'],
+    ['/vendor/dashboard?tab=pro', 'proveedor-planes', 'Planes'],
+    ['/vendor/dashboard?tab=configuracion', 'proveedor-configuracion', 'Configuración'],
+    ['/vendor/dashboard?tab=visibilidad', 'proveedor-visibilidad', 'Visibilidad'],
   ],
   pareja: [
     ['/couple/dashboard', 'novios-resumen', 'Panel de novios'],
@@ -68,6 +75,8 @@ const PANTALLAS = {
     ['/couple/dashboard?tab=guests', 'novios-invitados', 'Invitados'],
     ['/couple/dashboard?tab=itinerary', 'novios-itinerario', 'Itinerario'],
     ['/couple/dashboard?tab=favorites', 'novios-favoritos', 'Favoritos'],
+    ['/couple/dashboard?tab=inquiries', 'novios-cotizaciones', 'Cotizaciones pedidas'],
+    ['/couple/dashboard?tab=seating', 'novios-mesas', 'Organiza tu mesa'],
   ],
 };
 
@@ -80,6 +89,49 @@ const PANTALLAS = {
  *
  * Cada entrada es [patron sobre la ruta, carpeta destino].
  */
+/**
+ * Los menus laterales de los dos paneles no son enlaces: son <button> que
+ * cambian de pestana con estado de cliente. Sin JavaScript no hacen nada, y
+ * dejan el recorrido encerrado en la pantalla en la que se entro.
+ *
+ * Como cada pestana se capturo por separado, se convierten en enlaces a la
+ * pantalla que corresponde. Se identifican por su texto visible porque el
+ * boton no lleva el id de la pestana en ningun atributo.
+ *
+ * Las pestanas que no se capturaron no estan aqui y quedan como botones
+ * inertes, que es preferible a mandarlas a una pantalla equivocada.
+ */
+const TABS = {
+  publico: {},
+  proveedor: {
+    Dashboard: 'proveedor-resumen',
+    Parejas: 'proveedor-crm',
+    Consultas: 'proveedor-consultas',
+    Cotizaciones: 'proveedor-cotizaciones',
+    Cotizador: 'proveedor-cotizador',
+    Contratos: 'proveedor-contratos',
+    Agenda: 'proveedor-agenda',
+    Servicios: 'proveedor-servicios',
+    'Perfil público': 'proveedor-perfil',
+    Galería: 'proveedor-galeria',
+    Estadísticas: 'proveedor-estadisticas',
+    Visibilidad: 'proveedor-visibilidad',
+    Planes: 'proveedor-planes',
+    Equipo: 'proveedor-equipo',
+    Configuración: 'proveedor-configuracion',
+  },
+  pareja: {
+    Resumen: 'novios-resumen',
+    'Plan de boda': 'novios-checklist',
+    Presupuesto: 'novios-presupuesto',
+    Favoritos: 'novios-favoritos',
+    Cotizaciones: 'novios-cotizaciones',
+    Invitados: 'novios-invitados',
+    'Organiza tu Mesa': 'novios-mesas',
+    'Minuto a Minuto': 'novios-itinerario',
+  },
+}
+
 const ALIAS = [
   ['^/proveedor/', 'ficha-proveedor'],
   ['^/proveedores/', 'proveedores'],
@@ -199,7 +251,7 @@ const AVISO = `
 </style>
 `;
 
-async function capturar(ctx, ruta, archivo) {
+async function capturar(ctx, ruta, archivo, tabsPerfil) {
   const page = await ctx.newPage();
   const res = await page.goto(ORIGEN + ruta, { waitUntil: 'networkidle', timeout: 60_000 });
   if (!res || res.status() >= 400) {
@@ -219,7 +271,7 @@ async function capturar(ctx, ruta, archivo) {
   await page.waitForTimeout(1500);
 
   const { html, css } = await page.evaluate(
-    async ({ BASE, rutas, alias }) => {
+    async ({ BASE, rutas, alias, tabs }) => {
       // El dev server de Next sirve el CSS con un ?v= que cambia en cada
       // recompilacion, asi que bajarlo despues da 404. Se trae aqui, desde
       // la propia pagina y mientras la URL sigue siendo valida.
@@ -304,6 +356,21 @@ async function capturar(ctx, ruta, archivo) {
         }
       }
 
+      // Los botones del menu lateral pasan a ser enlaces de verdad.
+      for (const b of document.querySelectorAll('button')) {
+        // El contador de notificaciones se pega al texto ("Consultas1"), asi
+        // que se quitan los digitos del final antes de buscar la pestana.
+        const etiqueta = b.textContent.replace(/\d+\s*$/, '').replace(/\s+/g, ' ').trim();
+        const destino = tabs[etiqueta];
+        if (!destino) continue;
+        const a = document.createElement('a');
+        a.setAttribute('href', `${BASE}/${destino}/`);
+        if (b.className) a.className = b.className;
+        if (b.getAttribute('style')) a.setAttribute('style', b.getAttribute('style'));
+        a.innerHTML = b.innerHTML;
+        b.replaceWith(a);
+      }
+
       // Los formularios no van a ninguna parte.
       for (const f of document.querySelectorAll('form')) {
         f.removeAttribute('action');
@@ -312,7 +379,7 @@ async function capturar(ctx, ruta, archivo) {
 
       return { html: document.documentElement.outerHTML, css };
     },
-    { BASE, rutas: RUTAS_A_ARCHIVO, alias: ALIAS }
+    { BASE, rutas: RUTAS_A_ARCHIVO, alias: ALIAS, tabs: tabsPerfil }
   );
 
   await page.close();
@@ -432,7 +499,7 @@ for (const [perfil, lista] of Object.entries(PANTALLAS)) {
     lista[0][0].split('?')[0]
   );
   for (const [ruta, archivo, titulo] of lista) {
-    const ok = await capturar(ctx, ruta, archivo);
+    const ok = await capturar(ctx, ruta, archivo, TABS[perfil] ?? {});
     if (ok) {
       capturadas.push({ perfil, archivo, titulo, ruta });
       console.log(`  ${archivo}`);
