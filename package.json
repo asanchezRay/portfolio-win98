@@ -12,7 +12,7 @@
     "check:routes": "node scripts/check-published-routes.mjs",
     "fonts": "bash scripts/fetch-fonts.sh",
     "capturar:98": "node scripts/capturar-98.mjs",
-    "generar:og": "node scripts/generar-og.mjs",
+    "generar:og": "node --experimental-strip-types scripts/generar-og.mjs",
     "check:prod": "node scripts/check-prod.mjs",
     "check:paginas": "node scripts/check-paginas.mjs"
   },

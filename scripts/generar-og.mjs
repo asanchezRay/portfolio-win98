@@ -2,15 +2,16 @@
 /**
  * Genera public/og.png, la imagen que se ve al compartir el sitio.
  *
- * Se renderiza una pagina HTML a 1200x630 y se captura. Se versiona el PNG
- * resultante en vez de generarlo en cada build porque el build de Netlify no
- * tiene navegador, y porque el contenido de la tarjeta casi nunca cambia.
+ * Lee los datos de src/data/perfil.ts en vez de repetirlos. La version
+ * anterior los tenia escritos a mano y quedo mostrando el titular de dos
+ * revisiones atras, el rol antiguo y una cifra con formato viejo: nadie se da
+ * cuenta hasta que pega el enlace en alguna parte.
  *
- * Uso:  node scripts/generar-og.mjs
+ * Se versiona el PNG resultante porque el build de Netlify no tiene navegador.
+ *
+ * Uso:  npm run generar:og
  * Requiere Playwright; si no esta en este repo, pasar PLAYWRIGHT=<ruta>.
  */
-import { readFileSync } from 'node:fs';
-
 const modulo = process.env.PLAYWRIGHT ?? 'playwright-core';
 let chromium;
 try {
@@ -20,65 +21,71 @@ try {
   process.exit(1);
 }
 
-// La fuente se incrusta en base64 para que la captura no dependa de la red.
-const fuente = readFileSync('public/fonts/source-serif-4-upright.woff2').toString('base64');
+const { perfil } = await import('../src/data/perfil.ts');
 
+const cifras = perfil.cifras
+  .map(
+    (c) => `<div class="cifra">
+      <b>${c.valor}${c.unidad ? `<i>${c.unidad}</i>` : ''}</b>
+      <span>${c.etiqueta}</span>
+    </div>`
+  )
+  .join('');
+
+// El mismo lenguaje visual de la portada: consola, monoespaciada, cuadricula
+// de fondo y ambar de fosforo. Una tarjeta que no se parece al sitio confunde.
 const html = `<!doctype html>
 <meta charset="utf-8">
 <style>
-  @font-face {
-    font-family: 'Source Serif 4';
-    font-weight: 400 600;
-    src: url(data:font/woff2;base64,${fuente}) format('woff2');
-  }
   * { box-sizing: border-box; margin: 0; }
   body {
     width: 1200px; height: 630px;
-    padding: 76px 84px;
+    padding: 64px 72px;
     display: flex; flex-direction: column; justify-content: space-between;
-    background: #faf9f7;
-    color: #1a1816;
-    font-family: 'Source Serif 4', Georgia, serif;
+    background: #0a0d0c;
+    color: #d6e2d6;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+    background-image:
+      linear-gradient(#1e2826 1px, transparent 1px),
+      linear-gradient(90deg, #1e2826 1px, transparent 1px);
+    background-size: 40px 40px;
   }
   .rotulo {
-    font-family: ui-sans-serif, system-ui, sans-serif;
-    font-size: 19px; font-weight: 600;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: #7d766d;
+    font-size: 17px; font-weight: 600;
+    letter-spacing: 0.16em; text-transform: uppercase; color: #64756a;
   }
-  h1 { font-size: 66px; line-height: 1.08; letter-spacing: -0.03em; font-weight: 600; max-width: 17ch; }
-  .pie { display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; }
-  .quien { font-family: ui-sans-serif, system-ui, sans-serif; font-size: 25px; }
-  .quien strong { display: block; font-size: 31px; font-weight: 600; letter-spacing: -0.015em; }
-  .quien span { color: #55504a; }
-  .cifras { display: flex; gap: 52px; }
-  .cifra { border-top: 3px solid #cdc6bb; padding-top: 12px; }
-  .cifra b {
-    display: block;
-    font-family: ui-sans-serif, system-ui, sans-serif;
-    font-size: 47px; font-weight: 600; letter-spacing: -0.04em; line-height: 1;
+  h1 {
+    margin-top: 26px;
+    font-size: 58px; line-height: 1.08; font-weight: 600;
+    letter-spacing: -0.01em; text-transform: uppercase;
+    max-width: 19ch;
   }
-  .cifra b i { font-style: normal; font-size: 26px; color: #c4670f; }
+  h1 b { color: #ffb000; font-weight: 600; }
+  .pie { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .quien strong { display: block; font-size: 27px; font-weight: 600; }
+  .quien span { display: block; margin-top: 6px; font-size: 17px; color: #8fa08f; }
+  .cifras { display: flex; gap: 40px; }
+  .cifra { border-top: 2px solid #35443f; padding-top: 12px; }
+  .cifra b { display: block; font-size: 42px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+  .cifra b i { font-style: normal; font-size: 22px; color: #ff7b3d; }
   .cifra span {
-    display: block; margin-top: 8px; max-width: 13ch;
-    font-family: ui-sans-serif, system-ui, sans-serif;
-    font-size: 15px; line-height: 1.35; color: #55504a;
+    display: block; margin-top: 9px; max-width: 15ch;
+    font-size: 13px; line-height: 1.35; color: #64756a;
   }
 </style>
-<p class="rotulo">Concepción, Chile · Remoto</p>
-<h1>Traduzco entre dos mundos que rara vez hablan el mismo idioma: el negocio y el sistema.</h1>
+<p class="rotulo">${perfil.ubicacion} · ${perfil.modalidad}</p>
+<h1><b>&gt;</b> ${perfil.titular}</h1>
 <div class="pie">
-  <p class="quien"><strong>Andrés Sánchez</strong><span>Líder Técnico · IGX</span></p>
-  <div class="cifras">
-    <div class="cifra"><b>53<i>%</i></b><span>menos costo recurrente</span></div>
-    <div class="cifra"><b>900<i>GB</i></b><span>de historia migrados</span></div>
-    <div class="cifra"><b>4½<i>años</i></b><span>enseñando en la universidad</span></div>
-  </div>
+  <p class="quien"><strong>${perfil.nombre}</strong><span>${perfil.rol} · ${perfil.organizacion}</span></p>
+  <div class="cifras">${cifras}</div>
 </div>`;
 
 const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 await page.setContent(html, { waitUntil: 'networkidle' });
 await page.screenshot({ path: 'public/og.png' });
 await browser.close();
+
 console.log('public/og.png');
+console.log(`  titular: ${perfil.titular}`);
+console.log(`  rol:     ${perfil.rol}`);
