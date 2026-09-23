@@ -45,13 +45,17 @@ export const taller: Pieza[] = [
   {
     nombre: 'Organizatumatri',
     destacado: true,
-    cifra: { valor: '3', etiqueta: 'aplicaciones, levantadas solo' },
     que: 'Marketplace de dos lados, de punta a punta.',
     anios: '2025 — 2026',
     estado: 'cerrado',
     tags: ['Next.js', 'Prisma', 'MercadoPago', 'Playwright'],
     contexto: 'Proyecto propio',
     caso: 'organizatumatri',
+    enlace: { href: '/demo/organizatumatri/', texto: 'Recorrerla' },
+    imagen: {
+      src: '/img/organizatumatri/directorio.png',
+      alt: 'Directorio de proveedores de Organizatumatri',
+    },
   },
   {
     nombre: '900 GB a BigQuery',

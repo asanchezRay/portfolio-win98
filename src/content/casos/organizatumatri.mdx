@@ -23,6 +23,12 @@ stack:
   ]
 orden: 6
 destacado: true
+imagen:
+  src: /img/organizatumatri/directorio.png
+  alt: Directorio de proveedores de Organizatumatri, con tarjetas, filtros y categorías
+enlaces:
+  - href: /demo/organizatumatri/
+    texto: Recorrer la plataforma
 enCorto:
   problema: "Organizar un matrimonio en Chile son veinte proveedores coordinados a mano, casi siempre en una planilla."
   hice: "Construí el marketplace completo y solo: tres aplicaciones, pagos, correos, tests y despliegue."
@@ -37,6 +43,7 @@ nota: Cerré el proyecto. Está acá porque lo que aprendí sirve más que si hu
 ---
 
 import Figura from '../../components/Figura.astro';
+import Galeria from '../../components/Galeria.astro';
 import PipelineProveedores from '../../components/diagramas/PipelineProveedores.astro';
 
 Organizar un matrimonio en Chile implica coordinar entre diez y veinte
@@ -49,6 +56,26 @@ las herramientas de planificación: presupuesto, checklist, invitados, mesas,
 itinerario, RSVP. Lo construí completo y solo, incluidas las tres aplicaciones
 (novios, proveedores y administración), la infraestructura, los pagos, los
 correos, los tests y el despliegue.
+
+<Figura ancho="amplio" desnuda pie="Directorio, CRM de parejas, cotizador y panel de novios. Se pueden recorrer en la copia congelada: no hacen falta credenciales porque no hay nada que operar.">
+  <Galeria
+    minimo="18rem"
+    capturas={[
+      { src: '/img/organizatumatri/directorio.png', alt: 'Directorio de proveedores con tarjetas, filtros por región y categorías' },
+      { src: '/img/organizatumatri/crm.png', alt: 'CRM del proveedor: pipeline kanban con parejas en distintas etapas' },
+      { src: '/img/organizatumatri/cotizador.png', alt: 'Cotizador del proveedor' },
+      { src: '/img/organizatumatri/novios.png', alt: 'Panel de novios: presupuesto por categoría' },
+    ]}
+  />
+</Figura>
+
+## Se puede recorrer
+
+La plataforma dejó de operar, pero está
+[congelada y navegable](/demo/organizatumatri/) dentro de este sitio: 19
+pantallas, incluidas las privadas del proveedor y de los novios. No pide
+credenciales porque no hay backend detrás y no hay nada que proteger. Los datos
+son inventados.
 
 ## El modelo
 
