@@ -3,7 +3,7 @@
  * Verifica que las rutas publicadas sobrevivan al build.
  *
  * /readme y /myAphasia estan referenciadas desde la publicacion de AfasiaApp
- * en IEEE Latin America Transactions. Son enlaces impresos y no se pueden
+ * en SoftwareX (Elsevier). Son enlaces impresos y no se pueden
  * romper. Este script corre despues de cada build y falla ruidosamente si
  * alguna desaparece o si cambia su destino.
  *
@@ -84,7 +84,7 @@ if (errors.length) {
   console.error('\n  RUTAS PUBLICADAS ROTAS\n');
   for (const e of errors) console.error(`   - ${e}`);
   console.error(
-    '\n  Estas rutas estan impresas en la publicacion de IEEE. Arreglalo antes de desplegar.\n'
+    '\n  Estas rutas estan impresas en la publicacion en SoftwareX. Arreglalo antes de desplegar.\n'
   );
   process.exit(1);
 }

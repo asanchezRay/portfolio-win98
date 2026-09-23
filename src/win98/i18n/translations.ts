@@ -157,7 +157,7 @@ export const translations = {
         ],
         achievements: [
           'Puntaje de usabilidad SUS de 79.7/100 en evaluación con profesionales',
-          'Publicación de artículo científico en IEEE Latin America Transactions',
+          'Publicación de artículo científico en SoftwareX (Elsevier)',
           'Desarrollo de más de 15 actividades terapéuticas diferentes con 3 niveles de dificultad cada una',
           'Implementación exitosa de interfaz adaptada a necesidades de pacientes con afasia'
         ],
@@ -319,7 +319,7 @@ export const translations = {
         ],
         achievements: [
           'SUS usability score of 79.7/100 in professional evaluation',
-          'Publication of scientific article in IEEE Latin America Transactions',
+          'Publication of scientific article in SoftwareX (Elsevier)',
           'Development of more than 15 different therapeutic activities with 3 difficulty levels each',
           'Successful implementation of interface adapted to aphasia patients needs'
         ],
