@@ -9,6 +9,10 @@ rol: Senior Software Engineer
 stack: [Google Cloud Run, Python, BigQuery, Docker]
 orden: 2
 destacado: true
+enCorto:
+  problema: "La ingesta de medidores corría por lotes una vez al día, y facturar por intervalos necesita el dato fresco."
+  hice: "Monté un camino en vivo sobre Cloud Run al lado del scraper existente, sin tocarlo."
+  resultado: "Los dos caminos conviven: el lote asegura que no falte nada, el vivo entrega lo reciente."
 cifras:
   - valor: "0"
     etiqueta: reescrituras del scraper existente

@@ -10,12 +10,9 @@ export const perfil = {
   titular: 'Seis años construyendo software para el mercado eléctrico chileno.',
 
   presentacion:
-    'Hoy soy líder técnico en IGX, en un rol transversal a toda la plataforma. ' +
     'Escribo menos código que antes y paso más tiempo entre ingeniería y las ' +
-    'áreas de negocio: evalúo si lo que se pide es factible, propongo alternativas ' +
-    'más simples y ayudo a decidir qué vale la pena construir. Antes de volver ' +
-    'estuve siete meses en Buk, en nómina multipaís. Los dos son dominios ' +
-    'regulados, y en los dos un cálculo mal hecho termina en plata mal cobrada.',
+    'áreas de negocio, evaluando qué vale la pena construir. Antes de volver a ' +
+    'IGX estuve siete meses en Buk, en nómina multipaís.',
 
   /** Las tres cifras de la portada. Verificables, no adjetivos. */
   cifras: [

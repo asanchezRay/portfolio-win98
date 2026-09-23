@@ -1,0 +1,224 @@
+---
+import { taller, type Estado } from '../data/taller';
+
+/**
+ * Rejilla densa con todo lo construido.
+ *
+ * Fichas chicas y uniformes a proposito: lo que comunica aqui es la cantidad y
+ * la variedad, no cada pieza por separado. Las que tienen caso enlazan; las
+ * demas se leen completas en su ficha, que es justamente por que cada `que`
+ * tiene que caber en una linea.
+ */
+
+/** Activo lleva punto relleno; terminado, punto hueco. */
+const activo = (estado: Estado) =>
+  estado === 'en curso' || estado === 'en producción' || estado === 'continuo';
+
+const total = taller.length;
+const enMarcha = taller.filter((p) => activo(p.estado)).length;
+---
+
+<section class="taller">
+  <header>
+    <h2>El taller</h2>
+    <p class="cuenta rotulo">
+      {total} cosas · {enMarcha} andando
+    </p>
+  </header>
+
+  <p class="glosa">
+    Trabajo pagado, proyectos propios, clases y cambios de proceso, todo junto.
+    Los separo poco porque en la práctica no los separo.
+  </p>
+
+  <ul class="rejilla">
+    {
+      taller.map((pieza) => {
+        const Etiqueta = pieza.caso ? 'a' : 'div';
+        const props = pieza.caso ? { href: `/casos/${pieza.caso}` } : {};
+        return (
+          <li class="ficha">
+            <Etiqueta {...props} class="cuerpo">
+              <p class:list={['estado', { activo: activo(pieza.estado) }]}>
+                <span class="punto" aria-hidden="true" />
+                {pieza.estado}
+              </p>
+              <h3>{pieza.nombre}</h3>
+              <p class="que">{pieza.que}</p>
+            </Etiqueta>
+
+            <p class="meta">
+              <span>{pieza.anios}</span>
+              {pieza.contexto && <span>{pieza.contexto}</span>}
+            </p>
+
+            <ul class="tags">
+              {pieza.tags.map((t) => (
+                <li>{t}</li>
+              ))}
+            </ul>
+
+            {(pieza.caso || pieza.enlace) && (
+              <p class="acciones">
+                {pieza.caso && <a href={`/casos/${pieza.caso}`}>Ver el caso</a>}
+                {pieza.enlace && <a href={pieza.enlace.href}>{pieza.enlace.texto}</a>}
+              </p>
+            )}
+          </li>
+        );
+      })
+    }
+  </ul>
+</section>
+
+<style>
+  .taller header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--e-2) var(--e-4);
+  }
+
+  h2 {
+    font-size: var(--t-titulo);
+  }
+
+  .cuenta {
+    margin: 0;
+  }
+
+  .glosa {
+    margin-top: var(--e-3);
+    max-width: 34rem;
+    color: var(--tinta-media);
+    font-size: var(--t-chico);
+  }
+
+  .rejilla {
+    margin: var(--e-6) 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr));
+    gap: 0;
+    background: var(--papel-elevado);
+    border: var(--borde);
+    border-radius: var(--radio);
+    overflow: hidden;
+  }
+
+  .ficha {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+    padding: var(--e-4);
+    background: var(--papel-elevado);
+    /* Las lineas de la cuadricula se dibujan como sombra y no como borde: la
+       sombra sale fuera de la caja, asi que el overflow del contenedor recorta
+       las del ultimo borde y no quedan lineas dobles. Ademas, cuando la ultima
+       fila queda incompleta, la celda sobrante es papel y no un hueco gris. */
+    box-shadow:
+      1px 0 0 var(--linea),
+      0 1px 0 var(--linea);
+  }
+
+  .ficha:hover {
+    background: var(--papel-hundido);
+  }
+
+  .cuerpo {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    flex: 1;
+  }
+
+  a.cuerpo:hover h3 {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  /* --- Estado --- */
+  .estado {
+    margin: 0 0 var(--e-2);
+    display: flex;
+    align-items: center;
+    gap: 0.45em;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  .punto {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 50%;
+    border: 1.5px solid var(--tinta-suave);
+  }
+
+  .estado.activo {
+    color: var(--senal);
+  }
+
+  .estado.activo .punto {
+    background: var(--senal);
+    border-color: var(--senal);
+  }
+
+  h3 {
+    font-size: var(--t-base);
+    letter-spacing: -0.01em;
+  }
+
+  .que {
+    margin-top: var(--e-2);
+    font-size: var(--t-chico);
+    line-height: 1.5;
+    color: var(--tinta-media);
+    text-wrap: pretty;
+  }
+
+  /* --- Pie de ficha --- */
+  .meta {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em 0.7em;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    color: var(--tinta-suave);
+  }
+
+  .meta span + span::before {
+    content: '· ';
+  }
+
+  .tags {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-1) var(--e-2);
+  }
+
+  .tags li {
+    padding: 0.15em 0.45em;
+    border: var(--borde);
+    border-radius: 2px;
+    font-family: var(--fuente-mono);
+    font-size: 0.6875rem;
+    color: var(--tinta-suave);
+  }
+
+  .acciones {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-4);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-mini);
+  }
+</style>

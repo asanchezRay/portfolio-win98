@@ -28,6 +28,17 @@ const casos = defineCollection({
     destacado: z.boolean().default(false),
 
     /**
+     * La version de diez segundos. Va arriba del todo, y el cuerpo largo queda
+     * plegado detras. Sin esto cada caso son 600 palabras sin forma de mirar
+     * por encima, que es lo que hacia el sitio agotador de leer.
+     */
+    enCorto: z.object({
+      problema: z.string(),
+      hice: z.string(),
+      resultado: z.string(),
+    }),
+
+    /**
      * Cifras dura del caso. Se renderizan grandes, con unidad separada del
      * numero para poder componerlas tipograficamente.
      */
