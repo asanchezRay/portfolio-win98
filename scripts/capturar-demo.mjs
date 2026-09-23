@@ -111,6 +111,20 @@ async function sesion(cuenta, destino) {
     viewport: { width: 1440, height: 1000 },
     deviceScaleFactor: 1,
   });
+
+  // La app muestra un modal de "muy pronto el lanzamiento oficial" que tapa
+  // todo y se recuerda en sessionStorage. Como la copia va sin JavaScript, el
+  // boton de cerrar no funcionaria y el modal quedaria encima para siempre.
+  // Se marca como visto antes de cargar nada, que es lo mismo que pasa cuando
+  // un usuario lo cierra.
+  await ctx.addInitScript(() => {
+    try {
+      sessionStorage.setItem('launch_popup_seen', '1');
+    } catch {
+      /* sin sessionStorage el modal tampoco se muestra */
+    }
+  });
+
   if (!cuenta) return ctx;
 
   const p = await ctx.newPage();
@@ -217,6 +231,19 @@ async function capturar(ctx, ruta, archivo) {
       // Sin JS no hay hidratacion, asi que el DOM que se guarda es el final.
       for (const s of document.querySelectorAll('script')) s.remove();
       for (const n of document.querySelectorAll('noscript')) n.remove();
+
+      // Red de seguridad: cualquier capa fija que cubra la pantalla completa
+      // quedaria encima para siempre, porque no hay JS que la cierre.
+      for (const el of document.querySelectorAll('body *')) {
+        const e = getComputedStyle(el);
+        if (e.position !== 'fixed' || e.display === 'none') continue;
+        const c = el.getBoundingClientRect();
+        const tapaTodo =
+          c.width >= innerWidth * 0.9 &&
+          c.height >= innerHeight * 0.9 &&
+          Number(e.zIndex || 0) >= 10;
+        if (tapaTodo) el.remove();
+      }
 
       const aRuta = (href) => {
         if (!href) return null;
