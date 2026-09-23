@@ -61,6 +61,29 @@ for (const ancho of ANCHOS) {
           !a.getAttribute('aria-label') &&
           !a.querySelector('img[alt]:not([alt=""])')
       ).length;
+      // Palabras pegadas a un enlace. En Astro, un salto de linea entre texto
+      // y un elemento se colapsa a nada, asi que "y conte\n<a>por que…" sale
+      // como "y contepor que". No se ve en el codigo y si en la pagina.
+      out.pegados = [];
+      for (const a of document.querySelectorAll('p a, li a, dd a')) {
+        // Solo interesa el texto en flujo. En una fila flex o grid la
+        // separacion la da el gap, no un espacio en el HTML, y marcarla
+        // seria un falso positivo.
+        const padre = a.parentElement;
+        const disp = padre ? getComputedStyle(padre).display : '';
+        if (disp.includes('flex') || disp.includes('grid')) continue;
+        const texto = a.textContent ?? '';
+        const antes = a.previousSibling?.textContent ?? '';
+        const despues = a.nextSibling?.textContent ?? '';
+        const letra = /[\p{L}]/u;
+        if (antes && letra.test(antes.slice(-1)) && letra.test(texto.slice(0, 1))) {
+          out.pegados.push(`${antes.slice(-12)}|${texto.slice(0, 12)}`);
+        }
+        if (despues && letra.test(texto.slice(-1)) && letra.test(despues.slice(0, 1))) {
+          out.pegados.push(`${texto.slice(-12)}|${despues.slice(0, 12)}`);
+        }
+      }
+
       out.desc = document.querySelector('meta[name=description]')?.content ?? '';
       out.titulo = document.title;
       return out;
@@ -71,6 +94,7 @@ for (const ancho of ANCHOS) {
       if (r.h1 !== 1) problemas.push(`${ruta} → ${r.h1} elementos h1 (debe ser 1)`);
       if (r.sinAlt.length) problemas.push(`${ruta} → img sin alt: ${r.sinAlt.join(', ')}`);
       if (r.enlacesMudos) problemas.push(`${ruta} → ${r.enlacesMudos} enlaces sin nombre accesible`);
+      for (const p of r.pegados) problemas.push(`${ruta} → falta un espacio junto a un enlace: "${p.replace('|', '')}"`);
       if (!r.desc) problemas.push(`${ruta} → sin meta description`);
       if (r.titulo.length > 70) problemas.push(`${ruta} → title de ${r.titulo.length} caracteres`);
     }

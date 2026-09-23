@@ -22,15 +22,15 @@ import '../styles/prosa.css';
     <p>
       Lo que aporté fue el criterio: qué mostrar y qué sacar, cuándo algo no
       comunicaba, cuándo una versión se veía genérica y había que rehacerla. El
-      escritorio Windows 98 que vive en <a href="/98">/98</a>,
-      <a href="/casos/organizatumatri">Organizatumatri</a> y
+      escritorio Windows 98 que vive en <a href="/98">/98</a>,{' '}
+      <a href="/casos/organizatumatri">Organizatumatri</a> y{' '}
       <a href="/casos/afasiaapp">AfasiaApp</a> son otra cosa: esos los escribí
       yo, y por eso ahí sí digo que el CSS está hecho a mano.
     </p>
 
     <h2>Stack</h2>
     <p>
-      Astro, generado estático, desplegado en Netlify. El contenido vive en
+      Astro, generado estático, desplegado en Netlify. El contenido vive en{' '}
       <em>content collections</em> con esquema tipado, así que cada caso es un
       archivo MDX con su frontmatter validado y un campo mal escrito rompe el
       build en vez de renderizar un hueco.
@@ -100,14 +100,14 @@ import '../styles/prosa.css';
     <h2>Las dos rutas que no se pueden mover</h2>
     <p>
       <a href="/readme">/readme</a> y <a href="/myAphasia">/myAphasia</a> están
-      referenciadas desde la publicación de
+      referenciadas desde la publicación de{' '}
       <a href="/casos/afasiaapp">AfasiaApp</a> en <em>IEEE Latin America
       Transactions</em>. Son enlaces impresos, así que no se pueden renombrar ni
       romper. Están protegidas en tres capas:
     </p>
     <ul>
       <li>
-        Netlify sirve un <strong><code>302!</code></strong> desde
+        Netlify sirve un <strong><code>302!</code></strong> desde{' '}
         <code>_redirects</code>, que funciona sin JavaScript y para
         rastreadores. Es 302 y no 301 porque un 301 queda cacheado de forma
         permanente en el navegador, y eso impediría cambiar el destino si
@@ -127,14 +127,14 @@ import '../styles/prosa.css';
     </ul>
     <p>
       Sirvió dos veces. Al configurar el sitio cambié el formato de salida de
-      Astro a URL sin barra final, lo que habría movido <code>/readme</code> de
+      Astro a URL sin barra final, lo que habría movido <code>/readme</code> de{' '}
       <code>readme/index.html</code> a <code>readme.html</code>; el build falló
       y lo revertí.
     </p>
     <p>
       La segunda vez fue peor y el build no podía verla. Las reglas llegaron a
       producción sin el <code>!</code>, así que Netlify servía la página de
-      respaldo y el 302 no se aplicaba nunca: las rutas funcionaban, pero por el
+      respaldo y el 302 no se aplicaba nunca: las rutas funcionaban, pero por el{' '}
       <code>meta refresh</code>, que es exactamente la fragilidad que se quería
       quitar. Se detectó preguntándole al sitio desplegado, y de ahí salió una
       comprobación aparte que sigue la cadena de redirecciones en producción y
@@ -146,7 +146,7 @@ import '../styles/prosa.css';
       El portafolio anterior, un Windows 98 hecho a mano en CSS, sigue
       funcionando en <a href="/98">/98</a>. Su código está aislado en su propia
       carpeta porque sus estilos fijan <code>overflow: hidden</code> en el
-      documento y romperían cualquier página con scroll. Conté
+      documento y romperían cualquier página con scroll. Conté{' '}
       <a href="/casos/portafolio-98">por qué lo reemplacé</a>.
     </p>
   </article>
