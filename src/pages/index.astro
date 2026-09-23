@@ -1,108 +1,137 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Panel from '../components/Panel.astro';
 import Cifras from '../components/Cifras.astro';
 import Taller from '../components/Taller.astro';
 import { perfil } from '../data/perfil';
+import { taller } from '../data/taller';
 import { trayectoria, rango } from '../data/trayectoria';
 
 const totalCasos = (await getCollection('casos')).length;
 
-/** Solo las etapas de industria, y sin la de Vestuá, para el resumen de portada. */
+const enMarcha = taller.filter((p) =>
+  ['en curso', 'en producción', 'continuo'].includes(p.estado)
+).length;
+
 const resumenTrayectoria = trayectoria.filter((e) => e.via === 'industria').slice(0, 4);
+
+const { contacto } = perfil;
 ---
 
 <Base
   titulo={`${perfil.nombre} — ${perfil.rol} en ${perfil.organizacion}`}
   tituloCrudo
-  descripcion={`${perfil.rol} en ${perfil.organizacion}. Seis años construyendo software para el mercado eléctrico chileno y la nómina multipaís, entre ingeniería y negocio.`}
+  descripcion="Líder técnico. Software en dominios que no se parecen entre sí: mercado eléctrico, nómina multipaís, salud y marketplaces."
 >
-  <!-- ═══ Entrada ═══ -->
-  <section class="documento entrada">
-    <p class="rotulo">{perfil.ubicacion} · {perfil.modalidad}</p>
-    <h1>{perfil.titular}</h1>
-    <p class="presentacion">{perfil.presentacion}</p>
+  <div class="consola">
+    <!-- ═══ Quién ═══ -->
+    <Panel rotulo="Quién" ancho="dos-tercios">
+      <h1>{perfil.titular}</h1>
+      <p class="presentacion">{perfil.presentacion}</p>
 
-    <div class="a-medio bloque-cifras">
-      <Cifras cifras={perfil.cifras} escala="grande" />
-    </div>
-
-    <p class="acciones">
-      <a class="boton" href="/casos">Ver los {totalCasos} casos</a>
-      <a href={perfil.contacto.cv}>CV en PDF</a>
-      <a href={perfil.contacto.linkedin} rel="noopener">LinkedIn</a>
-      <a href={`mailto:${perfil.contacto.correo}`}>Escribirme</a>
-    </p>
-  </section>
-
-  <!-- ═══ El taller ═══ -->
-  <section class="franja">
-    <div class="documento">
-      <div class="a-amplio">
-        <Taller />
-        <p class="mas">
-          <a href="/casos">
-            Los {totalCasos} que tienen historia larga están en casos →
-          </a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ Trayectoria ═══ -->
-  <section class="documento trayectoria-resumen">
-    <div class="a-medio encabezado-seccion">
-      <h2>Trayectoria</h2>
-      <p>
-        Seis años en el mercado eléctrico chileno, siete meses de nómina
-        multipaís en Buk, y cuatro años y medio haciendo clases en paralelo.
+      <p class="acciones">
+        <a class="boton" href="#taller">Ver lo que he construido</a>
+        <a href="/casos">Los {totalCasos} contados en largo</a>
       </p>
-    </div>
+    </Panel>
 
-    <ol class="a-medio etapas">
-      {
-        resumenTrayectoria.map((etapa) => (
-          <li>
-            <p class="periodo rotulo">{rango(etapa.desde, etapa.hasta)}</p>
-            <p class="cargo">
-              <strong>{etapa.rol}</strong>
-              <span>{etapa.organizacion}</span>
-            </p>
-          </li>
-        ))
-      }
-    </ol>
+    <!-- ═══ Estado ═══ -->
+    <Panel rotulo="Estado" ancho="tercio">
+      <dl class="estado">
+        <div><dt>Rol</dt><dd>{perfil.rol}</dd></div>
+        <div><dt>Dónde</dt><dd>{perfil.organizacion} · {perfil.modalidad}</dd></div>
+        <div><dt>Base</dt><dd>{perfil.ubicacion}</dd></div>
+        <div><dt>Taller</dt><dd>{taller.length} cosas, {enMarcha} andando</dd></div>
+      </dl>
 
-    <p class="a-medio mas">
-      <a href="/trayectoria">Trayectoria completa, con la docencia →</a>
-    </p>
-  </section>
+      <ul class="contacto">
+        <li><a href={`mailto:${contacto.correo}`}>Escribirme</a></li>
+        <li><a href={contacto.cv}>CV en PDF</a></li>
+        <li><a href={contacto.linkedin} rel="noopener">LinkedIn</a></li>
+        <li><a href={contacto.github} rel="noopener">GitHub</a></li>
+      </ul>
+    </Panel>
+
+    <!-- ═══ Mediciones ═══ -->
+    <Panel rotulo="Mediciones" nota="verificables, no adjetivos">
+      <Cifras cifras={perfil.cifras} escala="grande" />
+    </Panel>
+
+    <!-- ═══ El taller ═══ -->
+    <Panel
+      rotulo="El taller"
+      nota={`${taller.length} cosas · ${enMarcha} andando`}
+      desnudo
+      id="taller"
+    >
+      <p class="glosa">
+        Trabajo pagado, proyectos propios, clases y cambios de proceso, todo
+        junto. Los separo poco porque en la práctica no los separo.
+      </p>
+      <Taller soloRejilla />
+    </Panel>
+
+    <!-- ═══ Trayectoria ═══ -->
+    <Panel rotulo="Trayectoria" nota="industria · lo reciente">
+      <ol class="etapas">
+        {
+          resumenTrayectoria.map((etapa) => (
+            <li>
+              <p class="periodo">{rango(etapa.desde, etapa.hasta)}</p>
+              <p class="cargo">
+                <strong>{etapa.rol}</strong>
+                <span>{etapa.organizacion}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="mas">
+        <a href="/trayectoria">Completa, con los cuatro años y medio de clases →</a>
+      </p>
+    </Panel>
+  </div>
 </Base>
 
 <style>
-  /* ═══ Entrada ═══ */
-  .entrada {
-    padding-block: clamp(var(--e-7), 9vh, var(--e-9)) var(--e-8);
+  /* ═══ La consola ═══
+     Reticula de doce columnas a sangre completa, sin columna centrada. Los
+     paneles se pegan entre si y las lineas las dibuja cada uno con sombra,
+     asi que no hay bordes dobles. */
+  .consola {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0;
+    max-inline-size: 96rem;
+    margin-inline: auto;
+    border-inline: 1px solid var(--linea-fuerte);
+    border-block-end: 1px solid var(--linea-fuerte);
+    overflow: hidden;
   }
 
-  .entrada h1 {
-    margin-top: var(--e-4);
+  /* Bajo 60rem cada panel ocupa el ancho completo; la regla de columnas vive
+     en Panel.astro y solo se activa en pantallas anchas. */
+  @media (max-width: 59.999rem) {
+    .consola {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  h1 {
     font-size: var(--t-display);
-    letter-spacing: -0.03em;
+    text-wrap: balance;
   }
 
   .presentacion {
-    margin-top: var(--e-5);
+    margin-top: var(--e-4);
+    max-width: 44rem;
     font-size: var(--t-medio);
     color: var(--tinta-media);
   }
 
-  .bloque-cifras {
-    margin-top: var(--e-8);
-  }
-
   .acciones {
-    margin-top: var(--e-7);
+    margin-top: var(--e-6);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -122,55 +151,82 @@ const resumenTrayectoria = trayectoria.filter((e) => e.via === 'industria').slic
 
   .boton:hover {
     background: var(--acento);
+    color: var(--papel);
   }
 
-  /* ═══ Secciones ═══ */
-  .franja {
-    padding-block: var(--e-8);
-    border-block: var(--borde);
-    background: var(--papel-hundido);
-  }
-
-  .encabezado-seccion h2 {
-    font-size: var(--t-titulo);
-  }
-
-  .encabezado-seccion p {
-    margin-top: var(--e-3);
-    max-width: 34rem;
-    color: var(--tinta-media);
-    font-size: var(--t-chico);
-  }
-
-  .mas {
-    margin-top: var(--e-5);
+  /* ═══ Estado ═══ */
+  .estado {
+    margin: 0;
+    display: grid;
+    gap: var(--e-3);
     font-family: var(--fuente-ui);
     font-size: var(--t-chico);
   }
 
-  /* ═══ Trayectoria ═══ */
-  .trayectoria-resumen {
-    padding-block: var(--e-8);
+  .estado > div {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: var(--e-3);
+    align-items: baseline;
+    padding-bottom: var(--e-3);
+    border-bottom: 1px solid var(--linea);
   }
 
-  .etapas {
-    margin: var(--e-6) 0 0;
+  .estado > div:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .estado dt {
+    font-size: var(--t-micro);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  .estado dd {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .contacto {
+    margin: var(--e-5) 0 0;
     padding: 0;
     list-style: none;
-    display: grid;
-    gap: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-4);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+
+  /* ═══ Taller ═══ */
+  .glosa {
+    margin: 0;
+    padding: var(--e-4) var(--e-5);
+    max-width: 46rem;
+    border-bottom: 1px solid var(--linea);
+    color: var(--tinta-media);
+    font-size: var(--t-chico);
+  }
+
+  /* ═══ Trayectoria ═══ */
+  .etapas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
   .etapas li {
     display: grid;
     grid-template-columns: minmax(0, 11rem) 1fr;
     gap: var(--e-2) var(--e-5);
-    padding-block: var(--e-4);
-    border-top: var(--borde);
+    padding-block: var(--e-3);
+    border-bottom: 1px solid var(--linea);
   }
 
   .etapas li:last-child {
-    border-bottom: var(--borde);
+    border-bottom: 0;
   }
 
   @media (max-width: 34rem) {
@@ -181,7 +237,12 @@ const resumenTrayectoria = trayectoria.filter((e) => e.via === 'industria').slic
 
   .periodo {
     margin: 0;
-    padding-top: 0.25em;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    padding-top: 0.3em;
   }
 
   .cargo {
@@ -195,5 +256,11 @@ const resumenTrayectoria = trayectoria.filter((e) => e.via === 'industria').slic
     font-family: var(--fuente-ui);
     font-size: var(--t-chico);
     color: var(--tinta-media);
+  }
+
+  .mas {
+    margin-top: var(--e-5);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
   }
 </style>

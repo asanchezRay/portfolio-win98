@@ -7,18 +7,20 @@ export const perfil = {
   modalidad: 'Remoto',
 
   /** Una frase. Es lo primero que se lee del sitio. */
-  titular: 'Seis años construyendo software para el mercado eléctrico chileno.',
+  titular: 'Software en dominios que no se parecen entre sí.',
 
   presentacion:
-    'Escribo menos código que antes y paso más tiempo entre ingeniería y las ' +
-    'áreas de negocio, evaluando qué vale la pena construir. Antes de volver a ' +
-    'IGX estuve siete meses en Buk, en nómina multipaís.',
+    'Mercado eléctrico y nómina multipaís, que son los regulados. Antes ' +
+    'e-commerce, el núcleo digital de una clínica, y un marketplace propio que ' +
+    'levanté solo. Hoy soy líder técnico en IGX: escribo menos código que antes ' +
+    'y paso más tiempo entre ingeniería y las áreas de negocio, evaluando qué ' +
+    'vale la pena construir.',
 
   /** Las tres cifras de la portada. Verificables, no adjetivos. */
   cifras: [
     { valor: '53', unidad: '%', etiqueta: 'menos costo operacional recurrente', caso: 'migracion-bigquery' },
     { valor: '900', unidad: 'GB', etiqueta: 'de historia migrados sin pérdida', caso: 'migracion-bigquery' },
-    { valor: '4½', unidad: 'años', etiqueta: 'enseñando IA y programación', caso: null },
+    { valor: '4,5', unidad: 'años', etiqueta: 'enseñando IA y programación', caso: null },
   ],
 
   contacto: {

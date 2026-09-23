@@ -16,20 +16,31 @@ const activo = (estado: Estado) =>
 
 const total = taller.length;
 const enMarcha = taller.filter((p) => activo(p.estado)).length;
+
+interface Props {
+  /** Dentro de un Panel el encabezado sobra: el panel ya trae barra de titulo. */
+  soloRejilla?: boolean;
+}
+const { soloRejilla = false } = Astro.props;
 ---
 
-<section class="taller">
-  <header>
-    <h2>El taller</h2>
-    <p class="cuenta rotulo">
-      {total} cosas · {enMarcha} andando
-    </p>
-  </header>
-
-  <p class="glosa">
-    Trabajo pagado, proyectos propios, clases y cambios de proceso, todo junto.
-    Los separo poco porque en la práctica no los separo.
-  </p>
+<section class:list={['taller', { 'solo-rejilla': soloRejilla }]}>
+  {
+    !soloRejilla && (
+      <>
+        <header>
+          <h2>El taller</h2>
+          <p class="cuenta rotulo">
+            {total} cosas · {enMarcha} andando
+          </p>
+        </header>
+        <p class="glosa">
+          Trabajo pagado, proyectos propios, clases y cambios de proceso, todo
+          junto. Los separo poco porque en la práctica no los separo.
+        </p>
+      </>
+    )
+  }
 
   <ul class="rejilla">
     {
@@ -105,6 +116,14 @@ const enMarcha = taller.filter((p) => activo(p.estado)).length;
     border: var(--borde);
     border-radius: var(--radio);
     overflow: hidden;
+  }
+
+  /* Dentro de un panel la rejilla llena el panel y no dibuja su propio marco:
+     esa linea ya la pone la barra de titulo. */
+  .solo-rejilla .rejilla {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
   }
 
   .ficha {

@@ -32,7 +32,7 @@ const imagenOg = new URL('/og.png', Astro.site);
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" data-tema="terminal">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -86,10 +86,15 @@ const imagenOg = new URL('/og.png', Astro.site);
     <!-- TEMPORAL: aplica el tema guardado antes de pintar, para que no
          parpadee. Se borra cuando se elija uno. -->
     <script is:inline>
+      // Terminal es el tema por defecto mientras se evalua.
       try {
-        const t = localStorage.getItem('tema');
-        if (t) document.documentElement.setAttribute('data-tema', t);
-      } catch {}
+        const t = localStorage.getItem('tema') ?? 'terminal';
+        if (t && t !== 'documento') {
+          document.documentElement.setAttribute('data-tema', t);
+        }
+      } catch {
+        document.documentElement.setAttribute('data-tema', 'terminal');
+      }
     </script>
   </head>
 

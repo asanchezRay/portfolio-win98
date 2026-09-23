@@ -261,3 +261,11 @@
 [data-tema='sistema'] .boton:active {
   border-color: var(--tinta) #ffffff #ffffff var(--tinta);
 }
+
+/* En terminal las lineas de la cuadricula son parte de la estetica, no un
+   detalle: con --linea se pierden contra el fondo oscuro. */
+[data-tema='terminal'] .ficha {
+  box-shadow:
+    1px 0 0 var(--linea-fuerte),
+    0 1px 0 var(--linea-fuerte);
+}

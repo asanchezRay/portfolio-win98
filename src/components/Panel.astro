@@ -1,0 +1,90 @@
+---
+/**
+ * Panel con barra de titulo.
+ *
+ * Es la pieza del layout de consola: en vez de una columna centrada flotando
+ * en el medio de la pantalla, el contenido va en paneles con borde duro y
+ * rotulo, pegados entre si, a sangre completa. La estructura es lo que hace
+ * que el sitio no se vea como cualquier otro.
+ */
+interface Props {
+  rotulo: string;
+  /** Texto a la derecha de la barra: conteo, estado, periodo. */
+  nota?: string;
+  /** Columnas de la reticula que ocupa, en pantallas anchas. */
+  ancho?: 'completo' | 'mitad' | 'tercio' | 'dos-tercios';
+  /** Quita el relleno interno; para rejillas que traen el suyo. */
+  desnudo?: boolean;
+  id?: string;
+}
+
+const { rotulo, nota, ancho = 'completo', desnudo = false, id } = Astro.props;
+---
+
+<section class:list={['panel', ancho, { desnudo }]} id={id}>
+  <header class="barra">
+    <h2 class="rotulo">{rotulo}</h2>
+    {nota && <p class="nota">{nota}</p>}
+  </header>
+  <div class="contenido">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .panel {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    background: var(--papel-elevado);
+    /* Las lineas se dibujan con sombra para que no se dupliquen entre paneles
+       contiguos y el contenedor las recorte en los bordes. */
+    box-shadow:
+      1px 0 0 var(--linea-fuerte),
+      0 1px 0 var(--linea-fuerte);
+  }
+
+  .barra {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--e-4);
+    padding: var(--e-2) var(--e-4);
+    border-bottom: 1px solid var(--linea-fuerte);
+    background: var(--papel-hundido);
+  }
+
+  .barra h2 {
+    margin: 0;
+    font-size: var(--t-micro);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-media);
+  }
+
+  .nota {
+    margin: 0;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    letter-spacing: 0.06em;
+    color: var(--tinta-suave);
+    white-space: nowrap;
+  }
+
+  .contenido {
+    flex: 1;
+    padding: var(--e-5);
+  }
+
+  .desnudo .contenido {
+    padding: 0;
+  }
+
+  @media (min-width: 60rem) {
+    .mitad { grid-column: span 6; }
+    .tercio { grid-column: span 4; }
+    .dos-tercios { grid-column: span 8; }
+    .completo { grid-column: 1 / -1; }
+  }
+</style>
