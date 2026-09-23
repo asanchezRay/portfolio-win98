@@ -15,9 +15,21 @@
 #  funcionando si este archivo llegara a perderse.
 # ─────────────────────────────────────────────────────────────────────
 
-/readme     https://github.com/asanchezRay/afasiaApp/blob/master/README.md          302
-/myAphasia  https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view  302
+# El signo de exclamacion despues del codigo NO es decorativo: fuerza la regla.
+# Netlify ignora una redireccion cuando existe un archivo estatico en esa ruta,
+# y el build genera readme/index.html y myAphasia/index.html como respaldo. Sin
+# el "!", Netlify servia esas paginas y el 302 no se aplicaba nunca, de modo que
+# la redireccion quedaba dependiendo del meta refresh. Se comprobo en produccion.
+#
+# Se declaran con y sin barra final porque Netlify normaliza /readme a /readme/
+# antes de evaluar las reglas.
 
-# Alias en minusculas: las URLs estaticas de Netlify son sensibles a
-# mayusculas y /myaphasia es un error de tipeo muy probable.
-/myaphasia  https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view  302
+/readme      https://github.com/asanchezRay/afasiaApp/blob/master/README.md          302!
+/readme/     https://github.com/asanchezRay/afasiaApp/blob/master/README.md          302!
+/myAphasia   https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view  302!
+/myAphasia/  https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view  302!
+
+# Alias en minusculas: Netlify normaliza a minusculas al resolver rutas
+# estaticas, y ademas es un error de tipeo probable.
+/myaphasia   https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view  302!
+/myaphasia/  https://drive.google.com/file/d/1pYGfndA-e_tn_XjcofslTrW9FNAP6aC4/view  302!

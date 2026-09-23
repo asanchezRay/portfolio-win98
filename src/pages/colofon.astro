@@ -72,10 +72,14 @@ import '../styles/prosa.css';
     </p>
     <ul>
       <li>
-        Netlify sirve un <strong>302</strong> desde <code>_redirects</code>, que
-        funciona sin JavaScript y para rastreadores. Es 302 y no 301 porque un
-        301 queda cacheado de forma permanente en el navegador, y eso impediría
-        cambiar el destino si GitHub o Drive mueven el recurso.
+        Netlify sirve un <strong><code>302!</code></strong> desde
+        <code>_redirects</code>, que funciona sin JavaScript y para
+        rastreadores. Es 302 y no 301 porque un 301 queda cacheado de forma
+        permanente en el navegador, y eso impediría cambiar el destino si
+        GitHub o Drive mueven el recurso. El signo de exclamación fuerza la
+        regla: Netlify ignora una redirección cuando existe un archivo estático
+        en esa ruta, y acá existe justamente la página de respaldo del punto
+        siguiente.
       </li>
       <li>
         Si esa configuración se perdiera, quedan páginas estáticas de respaldo
@@ -87,10 +91,19 @@ import '../styles/prosa.css';
       </li>
     </ul>
     <p>
-      Sirvió al menos una vez. Al configurar el sitio cambié el formato de
-      salida de Astro a URL sin barra final, lo que habría movido
-      <code>/readme</code> de <code>readme/index.html</code> a
-      <code>readme.html</code>. El build falló y lo revertí.
+      Sirvió dos veces. Al configurar el sitio cambié el formato de salida de
+      Astro a URL sin barra final, lo que habría movido <code>/readme</code> de
+      <code>readme/index.html</code> a <code>readme.html</code>; el build falló
+      y lo revertí.
+    </p>
+    <p>
+      La segunda vez fue peor y el build no podía verla. Las reglas llegaron a
+      producción sin el <code>!</code>, así que Netlify servía la página de
+      respaldo y el 302 no se aplicaba nunca: las rutas funcionaban, pero por el
+      <code>meta refresh</code>, que es exactamente la fragilidad que se quería
+      quitar. Se detectó preguntándole al sitio desplegado, y de ahí salió una
+      comprobación aparte que sigue la cadena de redirecciones en producción y
+      distingue un 302 del servidor de un respaldo sirviéndose en su lugar.
     </p>
 
     <h2>El escritorio de antes</h2>

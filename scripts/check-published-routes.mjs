@@ -27,8 +27,11 @@ const pages = [
 /** Reglas que deben estar presentes en _redirects (el redirect real de Netlify). */
 const rules = [
   { route: '/readme', url: README_URL },
+  { route: '/readme/', url: README_URL },
   { route: '/myAphasia', url: APK_URL },
+  { route: '/myAphasia/', url: APK_URL },
   { route: '/myaphasia', url: APK_URL },
+  { route: '/myaphasia/', url: APK_URL },
 ];
 
 const errors = [];
@@ -54,11 +57,26 @@ if (!existsSync(redirectsFile)) {
   errors.push('Falta dist/_redirects (Netlify no serviria los 302)');
 } else {
   const body = readFileSync(redirectsFile, 'utf8');
+  const lineas = body.split('\n').filter((l) => !l.trimStart().startsWith('#') && l.trim());
+
   for (const { route, url } of rules) {
-    const hit = body
-      .split('\n')
-      .some((l) => !l.trimStart().startsWith('#') && l.includes(route) && l.includes(url));
-    if (!hit) errors.push(`_redirects no tiene una regla para ${route} -> ${url}`);
+    const coincidencias = lineas.filter(
+      (l) => l.split(/\s+/)[0] === route && l.includes(url)
+    );
+    if (coincidencias.length === 0) {
+      errors.push(`_redirects no tiene una regla para ${route} -> ${url}`);
+      continue;
+    }
+    // El "!" es obligatorio. Netlify ignora una redireccion cuando existe un
+    // archivo estatico en esa ruta, y el build genera paginas de respaldo
+    // justamente ahi. Sin forzar, el 302 no se aplica nunca y la redireccion
+    // queda dependiendo del meta refresh. Paso en produccion una vez.
+    if (!coincidencias.some((l) => /\s30[12]!\s*$/.test(l))) {
+      errors.push(
+        `la regla de ${route} no esta forzada: tiene que terminar en "302!" o la ` +
+          `pagina estatica de respaldo la deja sin efecto`
+      );
+    }
   }
 }
 
