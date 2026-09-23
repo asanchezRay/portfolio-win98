@@ -51,7 +51,7 @@ export const taller: Pieza[] = [
     tags: ['Next.js', 'Prisma', 'MercadoPago', 'Playwright'],
     contexto: 'Proyecto propio',
     caso: 'organizatumatri',
-    enlace: { href: '/demo/organizatumatri/', texto: 'Recorrerla' },
+    enlace: { href: '/demo/organizatumatri/portada/', texto: 'Ver demo' },
     imagen: {
       src: '/img/organizatumatri/directorio.png',
       alt: 'Directorio de proveedores de Organizatumatri',

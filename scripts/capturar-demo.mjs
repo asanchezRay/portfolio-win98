@@ -553,11 +553,17 @@ await writeFile(
   li span { color:#64756a; font-size:12px; }
   a { color:#ffb000; }
   .volver { display:inline-block; margin-top:2.5rem; }
+  .entrar { margin:1.75rem 0 0; }
+  .entrar a { display:inline-block; padding:0.7em 1.3em; background:#ffb000; color:#0a0d0c;
+    font-weight:700; text-decoration:none; }
+  .entrar a::after { content:' \\2192'; }
+
 </style></head>
 <body><div class="caja">
 <h1>Organizatumatri</h1>
 <p>Copia congelada de la plataforma, capturada el ${new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'long', day: 'numeric' })}. No tiene backend: los datos son inventados y no se puede operar nada.</p>
 <p>Están incluidas las pantallas privadas, que en la plataforma real exigían cuenta. Acá se ven sin credenciales porque no hay nada que proteger.</p>
+<p class="entrar"><a href="${BASE}/portada/">Entrar a la plataforma</a></p>
 ${filas}
 <a class="volver" href="/casos/organizatumatri">← El caso completo</a>
 </div></body></html>

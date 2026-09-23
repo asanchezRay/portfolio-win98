@@ -1,0 +1,57 @@
+---
+/**
+ * Boton destacado para usar dentro del cuerpo de un caso.
+ *
+ * Existe porque el enlace del encabezado se pierde cuando alguien ya bajo
+ * hasta las capturas: justo ahi es cuando quiere abrir la cosa, no antes.
+ */
+interface Props {
+  href: string;
+  texto: string;
+  nota?: string;
+}
+
+const { href, texto, nota } = Astro.props;
+---
+
+<p class="llamada">
+  <a class="boton" href={href}>{texto}</a>
+  {nota && <span class="nota">{nota}</span>}
+</p>
+
+<style>
+  .llamada {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--e-3) var(--e-4);
+    margin-block: var(--e-6);
+    font-family: var(--fuente-ui);
+  }
+
+  .boton {
+    padding: 0.7em 1.3em;
+    background: var(--acento);
+    color: var(--papel);
+    font-size: var(--t-chico);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radio);
+    white-space: nowrap;
+  }
+
+  .boton::after {
+    content: ' →';
+  }
+
+  .boton:hover {
+    background: var(--tinta);
+    color: var(--acento);
+    outline: 1px solid var(--acento);
+  }
+
+  .nota {
+    font-size: var(--t-mini);
+    color: var(--tinta-suave);
+  }
+</style>

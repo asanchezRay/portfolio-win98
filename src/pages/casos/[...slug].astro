@@ -59,24 +59,6 @@ const etiquetaTipo = {
       </div>
 
       {
-        data.cifras.length > 0 && (
-          <div class="cifras-caso">
-            <Cifras cifras={data.cifras} />
-          </div>
-        )
-      }
-
-      <dl class="ficha">
-        <div><dt>Dónde</dt><dd>{data.organizacion}</dd></div>
-        <div><dt>Cuándo</dt><dd>{data.periodo}</dd></div>
-        <div><dt>Rol</dt><dd>{data.rol}</dd></div>
-      </dl>
-
-      <ul class="stack">
-        {data.stack.map((t) => <li>{t}</li>)}
-      </ul>
-
-      {
         data.enlaces.length > 0 && (
           <p class="enlaces">
             {/* El primer enlace es el que abre algo — el demo, el escritorio —
@@ -94,6 +76,25 @@ const etiquetaTipo = {
           </p>
         )
       }
+
+      {
+        data.cifras.length > 0 && (
+          <div class="cifras-caso">
+            <Cifras cifras={data.cifras} />
+          </div>
+        )
+      }
+
+      <dl class="ficha">
+        <div><dt>Dónde</dt><dd>{data.organizacion}</dd></div>
+        <div><dt>Cuándo</dt><dd>{data.periodo}</dd></div>
+        <div><dt>Rol</dt><dd>{data.rol}</dd></div>
+      </dl>
+
+      <ul class="stack">
+        {data.stack.map((t) => <li>{t}</li>)}
+      </ul>
+
     </header>
 
 
@@ -199,7 +200,7 @@ const etiquetaTipo = {
   }
 
   .enlaces {
-    margin-top: var(--e-6);
+    margin-top: var(--e-5);
     display: flex;
     flex-wrap: wrap;
     align-items: center;

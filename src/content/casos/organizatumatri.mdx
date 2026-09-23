@@ -27,8 +27,8 @@ imagen:
   src: /img/organizatumatri/directorio.png
   alt: Directorio de proveedores de Organizatumatri, con tarjetas, filtros y categorías
 enlaces:
-  - href: /demo/organizatumatri/
-    texto: Recorrer la plataforma
+  - href: /demo/organizatumatri/portada/
+    texto: Ver demo
 enCorto:
   problema: "Organizar un matrimonio en Chile son veinte proveedores coordinados a mano, casi siempre en una planilla."
   hice: "Construí el marketplace completo y solo: tres aplicaciones, pagos, correos, tests y despliegue."
@@ -44,6 +44,7 @@ nota: Cerré el proyecto. Está acá porque lo que aprendí sirve más que si hu
 
 import Figura from '../../components/Figura.astro';
 import Galeria from '../../components/Galeria.astro';
+import LlamadaAccion from '../../components/LlamadaAccion.astro';
 import PipelineProveedores from '../../components/diagramas/PipelineProveedores.astro';
 
 Organizar un matrimonio en Chile implica coordinar entre diez y veinte
@@ -69,13 +70,21 @@ correos, los tests y el despliegue.
   />
 </Figura>
 
+<LlamadaAccion
+  href="/demo/organizatumatri/portada/"
+  texto="Ver demo"
+  nota="Entra directo a la plataforma, sin credenciales."
+/>
+
 ## Se puede recorrer
 
-La plataforma dejó de operar, pero está
-[congelada y navegable](/demo/organizatumatri/) dentro de este sitio: 19
-pantallas, incluidas las privadas del proveedor y de los novios. No pide
-credenciales porque no hay backend detrás y no hay nada que proteger. Los datos
-son inventados.
+La plataforma dejó de operar, pero está congelada y navegable dentro de este
+sitio: 33 pantallas, incluidas las privadas del proveedor y de los novios. No
+pide credenciales porque no hay backend detrás y no hay nada que proteger. Los
+datos son inventados.
+
+Si prefieres ir a una pantalla concreta, el
+[índice las lista todas](/demo/organizatumatri/).
 
 ## El modelo
 
