@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/prosa.css';
+---
+
+<Base
+  titulo="Colofón"
+  descripcion="Cómo está construido este sitio: Astro, content collections, tipografía autohospedada, diagramas en SVG escritos a mano y una verificación que protege dos URL publicadas en un paper."
+>
+  <article class="documento prosa colofon">
+    <h1>Colofón</h1>
+    <p class="entradilla">
+      Un portafolio que habla de decisiones técnicas debería poder dar cuenta
+      de las suyas.
+    </p>
+
+    <h2>Cómo está hecho</h2>
+    <p>
+      Astro, generado estático, desplegado en Netlify. El contenido vive en
+      <em>content collections</em> con esquema tipado: cada caso es un archivo
+      MDX con su frontmatter validado, de modo que un campo mal escrito rompe
+      el build en vez de renderizar un hueco.
+    </p>
+    <p>
+      No hay framework de interfaz ni librería de componentes. El CSS está
+      escrito a mano sobre una retícula de tres anchos —texto, medio y
+      amplio— que permite a las figuras salirse de la columna de lectura sin
+      salirse del flujo.
+    </p>
+
+    <h2>Tipografía</h2>
+    <p>
+      Source Serif 4 para el cuerpo, autohospedada, solo el subconjunto latino:
+      dos archivos, 172 KB. La versión anterior de este sitio cargaba dos
+      familias de Google Fonts y tres CDN de iconos, cinco peticiones
+      bloqueantes a terceros antes de pintar una letra.
+    </p>
+    <p>
+      Los rótulos, los datos y las cifras van en la sans del sistema. Un número
+      grande compuesto en serif se lee como ornamento; en sans se lee como
+      medición.
+    </p>
+
+    <h2>Diagramas</h2>
+    <p>
+      Todos son SVG escritos a mano contra una hoja de estilos común, así que
+      comparten grosores, cajas, puntas de flecha y jerarquía tipográfica.
+      Esa consistencia es lo que le da identidad gráfica al sitio sin depender
+      de una librería de dibujo — y sin que yo tenga que ser diseñador.
+    </p>
+    <p>
+      En pantallas angostas no se encogen: se desplazan horizontalmente.
+      Reducir un diagrama hasta que quepa en un teléfono deja el texto en
+      cuatro píxeles, que es lo mismo que no tenerlo.
+    </p>
+
+    <h2>Color</h2>
+    <p>
+      La paleta de datos no se eligió a ojo. El par de énfasis —gris de
+      contexto más ámbar— pasa las comprobaciones de banda de luminosidad,
+      separación bajo daltonismo, piso de distinción para visión normal y
+      contraste mínimo contra el fondo, en tema claro y oscuro por separado. El
+      tema oscuro tiene sus propios escalones; no es una inversión automática
+      del claro.
+    </p>
+
+    <h2>Las dos rutas que no se pueden mover</h2>
+    <p>
+      <a href="/readme">/readme</a> y <a href="/myAphasia">/myAphasia</a> están
+      referenciadas desde la publicación de
+      <a href="/casos/afasiaapp">AfasiaApp</a> en <em>IEEE Latin America
+      Transactions</em>. Son enlaces impresos: no se pueden renombrar ni
+      romper, nunca.
+    </p>
+    <p>Están protegidas en tres capas:</p>
+    <ul>
+      <li>
+        Netlify sirve un <strong>302</strong> desde <code>_redirects</code>, que
+        funciona sin JavaScript y para rastreadores. Es 302 y no 301 a
+        propósito: un 301 queda cacheado de forma permanente en el navegador e
+        impediría cambiar el destino si GitHub o Drive movieran el recurso.
+      </li>
+      <li>
+        Si esa configuración se perdiera, quedan páginas estáticas de respaldo
+        con <code>meta refresh</code> y un enlace visible.
+      </li>
+      <li>
+        Un script corre después de cada build y lo hace fallar si alguna ruta
+        desaparece o cambia de destino.
+      </li>
+    </ul>
+    <p>
+      Esa verificación ya sirvió una vez: al configurar el sitio cambié el
+      formato de salida de Astro a URL sin barra final, lo que habría alterado
+      cómo se sirve <code>/readme</code>. El build falló y se revirtió.
+      Cosmética de barra final no vale arriesgar un enlace impreso en un paper.
+    </p>
+
+    <h2>El escritorio de antes</h2>
+    <p>
+      El portafolio anterior, un Windows 98 completo hecho a mano en CSS, sigue
+      funcionando en <a href="/98">/98</a>. Su código vive aislado en su propia
+      carpeta, porque sus estilos fijan <code>overflow: hidden</code> en el
+      documento y romperían cualquier página con scroll. Conté
+      <a href="/casos/portafolio-98">por qué lo jubilé</a>.
+    </p>
+  </article>
+</Base>
+
+<style>
+  .colofon {
+    padding-block: var(--e-8) var(--e-7);
+  }
+
+  h1 {
+    font-size: var(--t-display);
+  }
+
+  .entradilla {
+    margin-top: var(--e-4) !important;
+    font-size: var(--t-medio);
+    color: var(--tinta-media);
+  }
+</style>

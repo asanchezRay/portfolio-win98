@@ -1,0 +1,105 @@
+---
+import { perfil } from '../data/perfil';
+
+const ruta = Astro.url.pathname;
+const enlaces = [
+  { href: '/casos', texto: 'Casos' },
+  { href: '/trayectoria', texto: 'Trayectoria' },
+  { href: '/cv', texto: 'CV' },
+];
+
+/** Marca la seccion activa, incluidas las paginas hijas de /casos. */
+const activo = (href: string) => ruta === href || ruta.startsWith(href + '/');
+---
+
+<header>
+  <div class="interior">
+    <a class="marca" href="/">
+      <span class="nombre">{perfil.nombre}</span>
+      <span class="cargo">{perfil.rol} · {perfil.organizacion}</span>
+    </a>
+
+    <nav aria-label="Secciones">
+      <ul>
+        {
+          enlaces.map(({ href, texto }) => (
+            <li>
+              <a href={href} aria-current={activo(href) ? 'page' : undefined}>
+                {texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  header {
+    border-bottom: var(--borde);
+    background: var(--papel);
+  }
+
+  .interior {
+    max-width: var(--ancho-amplio);
+    margin-inline: auto;
+    padding: var(--e-4) var(--e-5);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--e-3) var(--e-5);
+  }
+
+  .marca {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .nombre {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .cargo {
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    color: var(--tinta-suave);
+  }
+
+  .marca:hover .nombre {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+
+  nav ul {
+    display: flex;
+    gap: var(--e-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+
+  nav a {
+    color: var(--tinta-media);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+  }
+
+  nav a:hover {
+    color: var(--tinta);
+    border-bottom-color: var(--linea-fuerte);
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--tinta);
+    border-bottom-color: var(--senal);
+  }
+</style>

@@ -1,0 +1,131 @@
+/*
+ * Lenguaje visual compartido de los diagramas.
+ *
+ * Todos los diagramas del sitio usan estas clases, asi que se leen como un
+ * mismo sistema aunque cada uno se dibuje a mano. Esa consistencia es lo que
+ * le da identidad grafica al portafolio sin depender de una libreria.
+ *
+ * Los SVG se autoran con un viewBox fijo y se envuelven en .diagrama, que da
+ * scroll horizontal propio en pantallas angostas: reducir el dibujo entero
+ * para que quepa dejaria el texto a cuatro pixeles.
+ */
+
+.diagrama {
+  overflow-x: auto;
+  padding: var(--e-5);
+  /* Sombra de borde que insinua que hay mas contenido al desplazar. */
+  background:
+    linear-gradient(to right, var(--papel-elevado) 30%, transparent),
+    linear-gradient(to left, var(--papel-elevado) 30%, transparent) 100% 0,
+    radial-gradient(farthest-side at 0 50%, rgb(0 0 0 / 0.08), transparent),
+    radial-gradient(farthest-side at 100% 50%, rgb(0 0 0 / 0.08), transparent) 100% 0;
+  background-repeat: no-repeat;
+  background-size: 3rem 100%, 3rem 100%, 1rem 100%, 1rem 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.diagrama svg {
+  display: block;
+  inline-size: 100%;
+  min-inline-size: 30rem;
+  block-size: auto;
+  font-family: var(--fuente-ui);
+}
+
+/* --- Cajas --- */
+.diagrama .caja {
+  fill: var(--papel);
+  stroke: var(--linea-fuerte);
+  stroke-width: 1;
+  rx: 3;
+}
+
+.diagrama .caja-enfasis {
+  fill: var(--senal-tenue);
+  stroke: var(--dato-enfasis);
+  stroke-width: 1.5;
+  rx: 3;
+}
+
+/* Lo que deja de existir despues del cambio. */
+.diagrama .caja-baja {
+  fill: none;
+  stroke: var(--linea-fuerte);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  rx: 3;
+}
+
+/* Contenedor de agrupacion (una nube, una cuenta, un entorno). */
+.diagrama .zona {
+  fill: none;
+  stroke: var(--linea);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  rx: 6;
+}
+
+/* --- Texto --- */
+.diagrama text {
+  fill: var(--tinta);
+  font-size: 13px;
+  dominant-baseline: middle;
+}
+
+.diagrama .t-titulo {
+  font-weight: 600;
+}
+
+.diagrama .t-sub {
+  fill: var(--tinta-suave);
+  font-size: 11px;
+}
+
+.diagrama .t-rotulo {
+  fill: var(--tinta-suave);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.diagrama .t-cifra {
+  fill: var(--dato-enfasis);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.diagrama .t-centro {
+  text-anchor: middle;
+}
+
+/* --- Conectores --- */
+.diagrama .flecha {
+  fill: none;
+  stroke: var(--tinta-suave);
+  stroke-width: 1.5;
+  marker-end: url(#punta);
+}
+
+.diagrama .flecha-enfasis {
+  fill: none;
+  stroke: var(--dato-enfasis);
+  stroke-width: 2;
+  marker-end: url(#punta-enfasis);
+}
+
+.diagrama .flecha-baja {
+  fill: none;
+  stroke: var(--linea-fuerte);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  marker-end: url(#punta);
+}
+
+.diagrama .punta-relleno { fill: var(--tinta-suave); }
+.diagrama .punta-relleno-enfasis { fill: var(--dato-enfasis); }
+
+.diagrama .regla {
+  stroke: var(--linea);
+  stroke-width: 1;
+}

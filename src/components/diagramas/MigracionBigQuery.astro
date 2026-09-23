@@ -1,0 +1,74 @@
+---
+/**
+ * Antes y despues de sacar la historia de medidores del motor operacional.
+ *
+ * El punto del dibujo no es "se agrego BigQuery": es que la base operacional
+ * dejo de cargar 900 GB que nadie consultaba en linea, y que la ruta de
+ * analitica se separo de la ruta transaccional.
+ */
+import Marcadores from './Marcadores.astro';
+---
+
+<div class="diagrama">
+  <svg viewBox="0 0 860 352" role="img" aria-labelledby="mbq-titulo mbq-desc">
+    <title id="mbq-titulo">Arquitectura de datos antes y después de la migración</title>
+    <desc id="mbq-desc">
+      Antes, el scraper de medidores escribía a una única base MySQL en RDS que
+      guardaba a la vez los datos operacionales y 900 GB de historia, y la
+      plataforma leía de ahí, con un costo de 600 dólares al mes. Después, el
+      scraper alimenta dos destinos: MySQL en RDS conserva solo lo operacional
+      y BigQuery recibe los 900 GB de historia con el esquema rediseñado; la
+      plataforma lee de ambos y el costo total baja a 284 dólares al mes.
+    </desc>
+
+    <Marcadores />
+
+    <!-- ══ ANTES ══ -->
+    <text class="t-rotulo" x="0" y="10">Antes</text>
+
+    <rect class="caja" x="0" y="30" width="160" height="56" />
+    <text class="t-titulo t-centro" x="80" y="51">Scraper ION</text>
+    <text class="t-sub t-centro" x="80" y="68">lectura de medidores</text>
+
+    <rect class="caja" x="220" y="30" width="270" height="56" />
+    <text class="t-titulo t-centro" x="355" y="51">MySQL · RDS</text>
+    <text class="t-sub t-centro" x="355" y="68">operacional + 900 GB de historia</text>
+
+    <rect class="caja" x="550" y="30" width="150" height="56" />
+    <text class="t-titulo t-centro" x="625" y="58">Plataforma</text>
+
+    <path class="flecha" d="M 160 58 H 214" />
+    <path class="flecha" d="M 490 58 H 544" />
+
+    <text class="t-titulo" x="740" y="51">US$ 600</text>
+    <text class="t-sub" x="740" y="68">al mes</text>
+
+    <line class="regla" x1="0" y1="138" x2="860" y2="138" />
+
+    <!-- ══ DESPUÉS ══ -->
+    <text class="t-rotulo" x="0" y="168">Después</text>
+
+    <rect class="caja" x="0" y="232" width="160" height="56" />
+    <text class="t-titulo t-centro" x="80" y="253">Scraper ION</text>
+    <text class="t-sub t-centro" x="80" y="270">sin cambios</text>
+
+    <rect class="caja" x="220" y="190" width="270" height="52" />
+    <text class="t-titulo t-centro" x="355" y="209">MySQL · RDS</text>
+    <text class="t-sub t-centro" x="355" y="226">solo lo operacional</text>
+
+    <rect class="caja-enfasis" x="220" y="278" width="270" height="52" />
+    <text class="t-titulo t-centro" x="355" y="297">BigQuery</text>
+    <text class="t-sub t-centro" x="355" y="314">900 GB · esquema rediseñado</text>
+
+    <rect class="caja" x="550" y="232" width="150" height="56" />
+    <text class="t-titulo t-centro" x="625" y="260">Plataforma</text>
+
+    <path class="flecha" d="M 160 260 C 190 260 190 216 214 216" />
+    <path class="flecha-enfasis" d="M 160 260 C 190 260 190 304 214 304" />
+    <path class="flecha" d="M 490 216 C 520 216 520 260 544 260" />
+    <path class="flecha-enfasis" d="M 490 304 C 520 304 520 260 544 260" />
+
+    <text class="t-cifra" x="740" y="253">US$ 284</text>
+    <text class="t-sub" x="740" y="270">al mes</text>
+  </svg>
+</div>

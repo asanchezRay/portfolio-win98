@@ -1,0 +1,213 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Cifras from '../../components/Cifras.astro';
+import '../../styles/prosa.css';
+import '../../styles/diagramas.css';
+
+export const getStaticPaths = (async () => {
+  const casos = await getCollection('casos');
+  const ordenados = [...casos].sort((a, b) => a.data.orden - b.data.orden);
+
+  return ordenados.map((caso, i) => ({
+    params: { slug: caso.id },
+    props: {
+      caso,
+      // Navegacion circular entre casos: el ultimo vuelve al primero, para
+      // que nunca haya un extremo sin salida.
+      anterior: ordenados[(i - 1 + ordenados.length) % ordenados.length],
+      siguiente: ordenados[(i + 1) % ordenados.length],
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { caso, anterior, siguiente } = Astro.props;
+const { data } = caso;
+const { Content } = await render(caso);
+
+const etiquetaTipo = {
+  producto: 'Producto',
+  infraestructura: 'Infraestructura',
+  practica: 'Práctica de equipo',
+}[data.tipo];
+---
+
+<Base titulo={data.titulo} descripcion={data.resumen} tipoOg="article">
+  <article>
+    <header class="documento cabecera">
+      <p class="rotulo">{etiquetaTipo}</p>
+      <h1>{data.titulo}</h1>
+      <p class="subtitulo">{data.subtitulo}</p>
+
+      <dl class="ficha">
+        <div><dt>Dónde</dt><dd>{data.organizacion}</dd></div>
+        <div><dt>Cuándo</dt><dd>{data.periodo}</dd></div>
+        <div><dt>Rol</dt><dd>{data.rol}</dd></div>
+      </dl>
+
+      <ul class="stack">
+        {data.stack.map((t) => <li>{t}</li>)}
+      </ul>
+
+      {
+        data.cifras.length > 0 && (
+          <div class="a-medio cifras-caso">
+            <Cifras cifras={data.cifras} />
+          </div>
+        )
+      }
+
+      {
+        data.enlaces.length > 0 && (
+          <p class="enlaces">
+            {data.enlaces.map((e) => (
+              <a href={e.href} rel={e.externo ? 'noopener' : undefined}>
+                {e.texto}
+              </a>
+            ))}
+          </p>
+        )
+      }
+    </header>
+
+    <div class="documento prosa">
+      <Content />
+    </div>
+
+    {
+      data.nota && (
+        <aside class="documento">
+          <p class="nota">{data.nota}</p>
+        </aside>
+      )
+    }
+
+    <nav class="documento" aria-label="Otros casos">
+      <div class="a-medio paso">
+        <a href={`/casos/${anterior.id}`}>
+          <span class="rotulo">Anterior</span>
+          <span class="nombre">{anterior.data.titulo}</span>
+        </a>
+        <a class="der" href={`/casos/${siguiente.id}`}>
+          <span class="rotulo">Siguiente</span>
+          <span class="nombre">{siguiente.data.titulo}</span>
+        </a>
+      </div>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .cabecera {
+    padding-block: var(--e-8) var(--e-7);
+  }
+
+  .cabecera h1 {
+    margin-top: var(--e-3);
+    font-size: var(--t-display);
+    letter-spacing: -0.03em;
+  }
+
+  .subtitulo {
+    margin-top: var(--e-4);
+    font-size: var(--t-medio);
+    color: var(--tinta-media);
+    text-wrap: pretty;
+  }
+
+  /* --- Ficha --- */
+  .ficha {
+    margin: var(--e-6) 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--e-4);
+    padding-block: var(--e-4);
+    border-block: var(--borde);
+    font-family: var(--fuente-ui);
+  }
+
+  .ficha dt {
+    font-size: var(--t-micro);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  .ficha dd {
+    margin: var(--e-2) 0 0;
+    font-size: var(--t-chico);
+  }
+
+  /* --- Stack --- */
+  .stack {
+    margin: var(--e-4) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2);
+  }
+
+  .stack li {
+    padding: 0.25em 0.6em;
+    border: var(--borde);
+    border-radius: 999px;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    color: var(--tinta-media);
+  }
+
+  .cifras-caso {
+    margin-top: var(--e-7);
+  }
+
+  .enlaces {
+    margin-top: var(--e-6);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-5);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+
+  /* --- Nota de honestidad al pie --- */
+  .nota {
+    margin-top: var(--e-8);
+    padding: var(--e-4) var(--e-5);
+    border-left: 2px solid var(--senal);
+    background: var(--senal-tenue);
+    font-size: var(--t-chico);
+    color: var(--tinta-media);
+  }
+
+  /* --- Paso entre casos --- */
+  .paso {
+    margin-top: var(--e-9);
+    padding-block: var(--e-5);
+    border-top: var(--borde);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--e-5);
+  }
+
+  .paso a {
+    display: grid;
+    gap: var(--e-1);
+    align-content: start;
+    color: inherit;
+    text-decoration: none;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+
+  .paso .der {
+    text-align: right;
+  }
+
+  .paso a:hover .nombre {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

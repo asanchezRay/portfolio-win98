@@ -1,0 +1,289 @@
+---
+import Base from '../layouts/Base.astro';
+import { perfil } from '../data/perfil';
+import { trayectoria, rango, duracion } from '../data/trayectoria';
+
+/**
+ * Version de lectura corrida y de impresion.
+ *
+ * Existe por tres razones: es la ruta comoda en telefono, es lo que un
+ * reclutador con prisa quiere, y es lo que se imprime o se guarda en PDF sin
+ * que salga la navegacion del sitio.
+ */
+const { contacto } = perfil;
+const hoy = new Date().toLocaleDateString('es-CL', { year: 'numeric', month: 'long' });
+---
+
+<Base
+  titulo="CV"
+  descripcion={`Currículum de ${perfil.nombre}, ${perfil.rol} en ${perfil.organizacion}: trayectoria completa, logros con cifras y stack.`}
+>
+  <article class="documento cv">
+    <header>
+      <h1>{perfil.nombre}</h1>
+      <p class="cargo">{perfil.rol} · {perfil.organizacion}</p>
+      <p class="contacto">
+        <a href={`mailto:${contacto.correo}`}>{contacto.correo}</a>
+        <span>{perfil.ubicacion}</span>
+        <a href={contacto.linkedin} rel="noopener">linkedin.com/in/andressanchezc</a>
+        <a href={contacto.github} rel="noopener">github.com/asanchezRay</a>
+      </p>
+      <p class="no-imprimir aviso">
+        <a href={contacto.cv}>Descargar el PDF</a> · o imprime esta página, que
+        está maquetada para eso.
+      </p>
+    </header>
+
+    <section>
+      <h2>Perfil</h2>
+      <p>{perfil.presentacion}</p>
+    </section>
+
+    <section>
+      <h2>Experiencia</h2>
+      {
+        trayectoria
+          .filter((e) => e.via === 'industria')
+          .map((etapa) => (
+            <div class="entrada">
+              <div class="linea">
+                <h3>
+                  {etapa.rol} <span class="org">· {etapa.organizacion}</span>
+                </h3>
+                <p class="fechas">
+                  {rango(etapa.desde, etapa.hasta)}
+                  <span class="dura">({duracion(etapa.desde, etapa.hasta)})</span>
+                </p>
+              </div>
+              <p class="resumen">{etapa.resumen}</p>
+              {etapa.hitos && (
+                <ul>
+                  {etapa.hitos.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+              )}
+              {etapa.stack && <p class="stack">{etapa.stack.join(' · ')}</p>}
+            </div>
+          ))
+      }
+    </section>
+
+    <section>
+      <h2>Docencia</h2>
+      {
+        trayectoria
+          .filter((e) => e.via === 'docencia')
+          .map((etapa) => (
+            <div class="entrada">
+              <div class="linea">
+                <h3>
+                  {etapa.rol} <span class="org">· {etapa.organizacion}</span>
+                </h3>
+                <p class="fechas">
+                  {rango(etapa.desde, etapa.hasta)}
+                  <span class="dura">({duracion(etapa.desde, etapa.hasta)})</span>
+                </p>
+              </div>
+              <p class="resumen">{etapa.resumen}</p>
+            </div>
+          ))
+      }
+    </section>
+
+    <section>
+      <h2>Publicación</h2>
+      <div class="entrada">
+        <div class="linea">
+          <h3>AfasiaApp <span class="org">· IEEE Latin America Transactions</span></h3>
+          <p class="fechas">2021</p>
+        </div>
+        <p class="resumen">
+          Aplicación para tablets que asiste a fonoaudiólogos en el tratamiento
+          temprano de la afasia. Puntaje SUS de 79,7/100 en validación con once
+          profesionales. <a class="no-imprimir" href="/casos/afasiaapp">Ver el caso</a>
+        </p>
+      </div>
+    </section>
+
+    <p class="pie-cv">Actualizado en {hoy}.</p>
+  </article>
+</Base>
+
+<style>
+  .cv {
+    padding-block: var(--e-8) var(--e-7);
+  }
+
+  .cv > * {
+    grid-column: texto;
+  }
+
+  h1 {
+    font-size: var(--t-titulo);
+  }
+
+  .cargo {
+    margin-top: var(--e-1);
+    font-family: var(--fuente-ui);
+    color: var(--tinta-media);
+  }
+
+  .contacto {
+    margin-top: var(--e-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-4);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-mini);
+    color: var(--tinta-media);
+  }
+
+  .aviso {
+    margin-top: var(--e-4);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-mini);
+    color: var(--tinta-suave);
+  }
+
+  section {
+    margin-top: var(--e-7);
+  }
+
+  h2 {
+    font-size: var(--t-chico);
+    font-family: var(--fuente-ui);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    padding-bottom: var(--e-2);
+    border-bottom: 1px solid var(--linea-fuerte);
+  }
+
+  section > p {
+    margin-top: var(--e-4);
+  }
+
+  .entrada {
+    margin-top: var(--e-5);
+    break-inside: avoid;
+  }
+
+  .linea {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--e-1) var(--e-4);
+  }
+
+  h3 {
+    font-size: var(--t-base);
+  }
+
+  .org {
+    font-weight: 400;
+    color: var(--tinta-media);
+  }
+
+  .fechas {
+    font-family: var(--fuente-ui);
+    font-size: var(--t-mini);
+    color: var(--tinta-suave);
+    white-space: nowrap;
+  }
+
+  .dura {
+    margin-left: 0.4em;
+  }
+
+  .resumen {
+    margin-top: var(--e-2);
+    font-size: var(--t-chico);
+    color: var(--tinta-media);
+  }
+
+  .entrada ul {
+    margin-top: var(--e-3);
+    padding-left: 1.1em;
+    font-size: var(--t-chico);
+  }
+
+  .entrada li + li {
+    margin-top: var(--e-1);
+  }
+
+  .stack {
+    margin-top: var(--e-3);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    color: var(--tinta-suave);
+  }
+
+  .pie-cv {
+    margin-top: var(--e-7);
+    padding-top: var(--e-3);
+    border-top: var(--borde);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    color: var(--tinta-suave);
+  }
+
+  /* --- Impresion ---
+     Se imprime en negro sobre blanco, sin la navegacion del sitio y con las
+     URL de los enlaces expandidas, que en papel es la unica forma de que un
+     enlace sirva de algo. */
+  @media print {
+    .cv {
+      padding: 0;
+      max-width: none;
+    }
+
+    .no-imprimir {
+      display: none !important;
+    }
+
+    a[href^='http']::after {
+      content: ' (' attr(href) ')';
+      font-size: 0.85em;
+      color: #555;
+      word-break: break-all;
+    }
+
+    section {
+      break-inside: avoid-page;
+      margin-top: 1.4em;
+    }
+  }
+</style>
+
+<style is:global>
+  @media print {
+    :root {
+      --papel: #fff;
+      --papel-hundido: #fff;
+      --papel-elevado: #fff;
+      --tinta: #000;
+      --tinta-media: #333;
+      --tinta-suave: #555;
+      --linea: #ccc;
+      --linea-fuerte: #999;
+      --acento: #000;
+    }
+
+    body > header,
+    body > footer,
+    .saltar-al-contenido {
+      display: none !important;
+    }
+
+    body {
+      font-size: 10.5pt;
+      line-height: 1.45;
+    }
+
+    @page {
+      margin: 16mm 14mm;
+    }
+  }
+</style>

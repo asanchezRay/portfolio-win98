@@ -1,0 +1,48 @@
+---
+/**
+ * Rejilla de capturas dentro de un caso.
+ *
+ * Las imagenes se muestran completas (object-fit: contain) y no recortadas:
+ * en una captura de interfaz, el recorte se come justo lo que se quiere
+ * mostrar.
+ */
+interface Captura {
+  src: string;
+  alt: string;
+}
+
+interface Props {
+  capturas: Captura[];
+  /** Ancho minimo de cada celda; baja para rejillas mas densas. */
+  minimo?: string;
+}
+
+const { capturas, minimo = '13rem' } = Astro.props;
+---
+
+<div class="galeria" style={`--minimo: ${minimo}`}>
+  {
+    capturas.map(({ src, alt }) => (
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
+    ))
+  }
+</div>
+
+<style>
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--minimo), 1fr));
+    gap: var(--e-3);
+    padding: var(--e-4);
+    background: var(--papel-hundido);
+  }
+
+  img {
+    inline-size: 100%;
+    block-size: auto;
+    object-fit: contain;
+    background: var(--papel-elevado);
+    border: var(--borde);
+    border-radius: var(--radio);
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+titulo: AfasiaApp
+subtitulo: Aplicación para tablets que asiste a fonoaudiólogos en el tratamiento temprano de la afasia
+resumen: Tesis de ingeniería, validada con once fonoaudiólogos y publicada en IEEE Latin America Transactions.
+tipo: producto
+organizacion: Tesis de ingeniería
+periodo: "2021"
+rol: Diseño y desarrollo completo
+stack: [Flutter, Dart, SQLite, Material Design]
+orden: 7
+destacado: true
+imagen:
+  src: /img/afasiaApp/lecturaComprensiva.png
+  alt: Actividad de lectura comprensiva en AfasiaApp
+cifras:
+  - valor: "79,7"
+    unidad: /100
+    etiqueta: puntaje SUS de usabilidad
+  - valor: "11"
+    etiqueta: fonoaudiólogos en la validación
+  - valor: "15+"
+    etiqueta: actividades terapéuticas, con tres niveles cada una
+enlaces:
+  - href: /readme
+    texto: Documentación del proyecto
+  - href: /myAphasia
+    texto: Descargar el APK
+---
+
+import Figura from '../../components/Figura.astro';
+import Galeria from '../../components/Galeria.astro';
+
+La afasia es un trastorno que compromete la capacidad de usar el lenguaje,
+habitualmente después de un accidente cerebrovascular. El tratamiento temprano
+—las primeras semanas, todavía en el hospital— es determinante para la
+recuperación, y en ese momento el trabajo del fonoaudiólogo depende de material
+impreso que hay que preparar, transportar y adaptar paciente por paciente.
+
+AfasiaApp es una aplicación para tablets que traslada ese material al formato
+digital, con las actividades listas y el progreso registrado.
+
+<Figura ancho="amplio" desnuda pie="Perfil de paciente, actividad de lectura comprensiva, listado de actividades e inicio de sesión. La interfaz está pensada para usarse al lado de la cama del paciente, no en un escritorio.">
+  <Galeria
+    capturas={[
+      { src: '/img/afasiaApp/profile.png', alt: 'Vista de perfil de paciente en AfasiaApp' },
+      { src: '/img/afasiaApp/lecturaComprensiva.png', alt: 'Actividad de lectura comprensiva en AfasiaApp' },
+      { src: '/img/afasiaApp/listaActividades.png', alt: 'Listado de actividades terapéuticas en AfasiaApp' },
+      { src: '/img/afasiaApp/login.png', alt: 'Pantalla de inicio de sesión de AfasiaApp' },
+    ]}
+  />
+</Figura>
+
+## Diseñar para alguien que perdió el lenguaje
+
+La restricción central del proyecto es que la interfaz no puede apoyarse en
+texto para explicarse, porque el texto es justamente la capacidad que el
+paciente tiene comprometida. Todo lo que normalmente resuelve un problema de
+usabilidad —un rótulo más claro, una instrucción, un mensaje de ayuda— acá no
+está disponible.
+
+Eso empuja el diseño hacia otro lado: jerarquía visual, consistencia absoluta
+de posición entre actividades, y una progresión de dificultad que el
+fonoaudiólogo controla en vez de que la decida el sistema. Cada una de las más
+de quince actividades tiene tres niveles, para que el terapeuta ajuste sin
+cambiar de herramienta a mitad de sesión.
+
+## La validación
+
+La evaluación se hizo con once fonoaudiólogos en ejercicio, con un puntaje SUS
+de 79,7 sobre 100. Ese instrumento importa acá más de lo habitual: el usuario
+directo no es el paciente sino el profesional, que va a usar la aplicación bajo
+presión de tiempo y en un entorno hospitalario, donde una interfaz confusa no
+es una molestia sino una sesión perdida.
+
+El trabajo derivó en un artículo publicado en *IEEE Latin America
+Transactions*.
+
+## Una nota sobre las rutas publicadas
+
+Las dos URL que aparecen arriba —`/readme` y `/myAphasia`— están referenciadas
+desde esa publicación. Son enlaces impresos, y por eso siguen viviendo en este
+dominio aunque el sitio se haya reescrito entero desde entonces: hay una
+verificación automática que hace fallar el build si alguna de las dos deja de
+resolver. Un enlace en un paper no se puede mover.

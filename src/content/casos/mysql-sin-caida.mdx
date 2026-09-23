@@ -1,0 +1,44 @@
+---
+titulo: Cambiarle el motor a la base en marcha
+subtitulo: Upgrade del motor MySQL en AWS RDS productivo, sin interrupción de la plataforma
+resumen: "La clase de cambio que no tiene una versión parcial: o la plataforma sigue en pie, o no."
+tipo: infraestructura
+organizacion: IGX
+periodo: dic 2025 — jul 2026
+rol: Senior Software Engineer
+stack: [MySQL, AWS RDS, AWS]
+orden: 4
+destacado: false
+cifras:
+  - valor: "0"
+    etiqueta: interrupciones de plataforma
+---
+
+Actualizar el motor de la base de datos productiva es de los cambios más
+incómodos que existen, porque reúne tres cosas que rara vez coinciden: el radio
+de impacto es total —todo el sistema depende de esa base—, la reversión es cara
+y lenta, y no hay forma de entregarlo por partes. No existe una versión del
+cambio que afecte al 10% de los usuarios.
+
+Se completó sin interrupción de la plataforma.
+
+## Por qué llegó cuando llegó
+
+Este trabajo no fue independiente del resto. Vino después de sacar
+[900 GB de historia](/casos/migracion-bigquery) del motor, y ese orden no fue
+casualidad: una base de casi un terabyte convierte cualquier operación de
+mantenimiento en un evento largo, con una ventana difícil de conseguir y una
+reversión que se mide en horas.
+
+Aligerar la base primero fue lo que hizo que el upgrade fuera una operación
+manejable en vez de una apuesta. La decisión técnica interesante, en ese
+sentido, se tomó un paso antes de donde parece.
+
+## Cómo se mide el éxito acá
+
+Casi todo el trabajo de ingeniería se juzga por lo que produce. Este se juzga
+por lo que *no* pasó: ningún cliente notó nada, no hubo ventana anunciada, no
+hubo incidente que escribir.
+
+Es un tipo de resultado que no se ve en ninguna métrica de producto y que es
+difícil de mostrar en un portafolio — precisamente porque salió bien.

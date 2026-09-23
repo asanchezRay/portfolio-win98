@@ -1,0 +1,218 @@
+---
+/**
+ * Costo mensual de la infraestructura de datos, antes y despues de mover la
+ * historia de ION a BigQuery.
+ *
+ * Forma: cifra protagonista mas dos columnas en tratamiento de "enfasis"
+ * (el estado nuevo lleva color, el anterior es contexto gris). No es una
+ * paleta categorica: las dos barras son la misma medida en dos momentos,
+ * asi que usar dos identidades de color seria leerlas mal.
+ *
+ * El desglose del estado nuevo va como texto y no como segmento apilado:
+ * BigQuery son 4 de 284 dolares, que a esta altura de grafico serian menos
+ * de dos pixeles. Un segmento invisible miente mas de lo que informa.
+ *
+ * Sin tooltip a proposito: las dos barras estan rotuladas directamente y
+ * debajo hay tabla con las cifras, asi que no queda ningun dato oculto que
+ * un hover pudiera revelar.
+ */
+
+const ANTES = 600;
+const DESPUES_RDS = 280;
+const DESPUES_BQ = 4;
+const DESPUES = DESPUES_RDS + DESPUES_BQ;
+
+const caida = Math.round(((ANTES - DESPUES) / ANTES) * 100);
+const alturaDespues = (DESPUES / ANTES) * 100;
+
+const usd = (n: number) => `US$ ${n.toLocaleString('es-CL')}`;
+---
+
+<div class="grafico">
+  <div class="titular">
+    <p class="cifra">−{caida}<span class="pct">%</span></p>
+    <p class="glosa">
+      de costo operacional recurrente, sostenido mes a mes
+    </p>
+  </div>
+
+  <div class="trama" role="img" aria-label={`Costo mensual antes: ${usd(ANTES)}. Despues: ${usd(DESPUES)}, repartidos en ${usd(DESPUES_RDS)} de RDS y ${usd(DESPUES_BQ)} de BigQuery. Una caida de ${caida} por ciento.`}>
+    <div class="columnas">
+      <div class="columna">
+        <p class="valor">{usd(ANTES)}</p>
+        <div class="barra contexto" style={{ blockSize: '100%' }}></div>
+      </div>
+      <div class="columna">
+        <p class="valor destacado">{usd(DESPUES)}</p>
+        <div class="barra enfasis" style={{ blockSize: `${alturaDespues}%` }}></div>
+      </div>
+    </div>
+
+    <div class="pies">
+      <p>Antes<span>todo en MySQL/RDS</span></p>
+      <p>Después<span>{usd(DESPUES_RDS)} RDS + {usd(DESPUES_BQ)} BigQuery</span></p>
+    </div>
+  </div>
+
+  <table>
+    <caption class="solo-lectores">Costo mensual de infraestructura de datos</caption>
+    <thead>
+      <tr><th scope="col">Partida</th><th scope="col">Antes</th><th scope="col">Después</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">MySQL / RDS</th><td>{usd(ANTES)}</td><td>{usd(DESPUES_RDS)}</td></tr>
+      <tr><th scope="row">BigQuery</th><td>—</td><td>{usd(DESPUES_BQ)}</td></tr>
+      <tr class="total"><th scope="row">Total mensual</th><td>{usd(ANTES)}</td><td>{usd(DESPUES)}</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .grafico {
+    display: grid;
+    gap: var(--e-6);
+    padding: var(--e-6) var(--e-5);
+    font-family: var(--fuente-ui);
+  }
+
+  @media (min-width: 40rem) {
+    .grafico {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      align-items: center;
+      gap: var(--e-7);
+    }
+    .grafico table {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* --- Cifra protagonista ---
+     Cifras proporcionales y no tabulares: a este tamano, tabular-nums le da
+     a cada digito el ancho de un cero y el numero se ve suelto. */
+  .cifra {
+    margin: 0;
+    font-size: clamp(3.25rem, 2rem + 5vw, 5rem);
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--dato-enfasis);
+  }
+
+  .pct {
+    font-size: 0.45em;
+    margin-left: 0.05em;
+    vertical-align: 0.5em;
+  }
+
+  .glosa {
+    margin: var(--e-3) 0 0;
+    max-width: 18rem;
+    font-size: var(--t-chico);
+    line-height: 1.45;
+    color: var(--tinta-media);
+  }
+
+  /* --- Columnas ---
+     Barras y pies son dos filas de la misma reticula de dos columnas, para
+     que ambas midan contra la misma linea base sin margenes negativos. */
+  .columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-5);
+    align-items: end;
+    block-size: 13rem;
+    /* Linea base recesiva: la referencia, no un elemento del dibujo. */
+    border-bottom: 1px solid var(--linea-fuerte);
+  }
+
+  .columna {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    block-size: 100%;
+    align-items: end;
+    justify-items: center;
+  }
+
+  .pies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--e-5);
+    margin-top: var(--e-3);
+  }
+
+  .valor {
+    margin: 0 0 var(--e-2);
+    font-size: var(--t-chico);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--tinta-media);
+  }
+
+  .valor.destacado {
+    color: var(--dato-enfasis);
+  }
+
+  .barra {
+    align-self: end;
+    justify-self: center;
+    /* Marca fina: una barra que ocupa toda su columna lee como bloque de
+       color y no como dato. */
+    inline-size: min(100%, 5.5rem);
+    /* Extremo de dato redondeado, base cuadrada contra la linea. */
+    border-radius: 4px 4px 0 0;
+    min-block-size: 3px;
+  }
+
+  .contexto { background: var(--dato-contexto); }
+  .enfasis { background: var(--dato-enfasis); }
+
+  .pies p {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: var(--t-mini);
+    font-weight: 600;
+    color: var(--tinta);
+  }
+
+  .pies span {
+    font-weight: 400;
+    font-size: var(--t-micro);
+    color: var(--tinta-suave);
+    text-wrap: pretty;
+  }
+
+  /* --- Tabla --- */
+  table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    font-size: var(--t-mini);
+    font-variant-numeric: tabular-nums;
+  }
+
+  th, td {
+    padding: var(--e-2) var(--e-3) var(--e-2) 0;
+    text-align: right;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  thead th, tbody th {
+    text-align: left;
+    font-weight: 400;
+    color: var(--tinta-media);
+  }
+
+  thead th {
+    font-size: var(--t-micro);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+  }
+
+  .total th, .total td {
+    font-weight: 600;
+    color: var(--tinta);
+    border-bottom: 0;
+  }
+</style>

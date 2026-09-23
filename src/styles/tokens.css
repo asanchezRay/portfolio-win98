@@ -1,0 +1,101 @@
+/*
+ * Tokens del sistema visual.
+ *
+ * La direccion es "expediente tecnico": tipografia de documento, cifras
+ * tratadas como instrumento de medicion y figuras con pie numerado. El color
+ * es deliberadamente sobrio — el peso visual lo cargan las imagenes, los
+ * diagramas y los numeros, no el cromado de la interfaz.
+ *
+ * El tema claro se define completo en :root. El oscuro solo redefine tokens,
+ * nunca introduce un color que no exista ya en claro.
+ */
+
+:root {
+  /* --- Color: papel e tinta --- */
+  --papel: #faf9f7;
+  --papel-hundido: #f2f0ec;
+  --papel-elevado: #ffffff;
+  --tinta: #1a1816;
+  --tinta-media: #55504a;
+  --tinta-suave: #7d766d;
+  --linea: #e2ddd5;
+  --linea-fuerte: #cdc6bb;
+
+  /* --- Color: acentos ---
+     Un solo acento para lo interactivo. La senal ambar queda reservada
+     para datos y diagramas, para que nunca compita con un enlace. */
+  --acento: #1f4ba8;
+  --acento-tenue: #e8eefb;
+  --senal: #b1560f;
+  --senal-tenue: #fbeee2;
+
+  /* --- Color de datos ---
+     Par de enfasis para graficos: gris de contexto + ambar de enfasis.
+     Separado de --senal a proposito: --senal es para texto y marcas de
+     interfaz, donde manda el contraste de texto; estos dos son para
+     rellenos, y estan elegidos para pasar banda de luminosidad,
+     separacion bajo daltonismo, piso de vision normal y 3:1 contra el
+     fondo. Verificados con el validador de paleta; no cambiar a ojo. */
+  --dato-contexto: #6f6860;
+  --dato-enfasis: #c4670f;
+
+  color-scheme: light dark;
+
+  /* --- Tipografia --- */
+  --fuente-texto: 'Source Serif 4', ui-serif, Georgia, 'Times New Roman', serif;
+  --fuente-ui: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --fuente-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+
+  /* Escala modular ~1.2, con los extremos fluidos */
+  --t-micro: 0.75rem;
+  --t-mini: 0.8125rem;
+  --t-chico: 0.9375rem;
+  --t-base: 1.0625rem;
+  --t-medio: 1.1875rem;
+  --t-grande: clamp(1.25rem, 0.9rem + 1.1vw, 1.5rem);
+  --t-titulo: clamp(1.5rem, 1.1rem + 1.7vw, 2rem);
+  --t-display: clamp(2rem, 1.3rem + 3.2vw, 3.25rem);
+
+  /* --- Ritmo vertical --- */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.5rem;
+  --e-6: 2rem;
+  --e-7: 3rem;
+  --e-8: 4rem;
+  --e-9: 6rem;
+
+  /* --- Medidas de la reticula de documento --- */
+  --ancho-texto: 38rem;
+  --ancho-medio: 52rem;
+  --ancho-amplio: 68rem;
+
+  --radio: 3px;
+  --borde: 1px solid var(--linea);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --papel: #14120f;
+    --papel-hundido: #1c1916;
+    --papel-elevado: #201d19;
+    --tinta: #eae5dc;
+    --tinta-media: #a9a298;
+    --tinta-suave: #857e74;
+    --linea: #2e2a25;
+    --linea-fuerte: #453f38;
+
+    --acento: #9cb8f5;
+    --acento-tenue: #1b2438;
+    --senal: #e09a5c;
+    --senal-tenue: #2c2118;
+
+    /* Escalones propios para el fondo oscuro, no un volteo automatico. */
+    --dato-contexto: #736d65;
+    --dato-enfasis: #d07a2b;
+  }
+}

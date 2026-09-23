@@ -1,0 +1,94 @@
+---
+import { perfil } from '../data/perfil';
+
+const { contacto } = perfil;
+const anio = new Date().getFullYear();
+---
+
+<footer>
+  <div class="interior">
+    <div class="bloque">
+      <p class="rotulo">Contacto</p>
+      <ul>
+        <li><a href={`mailto:${contacto.correo}`}>{contacto.correo}</a></li>
+        <li><a href={contacto.linkedin} rel="me noopener">LinkedIn</a></li>
+        <li><a href={contacto.github} rel="me noopener">GitHub</a></li>
+        <li><a href={contacto.gitlab} rel="me noopener">GitLab</a></li>
+      </ul>
+    </div>
+
+    <div class="bloque">
+      <p class="rotulo">Este sitio</p>
+      <ul>
+        <li><a href="/casos">Todos los casos</a></li>
+        <li><a href="/trayectoria">Trayectoria completa</a></li>
+        <li><a href={contacto.cv}>CV en PDF</a></li>
+        <li><a href="/colofon">Cómo está hecho</a></li>
+      </ul>
+    </div>
+
+    <div class="bloque archivo">
+      <p class="rotulo">Archivo</p>
+      <p>
+        Mi portafolio anterior era un escritorio Windows 98 hecho a mano en CSS.
+        Sigue en pie en <a href="/98">/98</a>, y conté
+        <a href="/casos/portafolio-98">por qué lo reemplacé</a>.
+      </p>
+    </div>
+  </div>
+
+  <p class="firma">
+    <span>© {anio} {perfil.nombre}</span>
+    <span>{perfil.ubicacion}</span>
+  </p>
+</footer>
+
+<style>
+  footer {
+    margin-top: var(--e-9);
+    border-top: var(--borde);
+    background: var(--papel-hundido);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+
+  .interior {
+    max-width: var(--ancho-amplio);
+    margin-inline: auto;
+    padding: var(--e-7) var(--e-5) var(--e-6);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--e-6) var(--e-5);
+  }
+
+  .bloque p.rotulo {
+    margin-bottom: var(--e-3);
+  }
+
+  .bloque ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: var(--e-2);
+  }
+
+  .archivo p:not(.rotulo) {
+    margin: 0;
+    max-width: 28rem;
+    color: var(--tinta-media);
+    line-height: 1.6;
+  }
+
+  .firma {
+    max-width: var(--ancho-amplio);
+    margin-inline: auto;
+    padding: var(--e-4) var(--e-5) var(--e-6);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--e-4);
+    border-top: var(--borde);
+    color: var(--tinta-suave);
+    font-size: var(--t-micro);
+  }
+</style>

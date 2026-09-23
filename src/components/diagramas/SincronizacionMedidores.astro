@@ -1,0 +1,59 @@
+---
+/**
+ * Ingesta en vivo de datos de medidores sobre el scraper que ya existia.
+ *
+ * Lo que el dibujo quiere dejar claro es que no se reemplazo el scraper: se
+ * le colgo un camino en tiempo real al lado del lote nocturno, y ambos
+ * conviven.
+ */
+import Marcadores from './Marcadores.astro';
+---
+
+<div class="diagrama">
+  <svg viewBox="0 0 860 300" role="img" aria-labelledby="sm-titulo sm-desc">
+    <title id="sm-titulo">Sincronización en vivo de datos de medidores</title>
+    <desc id="sm-desc">
+      Los medidores en terreno alimentan el scraper existente. Desde ahí salen
+      dos caminos: el proceso por lotes que ya operaba, que consolida a
+      BigQuery una vez al día, y un servicio nuevo de sincronización en vivo
+      sobre Cloud Run, que empuja lecturas a medida que llegan. La plataforma
+      consume ambos.
+    </desc>
+
+    <Marcadores />
+
+    <rect class="caja" x="0" y="106" width="150" height="58" />
+    <text class="t-titulo t-centro" x="75" y="128">Medidores</text>
+    <text class="t-sub t-centro" x="75" y="145">en terreno</text>
+
+    <rect class="caja" x="212" y="106" width="160" height="58" />
+    <text class="t-titulo t-centro" x="292" y="128">Scraper</text>
+    <text class="t-sub t-centro" x="292" y="145">ya existente</text>
+
+    <path class="flecha" d="M 150 135 H 206" />
+
+    <!-- Camino por lotes, el que ya operaba -->
+    <rect class="caja" x="440" y="32" width="200" height="58" />
+    <text class="t-titulo t-centro" x="540" y="54">Proceso por lotes</text>
+    <text class="t-sub t-centro" x="540" y="71">consolidación diaria</text>
+    <text class="t-rotulo" x="440" y="16">Ya existía</text>
+
+    <!-- Camino nuevo, en vivo -->
+    <rect class="caja-enfasis" x="440" y="180" width="200" height="58" />
+    <text class="t-titulo t-centro" x="540" y="202">Cloud Run</text>
+    <text class="t-sub t-centro" x="540" y="219">sincronización en vivo</text>
+    <text class="t-rotulo" x="440" y="164">Agregado</text>
+
+    <path class="flecha" d="M 372 135 C 405 135 405 61 434 61" />
+    <path class="flecha-enfasis" d="M 372 135 C 405 135 405 209 434 209" />
+
+    <rect class="caja" x="706" y="106" width="150" height="58" />
+    <text class="t-titulo t-centro" x="781" y="128">Plataforma</text>
+    <text class="t-sub t-centro" x="781" y="145">y analítica</text>
+
+    <path class="flecha" d="M 640 61 C 672 61 672 135 700 135" />
+    <path class="flecha-enfasis" d="M 640 209 C 672 209 672 135 700 135" />
+
+    <text class="t-sub t-centro" x="540" y="130">los dos caminos conviven</text>
+  </svg>
+</div>

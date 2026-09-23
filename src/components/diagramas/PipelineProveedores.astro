@@ -1,0 +1,70 @@
+---
+/**
+ * El pipeline con el que se sembro el directorio de proveedores.
+ *
+ * Es el problema del arranque en frio de un marketplace: sin proveedores no
+ * llegan novios, y sin novios no se inscriben proveedores. En vez de esperar
+ * inscripciones, el catalogo inicial se construyo raspando y ordenando
+ * fuentes publicas — que resulta ser exactamente el oficio que ya hacia en el
+ * mercado electrico, aplicado a otro dominio.
+ */
+import Marcadores from './Marcadores.astro';
+
+const etapas = [
+  { archivo: 'scrape_vendors.py', hace: 'recolecta desde fuentes públicas' },
+  { archivo: 'enrich_vendors.py', hace: 'completa datos faltantes' },
+  { archivo: 'rank_by_instagram.py', hace: 'ordena por señal social' },
+  { archivo: 'tier_vendors.py', hace: 'clasifica por nivel' },
+];
+
+const ANCHO = 186;
+const SALTO = 206;
+const X0 = 8;
+---
+
+<div class="diagrama">
+  <svg viewBox="0 0 860 236" role="img" aria-labelledby="pp-titulo pp-desc">
+    <title id="pp-titulo">Pipeline de siembra del directorio de proveedores</title>
+    <desc id="pp-desc">
+      Cuatro etapas encadenadas en Python: recolección desde fuentes públicas,
+      enriquecimiento de datos faltantes, ordenamiento por señal social en
+      Instagram y clasificación por nivel. El resultado alimenta el directorio
+      inicial de la plataforma.
+    </desc>
+
+    <Marcadores />
+
+    <text class="t-rotulo" x={X0} y="14">Arranque en frío · Python</text>
+
+    {
+      etapas.map((etapa, i) => {
+        const x = X0 + i * SALTO;
+        return (
+          <>
+            <rect class="caja" x={x} y="36" width={ANCHO} height="64" />
+            <text class="t-titulo t-centro" x={x + ANCHO / 2} y="58" style="font-size:12px">
+              {etapa.archivo}
+            </text>
+            <text class="t-sub t-centro" x={x + ANCHO / 2} y="78">
+              {etapa.hace}
+            </text>
+            <text class="t-rotulo t-centro" x={x + ANCHO / 2} y="115">
+              {`0${i + 1}`}
+            </text>
+            {i < etapas.length - 1 && (
+              <path class="flecha" d={`M ${x + ANCHO} 68 H ${x + SALTO - 6}`} />
+            )}
+          </>
+        );
+      })
+    }
+
+    <rect class="caja-enfasis" x={X0} y="150" width={SALTO * 3 + ANCHO} height="58" />
+    <text class="t-titulo t-centro" x="430" y="172">Directorio sembrado</text>
+    <text class="t-sub t-centro" x="430" y="189">
+      catálogo inicial sin esperar a que los proveedores se inscribieran solos
+    </text>
+
+    <path class="flecha-enfasis" d="M 430 122 V 144" />
+  </svg>
+</div>

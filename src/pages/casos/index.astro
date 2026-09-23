@@ -1,0 +1,98 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import TarjetaCaso from '../../components/TarjetaCaso.astro';
+
+const casos = (await getCollection('casos')).sort((a, b) => a.data.orden - b.data.orden);
+
+const grupos = [
+  {
+    tipo: 'infraestructura' as const,
+    titulo: 'Infraestructura y arquitectura',
+    glosa:
+      'Trabajo que no se puede pantallazear porque vive en producción. Se cuenta con diagramas, con las alternativas que descarté y con lo que costó cada decisión.',
+  },
+  {
+    tipo: 'producto' as const,
+    titulo: 'Producto',
+    glosa: 'Cosas con interfaz, que se pueden mirar y —cuando existe demo— tocar.',
+  },
+  {
+    tipo: 'practica' as const,
+    titulo: 'Prácticas de equipo',
+    glosa: 'Cambios que no son de código sino de cómo trabaja el equipo. Suelen ser más difíciles.',
+  },
+];
+---
+
+<Base
+  titulo="Casos"
+  descripcion="Decisiones técnicas con su contexto, las alternativas evaluadas y lo que costaron: infraestructura de datos, migraciones, producto propio y prácticas de equipo."
+>
+  <section class="documento intro">
+    <h1>Casos</h1>
+    <p>
+      Cada uno sigue la misma estructura: cuál era el problema, qué opciones
+      había, cuál elegí y qué costó. Los que salieron mal también están — son
+      los que más enseñan.
+    </p>
+  </section>
+
+  {
+    grupos.map(({ tipo, titulo, glosa }) => {
+      const delGrupo = casos.filter((c) => c.data.tipo === tipo);
+      if (delGrupo.length === 0) return null;
+      return (
+        <section class="documento grupo">
+          <div class="a-amplio cabecera-grupo">
+            <h2>{titulo}</h2>
+            <p>{glosa}</p>
+          </div>
+          <div class="a-amplio rejilla">
+            {delGrupo.map((caso) => (
+              <TarjetaCaso caso={caso} />
+            ))}
+          </div>
+        </section>
+      );
+    })
+  }
+</Base>
+
+<style>
+  .intro {
+    padding-block: var(--e-8) var(--e-6);
+  }
+
+  .intro h1 {
+    font-size: var(--t-display);
+  }
+
+  .intro p {
+    margin-top: var(--e-4);
+    font-size: var(--t-medio);
+    color: var(--tinta-media);
+  }
+
+  .grupo {
+    padding-block: var(--e-6) var(--e-7);
+  }
+
+  .cabecera-grupo h2 {
+    font-size: var(--t-titulo);
+  }
+
+  .cabecera-grupo p {
+    margin-top: var(--e-3);
+    max-width: 36rem;
+    color: var(--tinta-media);
+    font-size: var(--t-chico);
+  }
+
+  .rejilla {
+    margin-top: var(--e-5);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: var(--e-5);
+  }
+</style>

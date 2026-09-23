@@ -1,18 +1,31 @@
 ---
 /**
- * Layout del sitio nuevo.
+ * Layout raiz del portafolio.
  *
- * Deliberadamente NO importa nada de src/win98/: ese CSS aplica
- * `overflow: hidden` a html/body y fija fuente y fondo del escritorio,
- * lo que romperia cualquier pagina con scroll.
+ * No importa nada de src/win98/: ese CSS fija overflow:hidden en html y body
+ * mas la fuente y el fondo del escritorio, y romperia cualquier pagina con
+ * scroll. El escritorio vive aislado en /98.
  */
+import '../styles/fuentes.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import EncabezadoSitio from '../components/EncabezadoSitio.astro';
+import PieSitio from '../components/PieSitio.astro';
+import { perfil } from '../data/perfil';
+
 interface Props {
-  title: string;
-  description: string;
+  titulo: string;
+  descripcion: string;
+  /** Sin el sufijo del nombre; para la portada, que ya lo lleva. */
+  tituloCrudo?: boolean;
+  tipoOg?: 'website' | 'article';
 }
 
-const { title, description } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const { titulo, descripcion, tituloCrudo = false, tipoOg = 'website' } = Astro.props;
+
+const tituloCompleto = tituloCrudo ? titulo : `${titulo} · ${perfil.nombre}`;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const imagenOg = new URL('/og.png', Astro.site);
 ---
 
 <!doctype html>
@@ -20,72 +33,61 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    <!-- La fuente del cuerpo se precarga porque es lo primero que se pinta. -->
+    <link
+      rel="preload"
+      href="/fonts/source-serif-4-upright.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <meta property="og:type" content={tipoOg} />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagenOg} />
     <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content={perfil.nombre} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={tituloCompleto} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={imagenOg} />
 
-    <script type="application/ld+json" set:html={JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: 'Andrés Sánchez',
-      jobTitle: 'Líder Técnico',
-      worksFor: { '@type': 'Organization', name: 'IGX' },
-      url: Astro.site?.href,
-      address: { '@type': 'PostalAddress', addressLocality: 'Concepción', addressCountry: 'CL' },
-      sameAs: [
-        'https://cl.linkedin.com/in/andressanchezc',
-        'https://github.com/asanchezRay',
-        'https://gitlab.com/asanchez35',
-      ],
-    })} />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: perfil.nombre,
+        jobTitle: perfil.rol,
+        worksFor: { '@type': 'Organization', name: perfil.organizacion },
+        url: Astro.site?.href,
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Concepción',
+          addressCountry: 'CL',
+        },
+        knowsLanguage: ['es', 'en'],
+        sameAs: [perfil.contacto.linkedin, perfil.contacto.github, perfil.contacto.gitlab],
+      })}
+    />
   </head>
+
   <body>
-    <slot />
+    <a class="saltar-al-contenido" href="#contenido">Saltar al contenido</a>
+    <EncabezadoSitio />
+    <main id="contenido">
+      <slot />
+    </main>
+    <PieSitio />
   </body>
 </html>
-
-<style is:global>
-  *, *::before, *::after { box-sizing: border-box; }
-
-  :root {
-    --ink: #1c1917;
-    --ink-soft: #57534e;
-    --rule: #e7e5e4;
-    --paper: #fafaf9;
-    --accent: #1d4ed8;
-    color-scheme: light dark;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --ink: #e7e5e4;
-      --ink-soft: #a8a29e;
-      --rule: #292524;
-      --paper: #12100f;
-      --accent: #93b4fd;
-    }
-  }
-
-  html { -webkit-text-size-adjust: 100%; }
-
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: ui-serif, Georgia, "Times New Roman", serif;
-    font-size: 1.0625rem;
-    line-height: 1.65;
-    text-rendering: optimizeLegibility;
-  }
-
-  a { color: var(--accent); }
-  img { max-width: 100%; height: auto; }
-</style>

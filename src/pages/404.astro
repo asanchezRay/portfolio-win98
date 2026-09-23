@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base titulo="Página no encontrada" descripcion="Esta ruta no existe en el sitio.">
+  <section class="documento">
+    <p class="rotulo">Error 404</p>
+    <h1>Esta ruta no existe</h1>
+    <p class="texto">
+      Puede que el enlace esté mal escrito, o que algo se haya movido cuando
+      reescribí el sitio.
+    </p>
+    <p class="texto">
+      Si llegaste buscando la documentación o el APK de AfasiaApp, están en
+      <a href="/readme">/readme</a> y <a href="/myAphasia">/myAphasia</a>, y
+      siguen funcionando. Si venías por el escritorio Windows 98, se mudó a
+      <a href="/98">/98</a>.
+    </p>
+    <p class="acciones">
+      <a href="/">Ir a la portada</a>
+      <a href="/casos">Ver los casos</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  section {
+    padding-block: clamp(var(--e-8), 14vh, var(--e-9));
+  }
+
+  h1 {
+    margin-top: var(--e-3);
+    font-size: var(--t-display);
+  }
+
+  .texto {
+    margin-top: var(--e-5);
+    color: var(--tinta-media);
+  }
+
+  .acciones {
+    margin-top: var(--e-7);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-5);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+</style>

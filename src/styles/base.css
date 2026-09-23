@@ -1,0 +1,146 @@
+/*
+ * Reset minimo y base tipografica.
+ * Depende de tokens.css, que debe cargarse antes.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: var(--fuente-texto);
+  font-size: var(--t-base);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+p, ul, ol { margin: 0; }
+p { text-wrap: pretty; }
+
+a {
+  color: var(--acento);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: from-font;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--acento-tenue);
+  color: var(--tinta);
+}
+
+/* --- Etiquetas de interfaz ---
+   Versalitas espaciadas en sans, para rotulos, metadatos y pies de figura.
+   Contrastan con el serif del cuerpo y dan el aire de documento tecnico. */
+.rotulo {
+  font-family: var(--fuente-ui);
+  font-size: var(--t-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+/* --- Cifras ---
+   Numeros siempre tabulares para que alineen en columnas y no bailen
+   al actualizarse. */
+.cifra-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* --- Reticula de documento ---
+   Tres anchos en una sola grilla: el texto corre angosto para que la linea
+   sea comoda de leer, y las figuras pueden salirse a 'medio', 'amplio' o al
+   ancho completo de la ventana sin sacarlas del flujo. */
+.documento {
+  display: grid;
+  /* Los sufijos -start y -end no son decorativos: son lo que hace que
+     `grid-column: texto` funcione como atajo del area implicita. CSS solo
+     reconoce esas dos palabras, asi que traducirlas rompe la colocacion. */
+  grid-template-columns:
+    [completo-start] minmax(var(--e-5), 1fr)
+    [amplio-start] minmax(0, calc((var(--ancho-amplio) - var(--ancho-medio)) / 2))
+    [medio-start] minmax(0, calc((var(--ancho-medio) - var(--ancho-texto)) / 2))
+    [texto-start] min(100% - var(--e-5) * 2, var(--ancho-texto)) [texto-end]
+    minmax(0, calc((var(--ancho-medio) - var(--ancho-texto)) / 2)) [medio-end]
+    minmax(0, calc((var(--ancho-amplio) - var(--ancho-medio)) / 2)) [amplio-end]
+    minmax(var(--e-5), 1fr) [completo-end];
+}
+
+.documento > * {
+  grid-column: texto;
+}
+.documento > .a-medio { grid-column: medio; }
+.documento > .a-amplio { grid-column: amplio; }
+.documento > .a-completo { grid-column: completo; }
+
+/* --- Utilidades --- */
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.saltar-al-contenido {
+  position: absolute;
+  left: var(--e-4);
+  top: var(--e-4);
+  z-index: 100;
+  padding: var(--e-2) var(--e-4);
+  background: var(--papel-elevado);
+  border: var(--borde);
+  border-radius: var(--radio);
+  font-family: var(--fuente-ui);
+  font-size: var(--t-chico);
+  transform: translateY(-200%);
+}
+.saltar-al-contenido:focus {
+  transform: translateY(0);
+}

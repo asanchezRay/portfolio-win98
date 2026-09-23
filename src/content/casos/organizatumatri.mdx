@@ -1,0 +1,114 @@
+---
+titulo: Organizatumatri
+subtitulo: Un marketplace de dos lados para el mercado de matrimonios en Chile, construido solo, de punta a punta
+resumen: El producto funcionó. El negocio no. Distinguir esas dos cosas a tiempo es la parte del trabajo que este proyecto me enseñó.
+tipo: producto
+organizacion: Proyecto propio
+periodo: 2025 — 2026
+rol: Fundador y único desarrollador
+stack:
+  [
+    Next.js 15,
+    TypeScript,
+    PostgreSQL,
+    Prisma,
+    Auth.js,
+    Tailwind,
+    Cloudinary,
+    Resend,
+    MercadoPago,
+    Sentry,
+    Playwright,
+    Docker,
+  ]
+orden: 6
+destacado: true
+cifras:
+  - valor: "3"
+    etiqueta: roles con aplicación propia — novios, proveedores, administración
+  - valor: "2"
+    unidad: lados
+    etiqueta: que había que hacer crecer al mismo tiempo
+nota: Fue un fracaso comercial. Está acá porque lo que dejó vale más que si hubiera funcionado a medias.
+---
+
+import Figura from '../../components/Figura.astro';
+import PipelineProveedores from '../../components/diagramas/PipelineProveedores.astro';
+
+Organizar un matrimonio en Chile significa coordinar a mano entre diez y veinte
+proveedores —centro de eventos, banquetería, fotografía, música, flores— sin
+ningún lugar común donde compararlos, cotizarlos ni llevar la cuenta.
+Organizatumatri intentaba ser ese lugar: un directorio de proveedores
+verificados por un lado, y por el otro las herramientas de planificación que
+las parejas terminan improvisando en planillas.
+
+Lo construí completo y solo: las tres aplicaciones —novios, proveedores y
+administración—, la infraestructura, los pagos, los correos, los tests y el
+despliegue.
+
+## Lo que había adentro
+
+Para los novios: favoritos, checklist, presupuesto, lista de invitados,
+itinerario, RSVP y solicitud de cotizaciones. Para los proveedores: perfil
+público, CRM de parejas interesadas, agenda, cotizador, contratos, gestión de
+equipo y planes de suscripción. Para administración: métricas, taxonomía de
+categorías, importación masiva, reseñas y comunicaciones.
+
+Todo sobre Next.js 15 con App Router, PostgreSQL con Prisma, autenticación con
+Auth.js, imágenes en Cloudinary, pagos con MercadoPago y una suite de pruebas
+end-to-end en Playwright sobre los flujos críticos.
+
+## El arranque en frío
+
+Un marketplace de dos lados tiene un problema circular desde el día uno: sin
+proveedores no llegan parejas, y sin parejas no se inscriben proveedores.
+Esperar a que uno de los dos lados aparezca solo no es una estrategia.
+
+Ataqué el lado de la oferta con lo que mejor sé hacer: un pipeline en Python
+que recolecta, enriquece, ordena y clasifica proveedores desde fuentes
+públicas, para que el directorio existiera antes que el primer registro.
+
+<Figura ancho="amplio" pie="El mismo oficio que uso en el mercado eléctrico —raspar fuentes que no ofrecen API y convertirlas en datos utilizables— aplicado a sembrar un catálogo desde cero.">
+  <PipelineProveedores />
+</Figura>
+
+## Una restricción que no vi venir
+
+Los correos transaccionales no salían en producción aunque funcionaran perfecto
+en local. La causa: Railway, como casi todo hosting cloud, bloquea los puertos
+SMTP salientes para prevenir spam, así que el envío vía SMTP no tenía ninguna
+posibilidad. La solución fue mover el envío a Resend, que trabaja sobre HTTPS
+—puerto 443, que nunca está bloqueado— manteniendo el dominio del remitente.
+
+Lo anoto porque es el tipo de problema que no aparece en ningún tutorial y que
+solo se descubre desplegando de verdad.
+
+## El post-mortem
+
+No conseguí la tracción de proveedores que necesitaba, y sin ese lado el flujo
+de parejas tampoco llegó. El proyecto se cerró.
+
+Mi lectura, en una línea: **aposté a que el cuello de botella era el
+descubrimiento, y el cuello de botella era la adquisición.** Construí una
+herramienta excelente para encontrar y comparar proveedores, partiendo del
+supuesto de que el problema de una pareja es no saber dónde buscar. El problema
+real de un marketplace nuevo es convencer al primer lado de que valga la pena
+estar ahí cuando el otro lado todavía está vacío — y eso no se resuelve con
+producto. Se resuelve con trabajo comercial que yo no hice y para el que el
+pipeline de scraping, por bueno que fuera, no era sustituto.
+
+Lo segundo que me llevo es más incómodo: construí demasiado antes de validar.
+Cuando cerré, la plataforma tenía CRM, contratos, agenda y planes de
+suscripción — funcionalidades que responden a problemas que solo existen
+*después* de tener tracción. Cada una era interesante de programar. Ninguna era
+lo que faltaba.
+
+## Por qué está en mi portafolio
+
+Porque lo que se aprende de un proyecto que no funcionó es distinto de lo que
+se aprende de uno que sí, y en mi rol actual —evaluar factibilidad, proponer
+alternativas más simples, ayudar a decidir qué vale la pena construir— uso mucho
+más lo primero.
+
+Cuando hoy digo "esto no es lo que falta", lo digo con la autoridad de haber
+construido, solo y muy bien hecho, exactamente lo que no faltaba.

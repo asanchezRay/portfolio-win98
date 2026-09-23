@@ -1,0 +1,68 @@
+---
+/**
+ * Figura con pie numerado.
+ *
+ * La numeracion la lleva un contador CSS declarado en el contenedor .prosa,
+ * asi que se reordenan solas si cambia el orden del texto y no hay que
+ * mantener numeros a mano en el MDX.
+ *
+ * `ancho` elige la columna de la reticula de documento: el texto corre
+ * angosto, pero una figura casi siempre quiere mas aire que eso.
+ */
+interface Props {
+  pie: string;
+  ancho?: 'texto' | 'medio' | 'amplio';
+  /** Quita el marco y el fondo; util para diagramas que ya traen el suyo. */
+  desnuda?: boolean;
+}
+
+const { pie, ancho = 'medio', desnuda = false } = Astro.props;
+
+const clasesAncho = {
+  texto: '',
+  medio: 'a-medio',
+  amplio: 'a-amplio',
+} as const;
+---
+
+<figure class:list={['figura', clasesAncho[ancho], { desnuda }]}>
+  <div class="lienzo">
+    <slot />
+  </div>
+  <figcaption>{pie}</figcaption>
+</figure>
+
+<style>
+  .figura {
+    margin: var(--e-7) 0;
+  }
+
+  .lienzo {
+    background: var(--papel-elevado);
+    border: var(--borde);
+    border-radius: var(--radio);
+    overflow: hidden;
+  }
+
+  .desnuda .lienzo {
+    background: none;
+    border: 0;
+    border-radius: 0;
+  }
+
+  figcaption {
+    margin-top: var(--e-3);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-mini);
+    line-height: 1.5;
+    color: var(--tinta-suave);
+    text-wrap: pretty;
+  }
+
+  /* El contador se incrementa por figura dentro de .prosa; ver prosa.css. */
+  figcaption::before {
+    content: 'Fig. ' counter(figura) ' — ';
+    font-weight: 600;
+    color: var(--tinta-media);
+  }
+</style>

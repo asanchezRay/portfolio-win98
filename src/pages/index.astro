@@ -1,103 +1,219 @@
 ---
-/**
- * Home — base minima mientras se construye el portafolio nuevo.
- *
- * Es intencionalmente corta: no es el diseno final, pero si un estado
- * presentable y desplegable. El portafolio Windows 98 anterior vive
- * completo en /98.
- */
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Cifras from '../components/Cifras.astro';
+import TarjetaCaso from '../components/TarjetaCaso.astro';
+import { perfil } from '../data/perfil';
+import { trayectoria, rango } from '../data/trayectoria';
 
-const links = [
-  { href: '/CV_Andres_Sanchez_Cabrera.pdf', label: 'CV (PDF)' },
-  { href: 'https://cl.linkedin.com/in/andressanchezc', label: 'LinkedIn' },
-  { href: 'https://github.com/asanchezRay', label: 'GitHub' },
-  { href: 'mailto:and.sanchezc@outlook.com', label: 'Correo' },
-];
+const casos = (await getCollection('casos'))
+  .filter((c) => c.data.destacado)
+  .sort((a, b) => a.data.orden - b.data.orden);
+
+const totalCasos = (await getCollection('casos')).length;
+
+/** Solo las etapas de industria, y sin la de Vestuá, para el resumen de portada. */
+const resumenTrayectoria = trayectoria.filter((e) => e.via === 'industria').slice(0, 4);
 ---
 
 <Base
-  title="Andrés Sánchez — Líder Técnico"
-  description="Líder Técnico en IGX. Seis años construyendo software para el mercado eléctrico chileno y la nómina multipaís, entre ingeniería y negocio."
+  titulo={`${perfil.nombre} — ${perfil.rol} en ${perfil.organizacion}`}
+  tituloCrudo
+  descripcion={`${perfil.rol} en ${perfil.organizacion}. Seis años construyendo software para el mercado eléctrico chileno y la nómina multipaís, entre ingeniería y negocio.`}
 >
-  <main>
-    <header>
-      <h1>Andrés Sánchez</h1>
-      <p class="role">Líder Técnico en IGX · Concepción, Chile</p>
-    </header>
+  <!-- ═══ Entrada ═══ -->
+  <section class="documento entrada">
+    <p class="rotulo">{perfil.ubicacion} · {perfil.modalidad}</p>
+    <h1>{perfil.titular}</h1>
+    <p class="presentacion">{perfil.presentacion}</p>
 
-    <p class="lead">
-      Traduzco entre dos mundos que rara vez hablan el mismo idioma: el negocio y el
-      sistema. Seis años construyendo software para el mercado eléctrico chileno y para
-      la nómina de miles de personas — dominios donde una regla mal leída se convierte
-      en plata mal cobrada.
+    <div class="a-medio bloque-cifras">
+      <Cifras cifras={perfil.cifras} escala="grande" />
+    </div>
+
+    <p class="acciones">
+      <a class="boton" href="/casos">Ver los {totalCasos} casos</a>
+      <a href={perfil.contacto.cv}>CV en PDF</a>
+      <a href={perfil.contacto.linkedin} rel="noopener">LinkedIn</a>
+      <a href={`mailto:${perfil.contacto.correo}`}>Escribirme</a>
     </p>
+  </section>
 
-    <nav aria-label="Enlaces">
-      <ul>
-        {links.map(({ href, label }) => (
-          <li><a href={href}>{label}</a></li>
-        ))}
-      </ul>
-    </nav>
+  <!-- ═══ Casos ═══ -->
+  <section class="franja">
+    <div class="documento">
+      <div class="a-amplio encabezado-seccion">
+        <h2>Casos</h2>
+        <p>
+          Decisiones técnicas con su contexto, sus alternativas y lo que costaron.
+          Las que tienen interfaz van con capturas; las de infraestructura, con
+          diagramas.
+        </p>
+      </div>
 
-    <footer>
-      <p>
-        Mi portafolio anterior, un escritorio Windows 98 hecho a mano en CSS,
-        sigue en pie en <a href="/98">/98</a>.
+      <div class="a-amplio rejilla">
+        {casos.map((caso) => <TarjetaCaso caso={caso} />)}
+      </div>
+
+      <p class="a-amplio mas">
+        <a href="/casos">Todos los casos, incluidos los que no están acá →</a>
       </p>
-    </footer>
-  </main>
+    </div>
+  </section>
+
+  <!-- ═══ Trayectoria ═══ -->
+  <section class="documento trayectoria-resumen">
+    <div class="a-medio encabezado-seccion">
+      <h2>Trayectoria</h2>
+      <p>
+        Seis años en el mercado eléctrico chileno, con un paso por nómina
+        multipaís en el medio, y cuatro años y medio de docencia universitaria
+        en paralelo a todo lo anterior.
+      </p>
+    </div>
+
+    <ol class="a-medio etapas">
+      {
+        resumenTrayectoria.map((etapa) => (
+          <li>
+            <p class="periodo rotulo">{rango(etapa.desde, etapa.hasta)}</p>
+            <p class="cargo">
+              <strong>{etapa.rol}</strong>
+              <span>{etapa.organizacion}</span>
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="a-medio mas">
+      <a href="/trayectoria">Trayectoria completa, con la docencia →</a>
+    </p>
+  </section>
 </Base>
 
 <style>
-  main {
-    max-width: 38rem;
-    margin-inline: auto;
-    padding-inline: 1.25rem;
-    padding-block: clamp(3rem, 12vh, 7rem) 4rem;
+  /* ═══ Entrada ═══ */
+  .entrada {
+    padding-block: clamp(var(--e-7), 9vh, var(--e-9)) var(--e-8);
   }
 
-  h1 {
-    margin: 0;
-    font-size: clamp(2rem, 7vw, 2.75rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+  .entrada h1 {
+    margin-top: var(--e-4);
+    font-size: var(--t-display);
+    letter-spacing: -0.03em;
   }
 
-  .role {
-    margin: 0.4rem 0 0;
-    color: var(--ink-soft);
-    font-family: ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.9375rem;
-    letter-spacing: 0.01em;
+  .presentacion {
+    margin-top: var(--e-5);
+    font-size: var(--t-medio);
+    color: var(--tinta-media);
   }
 
-  .lead {
-    margin: 2.25rem 0 0;
-    font-size: 1.1875rem;
-    text-wrap: pretty;
+  .bloque-cifras {
+    margin-top: var(--e-8);
   }
 
-  nav ul {
+  .acciones {
+    margin-top: var(--e-7);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    margin: 2.25rem 0 0;
+    align-items: center;
+    gap: var(--e-3) var(--e-5);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+
+  .boton {
+    padding: 0.6em 1.1em;
+    background: var(--tinta);
+    color: var(--papel);
+    border-radius: var(--radio);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .boton:hover {
+    background: var(--acento);
+  }
+
+  /* ═══ Secciones ═══ */
+  .franja {
+    padding-block: var(--e-8);
+    border-block: var(--borde);
+    background: var(--papel-hundido);
+  }
+
+  .encabezado-seccion h2 {
+    font-size: var(--t-titulo);
+  }
+
+  .encabezado-seccion p {
+    margin-top: var(--e-3);
+    max-width: 34rem;
+    color: var(--tinta-media);
+    font-size: var(--t-chico);
+  }
+
+  .rejilla {
+    margin-top: var(--e-6);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: var(--e-5);
+  }
+
+  .mas {
+    margin-top: var(--e-5);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+  }
+
+  /* ═══ Trayectoria ═══ */
+  .trayectoria-resumen {
+    padding-block: var(--e-8);
+  }
+
+  .etapas {
+    margin: var(--e-6) 0 0;
     padding: 0;
     list-style: none;
-    font-family: ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.9375rem;
+    display: grid;
+    gap: 0;
   }
 
-  footer {
-    margin-top: 3.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
-    color: var(--ink-soft);
-    font-family: ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.875rem;
+  .etapas li {
+    display: grid;
+    grid-template-columns: minmax(0, 11rem) 1fr;
+    gap: var(--e-2) var(--e-5);
+    padding-block: var(--e-4);
+    border-top: var(--borde);
   }
 
-  footer p { margin: 0; }
+  .etapas li:last-child {
+    border-bottom: var(--borde);
+  }
+
+  @media (max-width: 34rem) {
+    .etapas li {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .periodo {
+    margin: 0;
+    padding-top: 0.25em;
+  }
+
+  .cargo {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cargo span {
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+    color: var(--tinta-media);
+  }
 </style>

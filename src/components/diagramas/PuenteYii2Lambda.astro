@@ -1,0 +1,72 @@
+---
+/**
+ * Convivencia del monolito Yii2 con la arquitectura serverless nueva.
+ *
+ * El dibujo existe para explicar una decision, no una topologia: no se
+ * reescribio el monolito. Se le abrio una API y las piezas nuevas se
+ * construyeron al lado, compartiendo la misma base de datos, de modo que la
+ * migracion pueda avanzar por partes y sin una fecha de corte unica.
+ */
+import Marcadores from './Marcadores.astro';
+---
+
+<div class="diagrama">
+  <svg viewBox="0 0 860 310" role="img" aria-labelledby="pyl-titulo pyl-desc">
+    <title id="pyl-titulo">Puente entre el monolito Yii2 y la arquitectura serverless</title>
+    <desc id="pyl-desc">
+      El monolito Yii2 sigue sirviendo sus vistas y sigue siendo dueño de la
+      base MySQL en RDS. Se le expone una API con la que se comunica la
+      arquitectura nueva: un front en React que llama a funciones Lambda a
+      través de API Gateway. Las Lambda leen y escriben contra la misma base,
+      de modo que ambas mitades comparten estado y la migración puede avanzar
+      módulo por módulo.
+    </desc>
+
+    <Marcadores />
+
+    <!-- Mitad heredada -->
+    <text class="t-rotulo" x="0" y="14">Lo que ya estaba</text>
+    <rect class="zona" x="0" y="28" width="330" height="180" />
+
+    <rect class="caja" x="26" y="56" width="278" height="58" />
+    <text class="t-titulo t-centro" x="165" y="78">Monolito Yii2</text>
+    <text class="t-sub t-centro" x="165" y="95">vistas y lógica de negocio</text>
+
+    <rect class="caja" x="26" y="142" width="278" height="50" />
+    <text class="t-titulo t-centro" x="165" y="167">MySQL · RDS</text>
+
+    <path class="flecha" d="M 165 114 V 136" />
+
+    <!-- El puente -->
+    <rect class="caja-enfasis" x="382" y="56" width="120" height="58" />
+    <text class="t-titulo t-centro" x="442" y="78">API</text>
+    <text class="t-sub t-centro" x="442" y="95">el puente</text>
+
+    <path class="flecha-enfasis" d="M 304 85 H 376" />
+    <path class="flecha-enfasis" d="M 502 85 H 574" />
+
+    <!-- Mitad nueva -->
+    <text class="t-rotulo" x="580" y="14">Lo que se construye</text>
+    <rect class="zona" x="580" y="28" width="280" height="180" />
+
+    <rect class="caja" x="606" y="56" width="228" height="58" />
+    <text class="t-titulo t-centro" x="720" y="78">API Gateway + Lambda</text>
+    <text class="t-sub t-centro" x="720" y="95">funciones por módulo</text>
+
+    <rect class="caja" x="606" y="142" width="228" height="50" />
+    <text class="t-titulo t-centro" x="720" y="167">Front en React</text>
+
+    <path class="flecha" d="M 720 114 V 136" />
+
+    <!-- El estado compartido es lo que hace posible migrar por partes -->
+    <path class="flecha-enfasis" d="M 606 167 H 310" />
+    <text class="t-sub t-centro" x="455" y="152">misma base de datos</text>
+
+    <text class="t-sub" x="0" y="248">
+      Ningún módulo se reescribe dos veces: el monolito cede responsabilidades de a una,
+    </text>
+    <text class="t-sub" x="0" y="268">
+      y mientras tanto las dos mitades comparten estado en vez de sincronizarlo.
+    </text>
+  </svg>
+</div>

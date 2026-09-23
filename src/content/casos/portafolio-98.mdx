@@ -1,0 +1,105 @@
+---
+titulo: El portafolio que este reemplazó
+subtitulo: Un escritorio Windows 98 completo, hecho a mano en CSS — y por qué lo jubilé
+resumen: Ventanas arrastrables, barra de tareas y menú inicio, sin librerías. Era bonito y no comunicaba nada.
+tipo: producto
+organizacion: Proyecto propio
+periodo: 2024 — 2026
+rol: Diseño y desarrollo
+stack: [Astro, TypeScript, CSS]
+orden: 8
+destacado: true
+imagen:
+  src: /img/98/escritorio.png
+  alt: Captura del escritorio Windows 98 del portafolio anterior, con iconos, ventanas y barra de tareas
+enlaces:
+  - href: /98
+    texto: Abrirlo
+cifras:
+  - valor: "0"
+    etiqueta: librerías de interfaz — todo el chrome es CSS escrito a mano
+  - valor: "2"
+    etiqueta: media queries en doce hojas de estilo
+---
+
+import Figura from '../../components/Figura.astro';
+
+Windows 98 fue mi primer sistema operativo. Cuando armé mi primer portafolio
+quise que se viera así, y lo construí entero: ventanas que se arrastran, barra
+de tareas con reloj, menú inicio, iconos de escritorio, un visor de imágenes con
+miniaturas y soporte para dos idiomas. Sin librerías de interfaz — cada borde
+biselado es un `border` de dos colores escrito a mano.
+
+Sigue en pie y funcionando en <a href="/98">/98</a>. Vale la pena abrirlo antes
+de seguir leyendo.
+
+<Figura ancho="amplio" pie="El escritorio completo: iconos, ventanas arrastrables, menú inicio y barra de tareas con reloj. Todo el biselado es CSS a mano, sin una sola librería de componentes.">
+  <img
+    src="/img/98/escritorio.png"
+    alt="Escritorio del portafolio Windows 98, con iconos a la izquierda, una ventana abierta y la barra de tareas al pie"
+    loading="lazy"
+    decoding="async"
+  />
+</Figura>
+
+## Lo que aprendí construyéndolo
+
+Recrear una interfaz que existió de verdad es un ejercicio de observación más
+que de programación. El chrome de Windows 98 se ve simple hasta que uno lo mira
+en serio: cada botón tiene cuatro bordes de colores distintos, el biselado se
+invierte al presionar, y el gris no es un gris — es un gris específico que
+convive con otros tres.
+
+El arrastre de ventanas, la pila de foco y la sincronización de la barra de
+tareas con las ventanas abiertas fueron el trabajo real, y todo eso está escrito
+a mano en TypeScript. Lo hice en Astro porque quería aprender Astro.
+
+## Por qué lo jubilé
+
+Me gustaba, y esa era exactamente la trampa.
+
+**Todo el contenido estaba detrás de un clic.** La página cargaba un escritorio
+con iconos y nada más. Lo único legible al entrar era *"haz clic en los iconos
+para conocerme mejor"*. Quien abría el sitio no veía mi nombre, ni mi rol, ni un
+solo logro hasta decidir explorar — y la mayoría no explora.
+
+<Figura ancho="amplio" pie="El estado exacto con el que recibía a una visita. Ni el nombre, ni el rol, ni una cifra: solo iconos y una invitación a hacer clic.">
+  <img
+    src="/img/98/escritorio-vacio.png"
+    alt="El escritorio Windows 98 recién cargado: solo iconos en el margen izquierdo y un fondo de código, sin ninguna información sobre quién es el autor"
+    loading="lazy"
+    decoding="async"
+  />
+</Figura>
+
+**No tenía metadata.** El `<title>` decía, literalmente, "Portafolio". Sin
+descripción, sin Open Graph, sin datos estructurados. Compartir el enlace en
+LinkedIn producía una tarjeta vacía, y buscar mi nombre no llevaba a ninguna
+parte.
+
+**No era responsivo.** Doce hojas de estilo, dos media queries, ambas en el
+fondo animado. Un escritorio con ventanas arrastrables y barra de tareas en un
+teléfono es una idea que no sobrevive al contacto con un teléfono — y buena
+parte del tráfico de un portafolio compartido en LinkedIn llega desde uno.
+
+**Y tenía cinco imágenes en total.** Mi foto y cuatro capturas de la tesis.
+Ninguna de seis años de trabajo. Todo el peso visual del sitio lo cargaba el
+disfraz, que es la única capa que no comunica nada sobre lo que sé hacer.
+
+## La decisión
+
+El problema nunca fue Windows 98. Fue que el tema estaba haciendo el trabajo de
+comunicar en lugar del contenido. Si lo hubiera reemplazado por otro disfraz —una
+terminal, un editor de código, una consola retro— habría vuelto al mismo lugar en
+dos años.
+
+Así que moví la personalidad del envoltorio a la sustancia: el sitio que estás
+leyendo apuesta a que las decisiones técnicas bien contadas, los diagramas y las
+cifras verificables son más memorables que el cromado.
+
+El escritorio no se borró. Vive en <a href="/98">/98</a>, ahora como lo que
+siempre debió ser: una pieza más del portafolio, no el portafolio entero.
+
+Saber cuándo jubilar algo que uno construyó y que le gusta es una habilidad
+técnica. Es la misma que usé para
+[cerrar Organizatumatri](/casos/organizatumatri).

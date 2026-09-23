@@ -1,0 +1,99 @@
+---
+/**
+ * Fila de cifras duras.
+ *
+ * El numero y la unidad se componen por separado para poder darles pesos y
+ * tamanos distintos: la unidad no debe pesar lo mismo que el valor. Los
+ * numeros van tabulares para que alineen entre columnas.
+ */
+interface Cifra {
+  valor: string;
+  unidad?: string;
+  etiqueta: string;
+}
+
+interface Props {
+  cifras: readonly Cifra[];
+  /** 'grande' para la portada, 'compacta' dentro de un caso. */
+  escala?: 'grande' | 'compacta';
+}
+
+const { cifras, escala = 'compacta' } = Astro.props;
+---
+
+{
+  cifras.length > 0 && (
+    <dl class:list={['cifras', escala]}>
+      {cifras.map(({ valor, unidad, etiqueta }) => (
+        <div class="item">
+          <dt>
+            <span class="valor">{valor}</span>
+            {unidad && <span class="unidad">{unidad}</span>}
+          </dt>
+          <dd>{etiqueta}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+<style>
+  .cifras {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--e-5);
+  }
+
+  .item {
+    padding-top: var(--e-3);
+    border-top: 2px solid var(--linea-fuerte);
+  }
+
+  dt {
+    display: flex;
+    align-items: baseline;
+    gap: 0.15em;
+    color: var(--tinta);
+  }
+
+  /* Sans y no el serif del cuerpo: a tamano de dato, el serif lee como
+     decoracion. Cifras proporcionales y no tabulares — tabular-nums le da a
+     cada digito el ancho de un cero y a este tamano el numero se ve suelto;
+     se reserva para columnas que deben alinear. */
+  .valor {
+    font-family: var(--fuente-ui);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .unidad {
+    font-family: var(--fuente-ui);
+    font-weight: 600;
+    color: var(--senal);
+  }
+
+  dd {
+    margin: var(--e-2) 0 0;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-mini);
+    line-height: 1.45;
+    color: var(--tinta-media);
+    text-wrap: pretty;
+  }
+
+  .grande .valor {
+    font-size: clamp(2.5rem, 1.6rem + 4vw, 4rem);
+  }
+  .grande .unidad {
+    font-size: clamp(1rem, 0.8rem + 0.9vw, 1.375rem);
+  }
+
+  .compacta .valor {
+    font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem);
+  }
+  .compacta .unidad {
+    font-size: var(--t-base);
+  }
+</style>

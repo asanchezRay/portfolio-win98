@@ -1,0 +1,236 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { trayectoria, rango, duracion } from '../data/trayectoria';
+
+const casos = await getCollection('casos');
+const tituloDe = (slug: string) => casos.find((c) => c.id === slug)?.data.titulo;
+
+const industria = trayectoria.filter((e) => e.via === 'industria');
+const docencia = trayectoria.filter((e) => e.via === 'docencia');
+---
+
+<Base
+  titulo="Trayectoria"
+  descripcion="Seis años en el mercado eléctrico chileno, un paso por nómina multipaís en Buk, y cuatro años y medio de docencia universitaria en paralelo."
+>
+  <section class="documento intro">
+    <h1>Trayectoria</h1>
+    <p>
+      Dos vías en paralelo. Los cuatro años y medio de clases ocurrieron
+      mientras trabajaba full-time, y ese traslape es parte de lo que cuentan.
+    </p>
+  </section>
+
+  <section class="documento via">
+    <h2 class="a-medio">Industria</h2>
+    <ol class="a-medio etapas">
+      {
+        industria.map((etapa) => (
+          <li>
+            <div class="tiempo">
+              <p class="rotulo">{rango(etapa.desde, etapa.hasta)}</p>
+              <p class="dura">{duracion(etapa.desde, etapa.hasta)}</p>
+            </div>
+
+            <div class="detalle">
+              <h3>{etapa.rol}</h3>
+              <p class="donde">
+                {etapa.organizacion} · {etapa.ubicacion}
+              </p>
+
+              {etapa.nota && <p class="nota">{etapa.nota}</p>}
+
+              <p class="resumen">{etapa.resumen}</p>
+
+              {etapa.hitos && (
+                <ul class="hitos">
+                  {etapa.hitos.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+              )}
+
+              {etapa.stack && (
+                <ul class="stack">
+                  {etapa.stack.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              )}
+
+              {etapa.casos && etapa.casos.length > 0 && (
+                <p class="ver-casos">
+                  {etapa.casos.map((slug) => (
+                    <a href={`/casos/${slug}`}>{tituloDe(slug) ?? slug}</a>
+                  ))}
+                </p>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="documento via">
+    <h2 class="a-medio">Docencia</h2>
+    <ol class="a-medio etapas">
+      {
+        docencia.map((etapa) => (
+          <li>
+            <div class="tiempo">
+              <p class="rotulo">{rango(etapa.desde, etapa.hasta)}</p>
+              <p class="dura">{duracion(etapa.desde, etapa.hasta)}</p>
+            </div>
+            <div class="detalle">
+              <h3>{etapa.rol}</h3>
+              <p class="donde">
+                {etapa.organizacion} · {etapa.ubicacion}
+              </p>
+              <p class="resumen">{etapa.resumen}</p>
+              {etapa.hitos && (
+                <ul class="hitos">
+                  {etapa.hitos.map((h) => (
+                    <li>{h}</li>
+                  ))}
+                </ul>
+              )}
+              {etapa.stack && (
+                <ul class="stack">
+                  {etapa.stack.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-block: var(--e-8) var(--e-6);
+  }
+  .intro h1 {
+    font-size: var(--t-display);
+  }
+  .intro p {
+    margin-top: var(--e-4);
+    max-width: 34rem;
+    font-size: var(--t-medio);
+    color: var(--tinta-media);
+  }
+
+  .via {
+    padding-block: var(--e-5) var(--e-7);
+  }
+
+  .via h2 {
+    font-size: var(--t-titulo);
+    padding-bottom: var(--e-3);
+    border-bottom: 2px solid var(--linea-fuerte);
+  }
+
+  .etapas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .etapas > li {
+    display: grid;
+    grid-template-columns: minmax(0, 11rem) 1fr;
+    gap: var(--e-3) var(--e-6);
+    padding-block: var(--e-6);
+    border-bottom: var(--borde);
+  }
+
+  @media (max-width: 42rem) {
+    .etapas > li {
+      grid-template-columns: 1fr;
+      gap: var(--e-3);
+    }
+  }
+
+  .tiempo p {
+    margin: 0;
+  }
+
+  .dura {
+    margin-top: var(--e-1) !important;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    color: var(--tinta-suave);
+  }
+
+  h3 {
+    font-size: var(--t-grande);
+  }
+
+  .donde {
+    margin-top: var(--e-1);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-chico);
+    color: var(--tinta-media);
+  }
+
+  .nota {
+    margin-top: var(--e-4);
+    padding: var(--e-3) var(--e-4);
+    border-left: 2px solid var(--linea-fuerte);
+    background: var(--papel-hundido);
+    font-size: var(--t-mini);
+    line-height: 1.55;
+    color: var(--tinta-media);
+  }
+
+  .resumen {
+    margin-top: var(--e-4);
+    text-wrap: pretty;
+  }
+
+  .hitos {
+    margin-top: var(--e-4);
+    padding-left: 1.1em;
+    font-size: var(--t-chico);
+  }
+
+  .hitos li + li {
+    margin-top: var(--e-2);
+  }
+
+  .hitos li::marker {
+    color: var(--senal);
+  }
+
+  .stack {
+    margin-top: var(--e-5);
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2);
+  }
+
+  .stack li {
+    padding: 0.22em 0.6em;
+    border: var(--borde);
+    border-radius: 999px;
+    font-family: var(--fuente-ui);
+    font-size: var(--t-micro);
+    color: var(--tinta-media);
+  }
+
+  .ver-casos {
+    margin-top: var(--e-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-2) var(--e-4);
+    font-family: var(--fuente-ui);
+    font-size: var(--t-mini);
+  }
+</style>

@@ -1,0 +1,158 @@
+/*
+ * Estilos del cuerpo largo (la salida de MDX de cada caso).
+ *
+ * Se aplican con .prosa sobre la reticula .documento, asi que cada hijo
+ * directo cae en la columna de texto salvo que lleve .a-medio / .a-amplio /
+ * .a-completo.
+ */
+
+.prosa > * + * {
+  margin-top: var(--e-5);
+}
+
+.prosa > h2 {
+  margin-top: var(--e-8);
+  font-size: var(--t-titulo);
+  scroll-margin-top: var(--e-6);
+}
+
+.prosa > h3 {
+  margin-top: var(--e-7);
+  font-size: var(--t-grande);
+  scroll-margin-top: var(--e-6);
+}
+
+/* Un filete corto sobre cada seccion, como en un informe impreso. */
+.prosa > h2::before {
+  content: '';
+  display: block;
+  width: 2.5rem;
+  height: 2px;
+  margin-bottom: var(--e-4);
+  background: var(--linea-fuerte);
+}
+
+.prosa > h2 + *,
+.prosa > h3 + * {
+  margin-top: var(--e-4);
+}
+
+.prosa ul,
+.prosa ol {
+  padding-left: 1.15em;
+}
+
+.prosa li + li {
+  margin-top: var(--e-2);
+}
+
+.prosa li::marker {
+  color: var(--tinta-suave);
+}
+
+.prosa strong {
+  font-weight: 600;
+}
+
+/* Cita destacada: sirve para la frase que resume el caso. */
+.prosa blockquote {
+  margin: var(--e-7) 0;
+  padding-left: var(--e-5);
+  border-left: 2px solid var(--senal);
+  font-size: var(--t-medio);
+  font-style: italic;
+  color: var(--tinta-media);
+}
+
+.prosa code {
+  font-family: var(--fuente-mono);
+  font-size: 0.875em;
+  padding: 0.1em 0.35em;
+  background: var(--papel-hundido);
+  border: var(--borde);
+  border-radius: var(--radio);
+}
+
+.prosa pre {
+  padding: var(--e-4);
+  border: var(--borde);
+  border-radius: var(--radio);
+  overflow-x: auto;
+  font-size: var(--t-mini);
+  line-height: 1.55;
+}
+
+.prosa pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: inherit;
+}
+
+/* Shiki emite dos temas; se conmutan por preferencia del sistema. */
+@media (prefers-color-scheme: dark) {
+  .prosa .astro-code,
+  .prosa .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}
+
+/* --- Tablas ---
+   Envueltas en un contenedor con scroll horizontal propio, para que el
+   cuerpo de la pagina nunca se desborde en pantallas angostas. */
+.prosa .tabla-scroll {
+  overflow-x: auto;
+  margin-inline: calc(var(--e-2) * -1);
+  padding-inline: var(--e-2);
+}
+
+.prosa table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--fuente-ui);
+  font-size: var(--t-chico);
+  font-variant-numeric: tabular-nums;
+}
+
+.prosa th,
+.prosa td {
+  padding: var(--e-3) var(--e-4) var(--e-3) 0;
+  text-align: left;
+  border-bottom: var(--borde);
+  vertical-align: top;
+}
+
+.prosa th {
+  font-weight: 600;
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+  border-bottom-color: var(--linea-fuerte);
+  white-space: nowrap;
+}
+
+.prosa tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.prosa hr {
+  margin: var(--e-8) 0;
+  border: 0;
+  border-top: var(--borde);
+}
+
+/* --- Numeracion automatica de figuras ---
+   El contador vive en .prosa y lo incrementa cada <figure>, de modo que el
+   MDX nunca tiene numeros escritos a mano que se desincronicen al reordenar. */
+.prosa {
+  counter-reset: figura;
+}
+
+.prosa figure {
+  counter-increment: figura;
+}

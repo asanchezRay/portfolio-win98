@@ -1,0 +1,10 @@
+# El escritorio Windows 98 y las dos rutas publicadas quedan fuera del indice:
+# el primero es una pieza de archivo y las otras son redirecciones. Ninguno
+# deberia competir en buscadores con el portafolio.
+User-agent: *
+Allow: /
+Disallow: /98
+Disallow: /readme
+Disallow: /myAphasia
+
+Sitemap: https://asanchezc.netlify.app/sitemap-index.xml

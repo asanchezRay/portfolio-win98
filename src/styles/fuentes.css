@@ -1,0 +1,51 @@
+/*
+ * Source Serif 4 — subconjunto latin, autohospedada.
+ *
+ * Se autohospeda a proposito: la version anterior del sitio cargaba dos
+ * familias de Google Fonts y tres CDN de iconos, cinco peticiones
+ * bloqueantes a terceros antes de pintar una letra.
+ *
+ * Del CSS original de Google solo se conservan los tres @font-face del
+ * subconjunto 'latin': el rango U+0000-00FF ya cubre todos los acentos,
+ * la enie y los signos de apertura del espanol. Se descartaron los
+ * subconjuntos cirilico, griego, vietnamita y latin-ext.
+ *
+ * Los pesos 400 y 600 comparten archivo porque es una fuente variable;
+ * se declaran por separado, igual que hace Google, para que el navegador
+ * interpole el eje de peso en vez de sintetizar una negrita falsa.
+ *
+ * Regenerar con: npm run fonts
+ */
+
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-upright.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-upright.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Source Serif 4';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/source-serif-4-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
