@@ -105,7 +105,7 @@ export const trayectoria: Etapa[] = [
     hitos: [
       'Construí y mantuve scrapers automatizados contra SII, bancos, el Coordinador Eléctrico Nacional, BADX y PJDX',
       'Desarrollé integraciones con APIs del mercado eléctrico, ERPs y el SII',
-      'Automaticé procesos críticos de facturación y de subastas de energía',
+      'Automaticé procesos críticos de facturación y de licitaciones de energía',
       'Optimicé los algoritmos de cálculo de precios y facturación de energía',
       'Contribuí a la arquitectura cloud de la plataforma en rendimiento, escalabilidad y confiabilidad',
     ],
