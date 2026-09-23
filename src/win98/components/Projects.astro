@@ -8,6 +8,10 @@ console.log('Test translation:', t('projects'));
 
 console.log('Project description:', t('projectsList.igx.description'));
 
+// t() devuelve string o string[] segun la clave; aqui siempre se quiere una lista.
+const toList = (value: string | string[]): string[] =>
+  Array.isArray(value) ? value : [value];
+
 const categories = [
   { id: 'all', icon: 'fa-solid fa-briefcase', label: 'projectsList.categories.all' },
   { id: 'professional', icon: 'fa-solid fa-building', label: 'projectsList.categories.professional' },
@@ -126,7 +130,7 @@ const project2 = projects[0];
                   {t('projectsList.sections.responsibilities')}:
                 </h4>
                 <ul>
-                  {([].concat(t(project.responsibilitiesKey))).map((responsibility: string, index: number) => (
+                  {(toList(t(project.responsibilitiesKey))).map((responsibility: string, index: number) => (
                     <li data-i18n={`${project.responsibilitiesKey}.${index}`}>
                       {responsibility}
                     </li>
@@ -152,7 +156,7 @@ const project2 = projects[0];
                   {t('projectsList.sections.achievements')}:
                 </h4>
                 <ul>
-                  {([].concat(t(project.achievementsKey))).map((achievement: string, index: number) => (
+                  {(toList(t(project.achievementsKey))).map((achievement: string, index: number) => (
                     <li data-i18n={`${project.achievementsKey}.${index}`}>
                       {achievement}
                     </li>

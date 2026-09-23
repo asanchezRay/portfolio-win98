@@ -340,15 +340,18 @@ export const translations = {
 export function t(key: string, locale?: string): string | string[] {
   const currentLocale = locale || getCurrentLanguage();
   const keys = key.split('.');
-  let value = translations[currentLocale];
-  
+  // El arbol de traducciones se recorre por clave en tiempo de ejecucion, asi que
+  // aqui se pierde el tipo concreto a proposito: unknown y no any, para que el
+  // recorrido siga estando obligado a comprobar la forma en cada nivel.
+  let value: unknown = (translations as Record<string, unknown>)[currentLocale];
+
   for (const k of keys) {
-    if (value && typeof value === 'object' && k in value) {
-      value = value[k];
+    if (value && typeof value === 'object' && k in (value as object)) {
+      value = (value as Record<string, unknown>)[k];
     } else {
       return key;
     }
   }
-  
-  return value;
+
+  return value as string | string[];
 } 

@@ -107,8 +107,8 @@ const { title, 'data-window': dataWindow, icon = 'fa-solid fa-window-maximize', 
     }
 
     private initializeLanguageObserver() {
-      document.addEventListener('languageChanged', (e: CustomEvent) => {
-        const newLocale = e.detail.locale;
+      document.addEventListener('languageChanged', (e: Event) => {
+        const newLocale = (e as CustomEvent<{ locale: string }>).detail.locale;
         this.updateWindowTitle(newLocale);
         this.updateTaskbarItemContent();
       });
