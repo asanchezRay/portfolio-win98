@@ -7,15 +7,15 @@ export const perfil = {
   modalidad: 'Remoto',
 
   /** Una frase. Es lo primero que se lee del sitio. */
-  titular:
-    'Traduzco entre dos mundos que rara vez hablan el mismo idioma: el negocio y el sistema.',
+  titular: 'Seis años construyendo software para el mercado eléctrico chileno.',
 
   presentacion:
-    'Seis años construyendo software para el mercado eléctrico chileno y para la ' +
-    'nómina de miles de personas — dominios regulados donde una regla mal leída se ' +
-    'convierte en plata mal cobrada. Hoy trabajo de forma transversal entre ' +
-    'ingeniería y las áreas de negocio: evalúo factibilidad, propongo la solución ' +
-    'más simple y ayudo a decidir qué vale la pena construir.',
+    'Hoy soy líder técnico en IGX, en un rol transversal a toda la plataforma. ' +
+    'Escribo menos código que antes y paso más tiempo entre ingeniería y las ' +
+    'áreas de negocio: evalúo si lo que se pide es factible, propongo alternativas ' +
+    'más simples y ayudo a decidir qué vale la pena construir. Antes de volver ' +
+    'estuve siete meses en Buk, en nómina multipaís. Los dos son dominios ' +
+    'regulados, y en los dos un cálculo mal hecho termina en plata mal cobrada.',
 
   /** Las tres cifras de la portada. Verificables, no adjetivos. */
   cifras: [

@@ -30,16 +30,16 @@ enlaces:
 import Figura from '../../components/Figura.astro';
 import Galeria from '../../components/Galeria.astro';
 
-La afasia es un trastorno que compromete la capacidad de usar el lenguaje,
-habitualmente después de un accidente cerebrovascular. El tratamiento temprano
-—las primeras semanas, todavía en el hospital— es determinante para la
-recuperación, y en ese momento el trabajo del fonoaudiólogo depende de material
-impreso que hay que preparar, transportar y adaptar paciente por paciente.
+La afasia compromete la capacidad de usar el lenguaje, normalmente después de
+un accidente cerebrovascular. El tratamiento temprano, en las primeras semanas
+y todavía en el hospital, influye bastante en la recuperación. En ese momento
+el fonoaudiólogo trabaja con material impreso que hay que preparar antes,
+cargar hasta la sala y adaptar a cada paciente.
 
-AfasiaApp es una aplicación para tablets que traslada ese material al formato
-digital, con las actividades listas y el progreso registrado.
+AfasiaApp lleva ese material a una tablet, con las actividades listas y el
+progreso registrado por paciente.
 
-<Figura ancho="amplio" desnuda pie="Perfil de paciente, actividad de lectura comprensiva, listado de actividades e inicio de sesión. La interfaz está pensada para usarse al lado de la cama del paciente, no en un escritorio.">
+<Figura ancho="amplio" desnuda pie="Perfil de paciente, actividad de lectura comprensiva, listado de actividades e inicio de sesión. La interfaz está pensada para usarse al lado de la cama, no en un escritorio.">
   <Galeria
     capturas={[
       { src: '/img/afasiaApp/profile.png', alt: 'Vista de perfil de paciente en AfasiaApp' },
@@ -50,35 +50,32 @@ digital, con las actividades listas y el progreso registrado.
   />
 </Figura>
 
-## Diseñar para alguien que perdió el lenguaje
+## La restricción de diseño
 
-La restricción central del proyecto es que la interfaz no puede apoyarse en
-texto para explicarse, porque el texto es justamente la capacidad que el
-paciente tiene comprometida. Todo lo que normalmente resuelve un problema de
-usabilidad —un rótulo más claro, una instrucción, un mensaje de ayuda— acá no
-está disponible.
+La interfaz no puede explicarse con texto, porque el texto es justamente lo que
+el paciente tiene comprometido. Eso deja fuera casi todas las salidas habituales
+de un problema de usabilidad: un rótulo más claro, una instrucción, un mensaje
+de ayuda.
 
-Eso empuja el diseño hacia otro lado: jerarquía visual, consistencia absoluta
-de posición entre actividades, y una progresión de dificultad que el
-fonoaudiólogo controla en vez de que la decida el sistema. Cada una de las más
-de quince actividades tiene tres niveles, para que el terapeuta ajuste sin
-cambiar de herramienta a mitad de sesión.
+Lo que queda es jerarquía visual, que los elementos estén siempre en la misma
+posición entre una actividad y otra, y que la dificultad la controle el
+terapeuta. Cada una de las más de quince actividades tiene tres niveles, para
+poder ajustar sin salir de la aplicación a mitad de sesión.
 
 ## La validación
 
-La evaluación se hizo con once fonoaudiólogos en ejercicio, con un puntaje SUS
-de 79,7 sobre 100. Ese instrumento importa acá más de lo habitual: el usuario
-directo no es el paciente sino el profesional, que va a usar la aplicación bajo
-presión de tiempo y en un entorno hospitalario, donde una interfaz confusa no
-es una molestia sino una sesión perdida.
+La evaluación se hizo con once fonoaudiólogos en ejercicio y dio un puntaje SUS
+de 79,7 sobre 100.
 
-El trabajo derivó en un artículo publicado en *IEEE Latin America
-Transactions*.
+Ese instrumento importa acá más de lo habitual, porque el usuario directo no es
+el paciente sino el profesional, que va a usar la aplicación con poco tiempo y
+en un entorno hospitalario. Una interfaz confusa ahí cuesta una sesión.
 
-## Una nota sobre las rutas publicadas
+El trabajo derivó en un artículo en *IEEE Latin America Transactions*.
 
-Las dos URL que aparecen arriba —`/readme` y `/myAphasia`— están referenciadas
-desde esa publicación. Son enlaces impresos, y por eso siguen viviendo en este
-dominio aunque el sitio se haya reescrito entero desde entonces: hay una
-verificación automática que hace fallar el build si alguna de las dos deja de
-resolver. Un enlace en un paper no se puede mover.
+## Sobre las dos rutas publicadas
+
+Las URL que aparecen arriba, `/readme` y `/myAphasia`, están referenciadas desde
+esa publicación. Son enlaces impresos, así que siguen viviendo en este dominio
+aunque el sitio se haya reescrito entero desde entonces. Hay una verificación
+que hace fallar el build si alguna de las dos deja de resolver.

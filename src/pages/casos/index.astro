@@ -10,17 +10,17 @@ const grupos = [
     tipo: 'infraestructura' as const,
     titulo: 'Infraestructura y arquitectura',
     glosa:
-      'Trabajo que no se puede pantallazear porque vive en producción. Se cuenta con diagramas, con las alternativas que descarté y con lo que costó cada decisión.',
+      'Trabajo que vive en producción y no se puede mostrar con capturas. Va con diagramas, con las opciones que descarté y con lo que costó cada decisión.',
   },
   {
     tipo: 'producto' as const,
     titulo: 'Producto',
-    glosa: 'Cosas con interfaz, que se pueden mirar y —cuando existe demo— tocar.',
+    glosa: 'Cosas con interfaz, que se pueden mirar.',
   },
   {
     tipo: 'practica' as const,
     titulo: 'Prácticas de equipo',
-    glosa: 'Cambios que no son de código sino de cómo trabaja el equipo. Suelen ser más difíciles.',
+    glosa: 'Cambios en cómo trabaja el equipo. Cuestan más que los de código.',
   },
 ];
 ---
@@ -32,9 +32,8 @@ const grupos = [
   <section class="documento intro">
     <h1>Casos</h1>
     <p>
-      Cada uno sigue la misma estructura: cuál era el problema, qué opciones
-      había, cuál elegí y qué costó. Los que salieron mal también están — son
-      los que más enseñan.
+      Todos siguen la misma estructura: cuál era el problema, qué opciones había,
+      cuál elegí y qué costó. Están también los que no resultaron.
     </p>
   </section>
 

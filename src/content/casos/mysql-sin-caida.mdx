@@ -1,7 +1,7 @@
 ---
 titulo: Cambiarle el motor a la base en marcha
 subtitulo: Upgrade del motor MySQL en AWS RDS productivo, sin interrupción de la plataforma
-resumen: "La clase de cambio que no tiene una versión parcial: o la plataforma sigue en pie, o no."
+resumen: "Un cambio que no tiene versión parcial: no se puede liberar al 10% de los usuarios ni revertir rápido."
 tipo: infraestructura
 organizacion: IGX
 periodo: dic 2025 — jul 2026
@@ -14,31 +14,29 @@ cifras:
     etiqueta: interrupciones de plataforma
 ---
 
-Actualizar el motor de la base de datos productiva es de los cambios más
-incómodos que existen, porque reúne tres cosas que rara vez coinciden: el radio
-de impacto es total —todo el sistema depende de esa base—, la reversión es cara
-y lenta, y no hay forma de entregarlo por partes. No existe una versión del
-cambio que afecte al 10% de los usuarios.
+Actualizar el motor de la base productiva es incómodo por cómo está armado el
+riesgo. Todo el sistema depende de esa base, así que el radio de impacto es
+total. No se puede liberar por partes: no existe una versión del cambio que
+afecte al 10% de los usuarios. Y la reversión, si hace falta, se mide en horas
+de restauración.
 
 Se completó sin interrupción de la plataforma.
 
-## Por qué llegó cuando llegó
+## Por qué llegó después de la migración
 
-Este trabajo no fue independiente del resto. Vino después de sacar
-[900 GB de historia](/casos/migracion-bigquery) del motor, y ese orden no fue
-casualidad: una base de casi un terabyte convierte cualquier operación de
-mantenimiento en un evento largo, con una ventana difícil de conseguir y una
-reversión que se mide en horas.
+Este trabajo vino después de sacar
+[900 GB de historia](/casos/migracion-bigquery) del motor, y el orden importa.
+Con una base de casi un terabyte, cualquier operación de mantenimiento se
+alarga: la ventana necesaria crece, conseguir esa ventana cuesta más, y el
+plan de vuelta atrás deja de ser realista dentro del tiempo disponible.
 
-Aligerar la base primero fue lo que hizo que el upgrade fuera una operación
-manejable en vez de una apuesta. La decisión técnica interesante, en ese
-sentido, se tomó un paso antes de donde parece.
+Aligerar la base primero fue lo que convirtió el upgrade en una operación
+manejable. Visto así, la decisión que más pesó en este caso se tomó un paso
+antes.
 
-## Cómo se mide el éxito acá
+## Cómo se ve un resultado así
 
-Casi todo el trabajo de ingeniería se juzga por lo que produce. Este se juzga
-por lo que *no* pasó: ningún cliente notó nada, no hubo ventana anunciada, no
-hubo incidente que escribir.
-
-Es un tipo de resultado que no se ve en ninguna métrica de producto y que es
-difícil de mostrar en un portafolio — precisamente porque salió bien.
+No hubo ventana anunciada, ningún cliente notó nada y no quedó incidente que
+escribir. Es un tipo de trabajo que no aparece en ninguna métrica de producto
+y que cuesta mostrar en un portafolio, porque su única evidencia es la
+ausencia de un problema.

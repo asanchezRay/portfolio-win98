@@ -1,7 +1,7 @@
 ---
 titulo: Datos de medidores en tiempo real
 subtitulo: Un camino en vivo sobre Cloud Run, montado encima del scraper que ya funcionaba
-resumen: La ingesta operaba por lotes. Agregar tiempo real sin reescribir el scraper existente ni detener el proceso que ya andaba.
+resumen: La ingesta operaba por lotes una vez al día. Agregué tiempo real sin tocar el scraper existente.
 tipo: infraestructura
 organizacion: IGX
 periodo: dic 2025 — jul 2026
@@ -18,45 +18,33 @@ import Figura from '../../components/Figura.astro';
 import SincronizacionMedidores from '../../components/diagramas/SincronizacionMedidores.astro';
 
 La lectura de medidores funcionaba por lotes: un scraper recorría las fuentes y
-consolidaba los datos una vez al día. Para lo que hacía, funcionaba bien. El
-problema aparecía cuando alguien necesitaba saber qué estaba pasando *ahora* —
-y en un mercado donde la energía se factura por intervalos, "ayer" a veces no
-alcanza.
+consolidaba una vez al día. Para reportería servía bien. El problema aparecía
+cuando alguien necesitaba saber qué estaba pasando en el momento, que en un
+mercado donde la energía se factura por intervalos pasa seguido.
 
-## La decisión
+## Por qué no reescribí el scraper
 
-La opción tentadora era rehacer la ingesta completa con tiempo real desde el
-origen. La descarté: el scraper por lotes llevaba años funcionando, conocía las
-particularidades de cada fuente y esas particularidades no están escritas en
-ninguna parte salvo en su código. Reescribirlo significaba volver a aprender
-todo eso a punta de fallas en producción.
+Llevaba años funcionando. Conoce las particularidades de cada fuente (qué
+portal cambia el formato sin avisar, cuál se cae los lunes, dónde hay que
+reintentar) y nada de eso está documentado fuera de su propio código.
+Reescribirlo significaba volver a descubrir todo eso a punta de fallas en
+producción.
 
-En vez de reemplazarlo, le colgué un segundo camino al lado. Un servicio de
-sincronización en vivo sobre Cloud Run empuja las lecturas a medida que llegan,
-y el proceso por lotes se mantiene como estaba, consolidando. Los dos conviven y
-cada uno hace lo que hace bien: el lote garantiza completitud, el camino en vivo
-garantiza frescura.
+En vez de reemplazarlo le agregué un segundo camino al lado. Un servicio sobre
+Cloud Run empuja las lecturas a medida que llegan, y el proceso por lotes sigue
+igual. El lote asegura que no falte nada; el camino en vivo entrega lo reciente.
 
-<Figura ancho="amplio" pie="El scraper existente no se toca. Pasa a alimentar dos destinos, y la plataforma consume ambos según si necesita el dato fresco o el dato consolidado.">
+<Figura ancho="amplio" pie="El scraper existente no se toca. Pasa a alimentar dos destinos, y la plataforma consume el que corresponda según si necesita el dato fresco o el consolidado.">
   <SincronizacionMedidores />
 </Figura>
 
 ## Por qué Cloud Run
 
-La carga de una sincronización en vivo es irregular por definición: llega
-cuando los medidores reportan, no cuando a uno le conviene. Un servicio que
-escala a cero entre ráfagas y sube solo cuando hay trabajo se ajusta a esa forma
-mucho mejor que una instancia encendida todo el día esperando.
+La carga de una sincronización en vivo es irregular: llega cuando los medidores
+reportan. Cloud Run escala a cero entre ráfagas y levanta instancias cuando hay
+trabajo, así que no hay una máquina encendida todo el día esperando. El
+servicio va en contenedor, que es como ya se empaqueta el resto.
 
-Es también la pieza que hace que la
-[historia en BigQuery](/casos/migracion-bigquery) tenga sentido completo: una
-ruta alimenta el presente y la otra sostiene el pasado, cada una con la
-tecnología que le corresponde, en vez de exigirle las dos cosas al mismo motor.
-
-## Lo que aprendí
-
-Lo más útil de este trabajo no fue técnico. Fue resistir la tentación de
-reescribir. El scraper viejo era feo y yo no lo había escrito, que son las dos
-condiciones que más empujan a botar código. Pero funcionaba, y todo lo que sabía
-sobre el mundo real estaba adentro. Construir al lado costó menos y arriesgó
-menos que construir de nuevo.
+Junto con la [historia en BigQuery](/casos/migracion-bigquery), esto deja las
+dos rutas separadas: una alimenta el presente y la otra sostiene el pasado, sin
+exigirle las dos cosas al mismo motor.

@@ -1,7 +1,7 @@
 ---
 titulo: No reescribir el monolito
 subtitulo: Integrar un Yii2 heredado con una arquitectura nueva de Lambda y React, vía API
-resumen: La migración a serverless podía ser un big bang o podía ser gradual. Abrir una API en el monolito la hizo gradual.
+resumen: La migración a serverless podía ser un corte único o podía avanzar por módulos. Abrir una API en el monolito la hizo gradual.
 tipo: infraestructura
 organizacion: IGX
 periodo: dic 2025 — jul 2026
@@ -13,51 +13,47 @@ cifras:
   - valor: "2"
     etiqueta: arquitecturas conviviendo sobre la misma base de datos
   - valor: "0"
-    etiqueta: fechas de corte — la migración avanza por módulos
+    etiqueta: "fechas de corte: la migración avanza por módulos"
 ---
 
 import Figura from '../../components/Figura.astro';
 import PuenteYii2Lambda from '../../components/diagramas/PuenteYii2Lambda.astro';
 
-El corazón de la plataforma es un monolito en Yii2 que lleva años en
-producción y que sabe cosas del mercado eléctrico chileno que no están
-documentadas en ningún otro lugar. La dirección técnica era clara: la
-arquitectura nueva va hacia AWS Lambda y React. La pregunta era cómo llegar.
+El núcleo de la plataforma es un monolito en Yii2 con años en producción, que
+tiene codificadas reglas del mercado eléctrico chileno que no están escritas en
+ningún otro lado. La dirección técnica ya estaba decidida: lo nuevo se
+construye en AWS Lambda y React. Faltaba resolver cómo llegar.
 
-## Las dos formas de hacerlo mal
+## Las opciones que descarté
 
-La primera es el corte único: reescribir el monolito completo en la
-arquitectura nueva y cambiar de uno a otro en una fecha. Suena ordenado y casi
-nunca lo es — la fecha se corre, el sistema viejo sigue recibiendo cambios
-mientras el nuevo se construye, y se terminan manteniendo dos verdades en
-paralelo durante meses.
+Reescribir todo y cambiar en una fecha. Eso funciona cuando el sistema viejo
+deja de recibir cambios, y acá no era el caso: la plataforma sigue operando y
+sigue necesitando funcionalidades nuevas mientras dure la migración. La fecha
+se corre, y en el intertanto hay que aplicar cada cambio dos veces.
 
-La segunda es más silenciosa: construir lo nuevo al lado sin conectarlo, con su
-propia base de datos, y sincronizar entre las dos. Eso no es una migración, es
-un problema de consistencia distribuida autoinfligido.
+Construir lo nuevo al lado con su propia base de datos y sincronizar. Eso
+agrega un problema de consistencia distribuida que antes no existía, a cambio
+de nada.
 
-## La decisión
+## Lo que hice
 
-Le abrí una API al monolito y dejé que las piezas nuevas se construyeran contra
-ella, compartiendo la misma base de datos en vez de sincronizar copias.
+Le expuse una API al monolito y las piezas nuevas se construyen contra ella,
+sobre la misma base de datos.
 
 <Figura ancho="amplio" pie="El monolito conserva la propiedad de los datos. Lo nuevo se construye al lado y conversa con él por API, sobre el mismo estado.">
   <PuenteYii2Lambda />
 </Figura>
 
-Eso convierte la migración en algo que avanza por módulos en vez de por fechas.
-Cada pieza que se mueve a Lambda se mueve completa, se prueba en producción con
-tráfico real y, si sale mal, el módulo del monolito sigue ahí. No hay un día en
-que todo cambia.
+Así la migración avanza por módulos. Cada pieza que se mueve a Lambda se prueba
+en producción con tráfico real, y si algo sale mal el módulo del monolito sigue
+ahí. No hay un día en que todo cambia.
 
-## El costo que sí tiene
+## El costo
 
-Conviene decirlo: compartir base de datos entre el monolito y las funciones
-nuevas no es gratis. Significa que el esquema es un contrato entre dos mundos y
-que no se puede cambiar alegremente desde ninguno de los dos lados. Es deuda
-deliberada, elegida porque el problema que evita —dos copias de la verdad
-sincronizándose— es bastante peor que el que introduce.
+Compartir base de datos entre el monolito y las funciones nuevas tiene un
+precio: el esquema pasa a ser un contrato entre dos mundos y ninguno de los dos
+puede cambiarlo por su cuenta. Es deuda tomada a propósito, porque mantener dos
+copias de la verdad sincronizándose sale más caro.
 
-La alternativa correcta a largo plazo es que cada servicio termine siendo dueño
-de sus propios datos. Pero eso es el destino, no el primer paso, y confundir las
-dos cosas es exactamente lo que hace fracasar estas migraciones.
+A largo plazo cada servicio debería ser dueño de sus datos. Pero eso es el
+destino de la migración, no su primer paso.

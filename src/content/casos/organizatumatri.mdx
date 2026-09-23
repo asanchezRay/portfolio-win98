@@ -1,7 +1,7 @@
 ---
 titulo: Organizatumatri
-subtitulo: Un marketplace de dos lados para el mercado de matrimonios en Chile, construido solo, de punta a punta
-resumen: El producto funcionó. El negocio no. Distinguir esas dos cosas a tiempo es la parte del trabajo que este proyecto me enseñó.
+subtitulo: Un marketplace de dos lados para el mercado de matrimonios en Chile, construido solo
+resumen: Directorio de proveedores más suite de planificación para las parejas. Funcionó como producto y no funcionó como negocio.
 tipo: producto
 organizacion: Proyecto propio
 periodo: 2025 — 2026
@@ -25,90 +25,82 @@ orden: 6
 destacado: true
 cifras:
   - valor: "3"
-    etiqueta: roles con aplicación propia — novios, proveedores, administración
+    etiqueta: "roles con aplicación propia: novios, proveedores y administración"
   - valor: "2"
     unidad: lados
     etiqueta: que había que hacer crecer al mismo tiempo
-nota: Fue un fracaso comercial. Está acá porque lo que dejó vale más que si hubiera funcionado a medias.
+nota: Cerré el proyecto. Está acá porque lo que aprendí sirve más que si hubiera funcionado a medias.
 ---
 
 import Figura from '../../components/Figura.astro';
 import PipelineProveedores from '../../components/diagramas/PipelineProveedores.astro';
 
-Organizar un matrimonio en Chile significa coordinar a mano entre diez y veinte
-proveedores —centro de eventos, banquetería, fotografía, música, flores— sin
-ningún lugar común donde compararlos, cotizarlos ni llevar la cuenta.
-Organizatumatri intentaba ser ese lugar: un directorio de proveedores
-verificados por un lado, y por el otro las herramientas de planificación que
-las parejas terminan improvisando en planillas.
+Organizar un matrimonio en Chile implica coordinar entre diez y veinte
+proveedores (centro de eventos, banquetería, fotografía, música, flores) sin
+un lugar común para compararlos ni llevar la cuenta. La mayoría de las parejas
+termina en una planilla.
 
-Lo construí completo y solo: las tres aplicaciones —novios, proveedores y
-administración—, la infraestructura, los pagos, los correos, los tests y el
-despliegue.
+Organizatumatri era el directorio de proveedores por un lado, y por el otro
+las herramientas de planificación: presupuesto, checklist, invitados, mesas,
+itinerario, RSVP. Lo construí completo y solo, incluidas las tres aplicaciones
+(novios, proveedores y administración), la infraestructura, los pagos, los
+correos, los tests y el despliegue.
 
-## Lo que había adentro
+## El modelo
 
-Para los novios: favoritos, checklist, presupuesto, lista de invitados,
-itinerario, RSVP y solicitud de cotizaciones. Para los proveedores: perfil
-público, CRM de parejas interesadas, agenda, cotizador, contratos, gestión de
-equipo y planes de suscripción. Para administración: métricas, taxonomía de
-categorías, importación masiva, reseñas y comunicaciones.
+Pagan los proveedores, no los novios. El mecanismo son créditos de contacto:
+la pareja pide cotización sin costo y el proveedor gasta un crédito la primera
+vez que responde. Sobre eso van módulos Pro (galería extendida, redes en el
+perfil, listado prioritario), que se entregan activando un feature flag sobre
+el proveedor cuando Mercado Pago confirma el pago.
 
-Todo sobre Next.js 15 con App Router, PostgreSQL con Prisma, autenticación con
-Auth.js, imágenes en Cloudinary, pagos con MercadoPago y una suite de pruebas
-end-to-end en Playwright sobre los flujos críticos.
+Los precios se recalculan siempre en el servidor. El webhook de fulfillment es
+idempotente, porque Mercado Pago reintenta.
 
 ## El arranque en frío
 
-Un marketplace de dos lados tiene un problema circular desde el día uno: sin
-proveedores no llegan parejas, y sin parejas no se inscriben proveedores.
-Esperar a que uno de los dos lados aparezca solo no es una estrategia.
+Un marketplace de dos lados arranca con un problema circular: sin proveedores
+no llegan parejas, y sin parejas no se inscriben proveedores.
 
-Ataqué el lado de la oferta con lo que mejor sé hacer: un pipeline en Python
-que recolecta, enriquece, ordena y clasifica proveedores desde fuentes
-públicas, para que el directorio existiera antes que el primer registro.
+Ataqué el lado de la oferta con lo que ya sé hacer. Un pipeline en Python
+recolecta proveedores desde fuentes públicas, completa los datos que faltan,
+los ordena por señal de Instagram y los clasifica por nivel. Los perfiles
+quedan sembrados sin dueño, y el dueño real puede reclamarlos después desde el
+perfil público: la verificación es controlar el correo que ya figura en la
+ficha, así que el enlace de activación sale solo a esa dirección y al visitante
+se le muestra enmascarada.
 
-<Figura ancho="amplio" pie="El mismo oficio que uso en el mercado eléctrico —raspar fuentes que no ofrecen API y convertirlas en datos utilizables— aplicado a sembrar un catálogo desde cero.">
+<Figura ancho="amplio" pie="Cuatro etapas encadenadas en Python. Es el mismo oficio que uso en el mercado eléctrico, raspar fuentes que no ofrecen API, aplicado a llenar un catálogo.">
   <PipelineProveedores />
 </Figura>
 
-## Una restricción que no vi venir
+## Un problema de infraestructura que no vi venir
 
-Los correos transaccionales no salían en producción aunque funcionaran perfecto
-en local. La causa: Railway, como casi todo hosting cloud, bloquea los puertos
-SMTP salientes para prevenir spam, así que el envío vía SMTP no tenía ninguna
-posibilidad. La solución fue mover el envío a Resend, que trabaja sobre HTTPS
-—puerto 443, que nunca está bloqueado— manteniendo el dominio del remitente.
+Los correos transaccionales funcionaban en local y no salían en producción.
 
-Lo anoto porque es el tipo de problema que no aparece en ningún tutorial y que
-solo se descubre desplegando de verdad.
+Railway, como casi todo hosting cloud, bloquea los puertos SMTP salientes
+(465 y 587) para prevenir spam. Nodemailer contra el SMTP de Zoho no tenía
+ninguna posibilidad de funcionar ahí. Lo resolví moviendo el envío a Resend,
+que trabaja sobre HTTPS por el 443, manteniendo el dominio del remitente. Zoho
+quedó para el correo del negocio y Resend para lo que envía la aplicación.
 
-## El post-mortem
+## Por qué lo cerré
 
 No conseguí la tracción de proveedores que necesitaba, y sin ese lado el flujo
-de parejas tampoco llegó. El proyecto se cerró.
+de parejas tampoco llegó.
 
-Mi lectura, en una línea: **aposté a que el cuello de botella era el
-descubrimiento, y el cuello de botella era la adquisición.** Construí una
-herramienta excelente para encontrar y comparar proveedores, partiendo del
-supuesto de que el problema de una pareja es no saber dónde buscar. El problema
-real de un marketplace nuevo es convencer al primer lado de que valga la pena
-estar ahí cuando el otro lado todavía está vacío — y eso no se resuelve con
-producto. Se resuelve con trabajo comercial que yo no hice y para el que el
-pipeline de scraping, por bueno que fuera, no era sustituto.
+Mi lectura es que aposté al problema equivocado. Construí una herramienta para
+encontrar y comparar proveedores, dando por hecho que lo que le falta a una
+pareja es dónde buscar. Lo que le falta a un marketplace nuevo es convencer al
+primer lado de que valga la pena estar ahí cuando el otro está vacío, y eso se
+resuelve con trabajo comercial. El pipeline de scraping llenaba el catálogo
+pero no reemplazaba esa conversación.
 
-Lo segundo que me llevo es más incómodo: construí demasiado antes de validar.
-Cuando cerré, la plataforma tenía CRM, contratos, agenda y planes de
-suscripción — funcionalidades que responden a problemas que solo existen
-*después* de tener tracción. Cada una era interesante de programar. Ninguna era
-lo que faltaba.
+Lo segundo es más incómodo. Cuando cerré, la plataforma tenía CRM, contratos,
+agenda y planes de suscripción: funcionalidades que responden a problemas que
+aparecen *después* de tener tracción. Cada una era entretenida de programar.
+Ninguna era lo que faltaba.
 
-## Por qué está en mi portafolio
-
-Porque lo que se aprende de un proyecto que no funcionó es distinto de lo que
-se aprende de uno que sí, y en mi rol actual —evaluar factibilidad, proponer
-alternativas más simples, ayudar a decidir qué vale la pena construir— uso mucho
-más lo primero.
-
-Cuando hoy digo "esto no es lo que falta", lo digo con la autoridad de haber
-construido, solo y muy bien hecho, exactamente lo que no faltaba.
+Eso último es lo que más uso hoy. Cuando digo en una reunión que algo no es lo
+que falta, lo digo habiendo construido, solo y bien hecho, exactamente lo que
+no faltaba.

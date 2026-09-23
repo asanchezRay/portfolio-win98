@@ -1,6 +1,6 @@
 ---
 titulo: 900 GB fuera del motor operacional
-subtitulo: Mover la historia de medidores de MySQL/RDS a BigQuery, y rediseñar el esquema en el camino
+subtitulo: Sacar la historia de medidores de MySQL/RDS y rediseñar el esquema para BigQuery
 resumen: La base transaccional cargaba casi un terabyte de historia que nadie consultaba en línea. Sacarla bajó el costo recurrente a la mitad.
 tipo: infraestructura
 organizacion: IGX
@@ -25,56 +25,53 @@ import Figura from '../../components/Figura.astro';
 import MigracionBigQuery from '../../components/diagramas/MigracionBigQuery.astro';
 import CostoInfraestructura from '../../components/diagramas/CostoInfraestructura.astro';
 
-La plataforma guardaba las lecturas históricas de los medidores ION en la misma
-base MySQL sobre RDS que atiende la operación diaria. Esa historia había crecido
-hasta unos 900 GB: casi un terabyte de datos que el sistema consultaba muy rara
-vez, ocupando almacenamiento caro y arrastrando cada respaldo y cada operación
-de mantenimiento del motor.
+Las lecturas históricas de los medidores ION vivían en la misma base MySQL
+sobre RDS que atiende la operación diaria. Con los años eso creció a unos
+900 GB de datos que casi nunca se consultan, pero que igual ocupan
+almacenamiento provisionado, entran en cada respaldo y alargan cualquier
+operación de mantenimiento sobre el motor.
 
-El costo era el síntoma visible — unos 600 dólares al mes — pero el problema de
-fondo era otro: la base operacional estaba pagando, en dinero y en tiempo de
-mantenimiento, por un volumen que no tenía nada que ver con su trabajo.
+La factura era de unos 600 dólares mensuales.
 
-## La decisión
+## El rediseño del esquema
 
-Lo obvio era mover la historia a un almacenamiento más barato. Lo que realmente
-importó fue no moverla tal cual.
+Mover la historia a un almacenamiento más barato es la parte obvia. La parte
+que define si el cambio sirve o no es cómo queda el esquema al llegar.
 
-Un volcado directo de las tablas habría reproducido en BigQuery un esquema
-pensado para escrituras transaccionales frecuentes, no para consultas
-analíticas sobre series de tiempo. Habría funcionado, y habría vuelto a ser caro
-por otro motivo: en BigQuery se paga por el volumen que cada consulta recorre,
-así que un esquema mal particionado convierte cada pregunta en un escaneo
-completo.
+BigQuery no cobra por lo que guardas sino por los bytes que cada consulta
+recorre, y el almacenamiento de datos que no se modifican hace más de 90 días
+baja de precio automáticamente. Un volcado tal cual de las tablas de MySQL
+habría mantenido el particionado pensado para escrituras transaccionales
+frecuentes. Con ese esquema, cualquier pregunta sobre un rango de fechas
+termina escaneando la tabla completa, y la factura vuelve a subir por otro
+lado.
 
-El trabajo, entonces, fue rediseñar el esquema para el patrón de acceso real
-antes de migrar, y recién después mover los datos.
+Así que primero rediseñé el esquema para el patrón de acceso real (consultas
+por medidor y por ventana de tiempo) y después moví los datos.
 
 <Figura ancho="amplio" pie="La ruta analítica se separa de la transaccional. El scraper no cambia: pasa a alimentar dos destinos, y cada uno guarda lo que le corresponde.">
   <MigracionBigQuery />
 </Figura>
 
-## El resultado
+## Resultado
 
-RDS bajó de 600 a 280 dólares mensuales, y el almacenamiento histórico completo
-en BigQuery cuesta alrededor de 4. El total recurrente cayó 53%, y es un ahorro
-sostenido mes a mes, no una optimización de una vez.
+RDS bajó de 600 a 280 dólares mensuales. Los 900 GB en BigQuery cuestan
+alrededor de 4. El total recurrente quedó 53% abajo, y se mantiene ahí mes a
+mes.
 
 <Figura ancho="amplio" desnuda pie="Costo mensual de la infraestructura de datos, antes y después. El desglose del estado nuevo va como texto y no como segmento del gráfico: 4 dólares sobre 284 serían menos de dos píxeles de alto.">
   <CostoInfraestructura />
 </Figura>
 
-## Lo que no muestra la cifra
+## Efecto secundario
 
-El ahorro es lo fácil de contar, pero no es lo más valioso que dejó el cambio.
+La base operacional quedó liviana, y eso cambió el costo de operar sobre ella:
+respaldos más rápidos, ventanas de mantenimiento más cortas, restauraciones
+que se pueden ensayar. El
+[upgrade del motor MySQL en producción](/casos/mysql-sin-caida) que vino
+después se planificó con esa base ya aligerada.
 
-La base operacional quedó liviana, y eso mejoró todo lo que la rodea: los
-respaldos son más rápidos, las ventanas de mantenimiento más cortas y las
-operaciones sobre el motor dejaron de ser un evento. El
-[upgrade del motor MySQL en producción](/casos/mysql-sin-caida) que vino después
-fue posible en buena parte porque la base ya no arrastraba ese peso.
-
-Y la historia quedó, por primera vez, en un lugar hecho para consultarla. Antes
-existía sobre todo como archivo, porque preguntarle cosas a una tabla de ese
-tamaño dentro del motor transaccional era caro y riesgoso. Ahora es data
-consultable sin poner en riesgo la operación.
+La historia también quedó en un lugar donde se le pueden hacer preguntas.
+Antes estaba ahí sobre todo como archivo: consultar una tabla de ese tamaño
+dentro del motor transaccional competía con la operación, así que en la
+práctica no se consultaba.

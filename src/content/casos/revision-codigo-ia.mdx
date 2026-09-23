@@ -1,7 +1,7 @@
 ---
 titulo: Revisión de código asistida por IA
 subtitulo: Introducir una práctica nueva en un equipo sin que el equipo la rechace
-resumen: "El cuello de botella no era la calidad de las revisiones: eran las primeras iteraciones, las que se van en detalles."
+resumen: "El atasco no estaba en las revisiones difíciles: estaba en las primeras vueltas, las que se van en detalles mecánicos."
 tipo: practica
 organizacion: IGX
 periodo: "2026"
@@ -14,37 +14,38 @@ cifras:
     etiqueta: iteración de revisión, que es donde estaba el atasco
 ---
 
-En cualquier equipo pequeño la revisión de código se atasca en el mismo lugar:
-no en las discusiones de diseño, que son las valiosas, sino en las primeras
-vueltas, las que se van en nombres, formato, un caso borde no cubierto, un
-`TODO` que quedó. Cosas reales, que hay que corregir, y que consumen la
-atención del revisor antes de llegar a lo que de verdad importa.
+En un equipo chico la revisión de código se atasca siempre en el mismo lugar.
+No en las discusiones de diseño, que son las que valen, sino en las primeras
+vueltas: nombres, formato, un caso borde sin cubrir, un `TODO` que quedó. Todas
+correcciones legítimas, y todas consumen la atención del revisor antes de
+llegar a lo importante.
 
-Introduje la revisión asistida por IA como práctica de equipo para absorber esa
-primera capa.
+Introduje la revisión asistida por IA para absorber esa primera capa.
 
-## Lo difícil no fue la herramienta
+## El problema no era la herramienta
 
-Fue que el equipo la adoptara sin sentir que se le estaba auditando el trabajo.
-Una herramienta que comenta código puede leerse de dos maneras muy distintas
-según cómo se introduzca: como un asistente que te ahorra la vergüenza de que
-te pillen un typo, o como un supervisor automático que reporta hacia arriba.
+Era cómo se recibía. Una herramienta que comenta código se puede leer de dos
+maneras muy distintas: como algo que te ahorra la vergüenza de que te pillen un
+typo, o como un supervisor automático que reporta hacia arriba. Lo segundo
+termina en gente que abre menos pull requests, o que las abre más grandes para
+que la revisen menos veces.
 
-La diferencia no está en la herramienta. Está en quién ve la salida primero, en
-si el resultado es obligatorio o sugerido, y en si el autor puede descartar un
-comentario sin justificarse. Esas tres decisiones definen si la práctica se
-adopta o se tolera.
+Tres decisiones definieron de qué lado cayó:
+
+- **Quién ve la salida primero.** El autor, antes de pedir revisión humana.
+- **Si es obligatoria o sugerida.** Sugerida.
+- **Si se puede descartar un comentario sin justificarse.** Sí.
+
+Ninguna de las tres es técnica.
 
 ## Qué cambió
 
-El revisor humano llega a la revisión cuando la capa mecánica ya pasó, así que
-su atención se gasta donde solo un humano sirve: si la solución es la correcta,
-si el problema estaba bien planteado, si esto va a envejecer bien.
+El revisor humano llega cuando la capa mecánica ya pasó, así que su atención se
+gasta en lo que solo un humano puede evaluar: si la solución es la correcta, si
+el problema estaba bien planteado, si esto va a envejecer bien.
 
-## Por qué esto está en un portafolio técnico
+## Por qué está entre los casos técnicos
 
-Porque en mi rol actual, la mitad del trabajo es de esta forma. No es escribir
-el código: es identificar dónde una herramienta —de IA o no— mejora de verdad
-un flujo, y después lograr que el equipo la incorpore. Lo segundo es
-consistentemente más difícil que lo primero, y se parece más a enseñar que a
-programar.
+En mi rol actual buena parte del trabajo tiene esta forma. Encontrar dónde una
+herramienta mejora de verdad un flujo es la mitad fácil. La otra mitad es que
+el equipo la incorpore, y ahí lo que sirve no es el criterio técnico.
